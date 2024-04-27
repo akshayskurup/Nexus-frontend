@@ -46,7 +46,7 @@ function Login() {
                     } else {
                         dispatch(login({ user: data }));
                         toast.info(data.message);
-                        navigate('/my-profile');
+                        navigate('/home');
                     }
                 } else {
                     toast.error(data.message);

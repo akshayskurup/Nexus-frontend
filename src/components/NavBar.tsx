@@ -13,6 +13,7 @@ function NavBar() {
 
     const handleLogout = ()=>{
         dispatch(logoutUser());
+        localStorage.clear();
         navigate('/login');
     }
   return (

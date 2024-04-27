@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../../../constants/urls";
 import { store } from "../../../utils/store";
-import { updateToken } from "../../../utils/reducers/authSlice";
+import { logoutUser, updateToken } from "../../../utils/reducers/authSlice";
 
 export const api = axios.create({
     withCredentials: true,
@@ -9,13 +9,14 @@ export const api = axios.create({
 });
 
 const getToken = () => {
-    const state = store.getState()
-    const token = state.auth.token
+    const state = store.getState();
+    const token = state.auth.token;
+    
     return token;
 }
 
 api.interceptors.request.use(
-    (config)=>{
+    async (config)=>{
         const token = getToken();
         if(token){
             config.headers.Authorization = `Bearer ${token}`;
@@ -29,17 +30,22 @@ api.interceptors.request.use(
 )
 api.interceptors.response.use(
     (response) => {
+        console.log("Wwww");
         return response;
     },
     async (error) => {
+        console.log("ERRorrr",error);
+        
         if (error.response && error.response.status === 401 && error.response.message==="Token expired") {
+
+            console.log("Wwww 22");
             try {
                 const refreshToken = localStorage.getItem('refreshToken');
 
                 if (!refreshToken) {
                     return Promise.reject(new Error('Refresh token is missing'));
                 }
-                const refreshedTokenResponse = await api.post('/refresh-token', {
+                const refreshedTokenResponse = await api.post('/user/refresh-token', {
                     refreshToken
                 });
                 const newToken = refreshedTokenResponse.data.accessToken;
@@ -50,8 +56,10 @@ api.interceptors.response.use(
                 originalRequest.headers.Authorization = `Bearer ${newToken}`;
                 return api(originalRequest);
             } catch (refreshError) {
-                
-                return Promise.reject(refreshError);
+                console.error('Refresh token failed:', refreshError);
+                store.dispatch(logoutUser()); 
+                throw refreshError;
+
             }
         }
         return Promise.reject(error);
