@@ -14,11 +14,13 @@ interface UserData {
 interface initialStateType{
     user:UserData | null;
     token:string | null;
+    posts:any[]
 } 
 
 const initialState:initialStateType = {
     user:null,
-    token:null
+    token:null,
+    posts:[]
 }
 
 
@@ -32,18 +34,21 @@ const authSlice = createSlice({
             state.token = action.payload.user.token;
           },
         updateUser:(state,action: PayloadAction<{ user: UserData}>)=>{
-            console.log("reduxx",action.payload)
             state.user = action.payload.user
         },
         updateToken:(state,action: PayloadAction<{token:string}>)=>{
             state.token = action.payload.token;
         },
         logoutUser:(state)=>{
-            state.user = null,
-            state.token = null
+            state.user = null;
+            state.token = null;
+            state.posts = [];
+        },
+        setPosts:(state,action: PayloadAction<{posts: any[]}>)=>{
+            state.posts = action.payload.posts;
         }
     }
 });
 
-export const {login,updateUser,updateToken,logoutUser} = authSlice.actions;
+export const {login,updateUser,updateToken,logoutUser,setPosts} = authSlice.actions;
 export default authSlice.reducer;

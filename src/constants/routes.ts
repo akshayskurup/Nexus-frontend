@@ -1,5 +1,4 @@
 export const userUrl = {
-    // refreshToken : "/user/refresh-token",
 
     login :"/user/login",
     register:"/user/register",
@@ -16,4 +15,11 @@ export const adminUrl = {
     login :"admin/login",
     AllUsers:"admin/all-users",
     changeUserStatus:"admin/change-user-status"
+}
+
+export const postUrl = {
+    addPost:"post/add-post",
+    getAllPost:"post/get-post",
+    likePost:"post/like-post",
+    updatePost:"/post/update-post",
 }

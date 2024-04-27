@@ -1,4 +1,4 @@
-import { userUrl } from "../../../constants/routes";
+import { postUrl, userUrl } from "../../../constants/routes";
 import { apiCall } from "./apiCalls";
 
 
@@ -109,7 +109,7 @@ export const postForgetPassword = (email:{email:string})=>{
     });
 }
 
-//@des     Forget password OTP verification
+//@des     Forget Password OTP Verification
 //method   POST
 
 export const forgetOtp = (otp:{otp:string})=>{
@@ -163,6 +163,82 @@ export const accountSetup = (values:{userName: string, gender: string, bio: stri
         } catch (error) {
             resolve({status:500,message:"Error in accountSetup"});
 
+        }
+    })
+}
+
+//@des     Add new Post
+//method   POST
+
+export const addPost = (values:{userId:string,description:string,image?:string})=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            apiCall("post",postUrl.addPost,values)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error in addPost"});
+        }
+    })
+}
+
+//@des     Get All Post
+//method   POST
+
+export const getAllPost = ()=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            apiCall("get",postUrl.getAllPost,"")
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error in getAllPost"});
+        }
+    })
+}
+
+//@des     Like Post
+//method   POST
+
+export const LikePost = (userId:any,postId:any)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            apiCall("post",postUrl.likePost,{userId,postId})
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during like"});
+        }
+    })
+}
+
+//@des     Update Post
+//method   POST
+
+export const UpdatePost = (values:{userId:any,postId:any,description:string})=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            apiCall("post",postUrl.updatePost,values)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during updatePost"});
         }
     })
 }
