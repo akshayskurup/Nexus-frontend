@@ -242,3 +242,185 @@ export const UpdatePost = (values:{userId:any,postId:any,description:string})=>{
         }
     })
 }
+
+//@des     Report Post
+//method   POST
+
+export const ReportPost = (values:{userId:any,postId:any,reason:string})=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            apiCall("post",postUrl.reportPost,values)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during reporting post"});
+        }
+    })
+}
+
+//@des     Save Post
+//method   POST
+
+export const SavePost = (values:{userId:any,postId:any})=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            apiCall("post",postUrl.savePost,values)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during post saving"});
+        }
+    })
+}
+
+//@des     Get User Post
+//method   POST
+
+export const UserPost = (userId:string)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            const url = `${postUrl.userPost}/${userId}`
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during fetching post"});
+        }
+    })
+}
+
+//@des     Get User Saved Post
+//method   POST
+
+export const UserSavedPost = (userId:string)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            const url = `${postUrl.getSavedPost}/${userId}`
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during fetching savedpost"});
+        }
+    })
+}
+
+//@des     Add Comment
+//method   POST
+
+export const addComment = (values:{userId:any,postId:any,comment:string})=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            apiCall("post",postUrl.addComment,values)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during posting comment"});
+        }
+    })
+}
+
+
+//@des     My Comment
+//method   POST
+
+// export const getMyComment = (values:{userId:any,postId:any})=>{
+//     return new Promise ((resolve,reject)=>{
+//         try {
+//             console.log("Api",values);
+            
+//             apiCall("get",postUrl.getMyComment,values)
+//             .then((response)=>{
+//                 resolve(response);
+//             })
+//             .catch((err)=>{
+//                 reject(err);
+//             })
+//         } catch (error) {
+//             resolve({status:500,message:"Error during posting comment"});
+//         }
+//     })
+// }
+
+
+//@des     My Comment
+//method   POST
+
+export const getAllComments = (postId:any)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            
+            const url = `${postUrl.allComments}/${postId}`
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during posting comment"});
+        }
+    })
+}
+
+//@des     My Comment
+//method   POST
+
+export const getCommentsCount = (postId:any)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            
+            const url = `${postUrl.getCommentsCount}/${postId}`
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during posting comment"});
+        }
+    })
+}
+
+//@des     Comment Delete
+//method   POST
+
+export const deleteComment = (commentId:string)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            
+            apiCall("post",postUrl.commentDelete,{commentId})
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during posting comment"});
+        }
+    })
+}
