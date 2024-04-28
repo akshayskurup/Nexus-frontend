@@ -22,4 +22,14 @@ export const postUrl = {
     getAllPost:"post/get-post",
     likePost:"post/like-post",
     updatePost:"/post/update-post",
+    reportPost:"/post/report-post",
+    savePost:"/post/save-post",
+    userPost:"/post/get-post",
+    getSavedPost:"/post/get-saved-post",
+    addComment:"/post/add-comment",
+    getMyComment:"/post/my-comment",
+    allComments:"/post/get-comments",
+    getCommentsCount:"/post/get-comments-count",
+    commentDelete:"/post/delete-comment"
 }
+
