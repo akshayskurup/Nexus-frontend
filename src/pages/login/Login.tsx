@@ -42,6 +42,7 @@ function Login() {
                     
                     // Check if data.bio is empty
                     if (data.bio == "") {
+                        localStorage.setItem("userId",data._id)
                         navigate('/account-setup');
                     } else {
                         dispatch(login({ user: data }));
@@ -54,11 +55,11 @@ function Login() {
             });
     };
   return (
-    <div className='bg-[#F7FCF6] grid md:grid-cols-2 items-center justify-center w-screen'> 
+    <div className='bg-[#F7FCF6] h-screen grid md:grid-cols-2 items-center justify-center w-screen'> 
     <div className='hidden md:block'> 
         <img className="h-[100vh] w-[50vw]" src="../public/images/Img.jpg" alt="" />
     </div>
-    <div className='bg-[#F7FCF6] md:col-start-2 pl-[9vw] mt-5 md:mt-[-90px]'> 
+    <div className='bg-[#F7FCF6] -ml-5 md:col-start-2 pl-[9vw]  mt-5 md:mt-[-90px] md:ml-5'> 
         <p className='text-5xl font-bold'>Login</p>
         <p className='mt-7 text-[#837D7D]'>Welcome back! Please login to your account</p>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>

@@ -167,6 +167,48 @@ export const accountSetup = (values:{userName: string, gender: string, bio: stri
     })
 }
 
+//@des     User profile
+//method   GET
+
+export const GetUserProfile = (userId:any)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            const url = `${userUrl.userProfile}/${userId}`
+            console.log("url",url);
+            
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during fetching user data"});
+        }
+    })
+}
+
+//@des     Edit profile
+//method   POST
+
+export const EditUserProfile = (values:{userId:any,userName?:string,bio?:string,profileImage?:string,bgImage?:string})=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            apiCall("post",userUrl.editProfile,values)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during profile editing"});
+        }
+    })
+}
+
+
 //@des     Add new Post
 //method   POST
 
@@ -239,6 +281,29 @@ export const UpdatePost = (values:{userId:any,postId:any,description:string})=>{
             })
         } catch (error) {
             resolve({status:500,message:"Error during updatePost"});
+        }
+    })
+}
+
+//@des     Delete Post
+//method   DELETE
+
+export const postDeletion = (postId:any)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            
+            const url = `${postUrl.deletePost}/${postId}`
+            console.log("urlll",url);
+            
+            apiCall("delete",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during post saving"});
         }
     })
 }
@@ -363,7 +428,7 @@ export const addComment = (values:{userId:any,postId:any,comment:string})=>{
 // }
 
 
-//@des     My Comment
+//@des     Get All Comment
 //method   POST
 
 export const getAllComments = (postId:any)=>{
@@ -384,7 +449,7 @@ export const getAllComments = (postId:any)=>{
     })
 }
 
-//@des     My Comment
+//@des     Comments Count
 //method   POST
 
 export const getCommentsCount = (postId:any)=>{
@@ -393,6 +458,26 @@ export const getCommentsCount = (postId:any)=>{
             
             const url = `${postUrl.getCommentsCount}/${postId}`
             apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during posting comment"});
+        }
+    })
+}
+
+//@des     Reply Comment
+//method   POST
+
+export const commentReply = (values:{userId:string,commentId:string,reply:string})=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            
+            apiCall("post",postUrl.replyComment,values)
             .then((response)=>{
                 resolve(response);
             })

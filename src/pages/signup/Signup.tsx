@@ -178,15 +178,15 @@ function Signup() {
         })
     }
   return (
-    <div className=' bg-[#F7FCF6] w-screen grid md:grid-cols-2 items-center justify-center'>
+    <div className=' bg-[#F7FCF6] w-screen h-screen  grid md:grid-cols-2 items-center justify-center'>
         <div className="hidden md:block">
             <img className="h-[100vh] w-[50vw]" src="../public/images/Img.jpg" alt="" />
         </div>
         <div className='bg-[#F7FCF6] md:col-start-2 pl-[9vw] mt-6 md:mt-[-90px]'>
-            <p className='text-5xl font-bold'>Signup</p>
+            <p className='text-5xl mb-4 font-bold'>Signup</p>
             
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-            <Form className="mt-5 w-full md:w-[18.5rem]">
+            <Form className="-ml-5 w-full md:w-[18.5rem]">
             <p className="text-[#837D7D]">Name:</p>
             <Field className="mt-3 h-9 w-full border border-neutral-300" type="text" name="name" />
             <ErrorMessage name="name" component="div" className="text-red-500" />

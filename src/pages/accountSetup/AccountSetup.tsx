@@ -33,6 +33,7 @@ function AccountSetup() {
   const validationSchema = Yup.object().shape({
     userName: Yup.string()
     .required('Username is required')
+    .min(5,"Requires more that 5 letters")
     .max(15,"Limit exceeded"),
     gender: Yup.string().required('Gender is required').oneOf(['male', 'female', 'other'], 'Please select a valid gender'),
     bio: Yup.string()

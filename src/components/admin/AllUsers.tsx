@@ -4,18 +4,20 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { changeUserStatus, getAllUsers } from "../../services/api/admin/apiMethods"
 import { toast } from "sonner"
 import { useDispatch, useSelector } from "react-redux";
-import { adminLogout } from "../../utils/reducers/adminAuthSlice";
 import { useNavigate } from "react-router-dom";
+import AdminSidebar from "./AdminSidebar";
+import { updateUser } from "../../utils/reducers/authSlice";
 
 
 function AllUsers() {
 
-    const dispatch = useDispatch()
     const navigate = useNavigate()
-
+    const dispatch = useDispatch()
     const [allUsers,setAllUsers] = useState();
     const [currentPage, setCurrentPage] = useState(1);
-    const [usersPerPage] = useState(2);
+    const [usersPerPage] = useState(5);
+
+
     
     const admin = useSelector((state:any)=>state.adminAuth.admin);
 
@@ -76,10 +78,7 @@ function AllUsers() {
         }
     }
 
-    const handleLogout = ()=>{
-        dispatch(adminLogout())
-        navigate('/admin')
-    }
+   
     
     let currentUsers = []
     const indexOfLastUser = currentPage * usersPerPage;
@@ -92,29 +91,9 @@ function AllUsers() {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    
-    <div className="flex ">
-    <div className="w-1/5 bg-gray-800 text-white">
-    <div className="p-4">
-        <h2 className="text-xl font-bold mb-4">Nexus Admin</h2>
-        <ul className="space-y-2 h-[70vh]">
-            <li>
-                <a href="#" className="block hover:bg-gray-700 px-2 py-1 rounded">User Management</a>
-            </li>
-            <li>
-                <a href="#" className="block hover:bg-gray-700 px-2 py-1 rounded">Post Management</a>
-            </li>
-            
-        </ul>
-        <div className="mt-auto">
-            <a onClick={()=>handleLogout()}  className="block cursor-pointer mb-5 hover:bg-red-700 px-2 py-1 rounded">Logout</a>
-            
-        </div>
-    </div>
-</div>
-
-    
-    <div className="ml-12">
+    <>
+    <AdminSidebar />
+    <div className="ml-80">
         
         
 
@@ -192,7 +171,7 @@ function AllUsers() {
     </div>
 </div>
 </div>
-    </div>
+    </>
   )
 }
 
@@ -221,3 +200,4 @@ const Pagination = ({ usersPerPage, totalUsers, paginate }) => {
         </nav>
     );
 };
+

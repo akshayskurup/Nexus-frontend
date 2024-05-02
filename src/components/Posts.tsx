@@ -17,6 +17,7 @@ import {
   UpdatePost,
   addComment,
   getCommentsCount,
+  postDeletion,
 } from "../services/api/user/apiMethods";
 import { setPosts, updateUser } from "../utils/reducers/authSlice";
 import { toast } from "sonner";
@@ -25,6 +26,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { BASE_URL } from "../constants/urls";
 import Comments from "./Modals/Comments";
+import { Link } from "react-router-dom";
 
 function ReportOptionModal({ isOpen, onClose, post, user }) {
   const onReport = (reason: string) => {
@@ -86,7 +88,7 @@ function ReportOptionModal({ isOpen, onClose, post, user }) {
   );
 }
 
-function EditPostModal({ isOpen, onClose, post }) {
+function EditPostModal({ isOpen, onClose, post, handlePost }) {
   const [valid, setValid] = useState(false);
   const [description, setDescription] = useState("");
 
@@ -112,6 +114,7 @@ function EditPostModal({ isOpen, onClose, post }) {
           if (response.status === 200) {
             dispatch(setPosts(data.posts));
             toast.success(data.message);
+            handlePost()
             onClose();
           } else {
             toast.error(data.message);
@@ -192,7 +195,8 @@ function EditPostModal({ isOpen, onClose, post }) {
 
 //----------------------------------------------------------------------------------------------
 
-function OptionsModal({ isModalOpen, onModalClose, post }) {
+function OptionsModal({ isModalOpen, onModalClose, post, handlePost}) {
+  const dispatch = useDispatch()
   const [isEditPostModalOpen, setIsEditPostModalOpen] = useState(false);
   const [reportOptionModal, setReportOptionModal] = useState(false);
 
@@ -218,6 +222,23 @@ function OptionsModal({ isModalOpen, onModalClose, post }) {
   const closeReportModal = () => {
     setReportOptionModal(false);
   };
+  const handleDeletion = ()=>{
+    postDeletion(post._id)
+    .then((response: any) => {
+      const data = response.data
+      if(response.status===200){
+        dispatch(setPosts({posts:data.updatedPost}));
+        onModalClose()
+        handlePost()
+      }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    toast.error("Error during getting my comments");
+  });
+
+    
+  }
 
   return (
     <>
@@ -226,8 +247,12 @@ function OptionsModal({ isModalOpen, onModalClose, post }) {
         onRequestClose={onModalClose}
         className=" border-2 border-black absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 bg-white rounded-lg shadow-lg p-6"
       >
-        <p className="cursor-pointer mb-4 text-center">Delete</p>
+        {post.userId._id == user._id && (
+          <>
+        <p className="cursor-pointer mb-4 text-center" onClick={handleDeletion}>Delete</p>
         <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
+        </>
+        )}
         {post.userId._id == user._id && (
           <>
             <p
@@ -249,7 +274,7 @@ function OptionsModal({ isModalOpen, onModalClose, post }) {
         )}
       </Modal>
       {isEditPostModalOpen && (
-        <EditPostModal isOpen={openModal} onClose={closeModal} post={post} />
+        <EditPostModal isOpen={openModal} onClose={closeModal} post={post} handlePost={handlePost} />
       )}
       {reportOptionModal && (
         <ReportOptionModal
@@ -265,7 +290,7 @@ function OptionsModal({ isModalOpen, onModalClose, post }) {
 
 //-----------------------------------------------------------------------------------------
 
-function Posts({ post }) {
+function Posts({ post, handlePost , handleSavedPost}) {
   const user = useSelector((state: any) => state.auth.user);
   const [likedUsers, setLikedUsers] = useState(post.likes);
   const [isLikedByUser, setIsLikedByUser] = useState(post.likes.includes(user._id));
@@ -308,6 +333,8 @@ function Posts({ post }) {
   };
 
   useEffect(()=>{
+    console.log("post",post);
+    
   fetchData(user._id, post._id)
   .then((response: any) => {
       setMyComment(response.comment);
@@ -326,7 +353,7 @@ function Posts({ post }) {
   toast.error("Error during getting my comments");
 });
 
-  },[post,refetchData])
+  },[post,refetchData,user._id,])
   
 
   const handleLike = (userId: string, postId: string) => {
@@ -355,8 +382,11 @@ function Posts({ post }) {
     SavePost({ userId, postId }).then((response: any) => {
       const data = response.data;
       if (response.status === 200) {
+        console.log("Saveddd",data.updatedUser);
+        
         dispatch(updateUser({ user: data.updatedUser }));
         setIsSavedByUser(!isSavedByUser);
+        handleSavedPost()
       } else {
         toast.error(data.message);
       }
@@ -365,10 +395,14 @@ function Posts({ post }) {
   const handlePostComment = (userId:string,postId:string)=>{
     addComment({userId,postId,comment})
     .then((response: any) => {
-      setComment('')
       const data = response.data;
       if (response.status === 200) {
+        setComment('')
         toast.success(data.message);
+        if (typeof handleSavedPost === 'function') {
+          handleSavedPost();
+        }
+        handlePost();
       } else {
         toast.error(data.message);
       }
@@ -386,6 +420,8 @@ function Posts({ post }) {
     setIsCommentModalOpen(!isCommentModalOpen)
   }
 
+  
+
   // const handleCommentDelete = () => {
   //   setCount((prevCount) => prevCount - 1);
   //   console.log("prevCount",count);
@@ -393,110 +429,123 @@ function Posts({ post }) {
   // };
 
   return (
-    <div key={post._id} className=" w-[40rem] ml-3 rounded-md mt-5 bg-white">
-      <div className="ml-4">
-        <div className="flex items-center ml-5 pt-2">
-          <img
-            className="w-11 h-11 rounded-full"
-            src={post.userId.profileImage}
-            alt="img"
-          />
-          <div className="ml-8">
-            <p className="font-semibold text-lg">{post.userId.userName}</p>
-            <p className="text-xs text-[#8B8585]">10 minutes ago</p>
-          </div>
-          <FontAwesomeIcon
-            className="ml-auto mr-11 cursor-pointer"
-            icon={faEllipsisV}
-            onClick={handleModal}
-          />
-        </div>
-        <p className="ml-6 mt-5 my-5 font-semibold text-sm">
-          {post.description}
-        </p>
+    
 
-        <div className="flex justify-center flex-col ml-6 ">
-          <img
-            className=" max-h-[500px] max-w-[560px] rounded-lg"
-            src={post.imageUrl}
-            alt=""
-          />
-          <div className="flex gap-24 py-5">
-            <div className="flex">
-              <FontAwesomeIcon
-                className="w-6 h-6 "
-                onClick={() => handleLike(user._id, post._id)}
-                style={{ color: likeColor }}
-                icon={faHeart}
-              />
-              <p className="ml-2">{likeCount}</p>
-            </div>
-            <div className="flex">
-              <FontAwesomeIcon
-                className="w-6 h-6 text-[#837D7D]"
-                icon={faCommentDots}
-              />
-              <p className="ml-2">{count}</p>
-            </div>
-            <FontAwesomeIcon
-              className="w-6 h-6"
-              style={{ color: savedColor }}
-              onClick={() => handleSavePost(user._id, post._id)}
-              icon={faBookmark}
-            />
-          </div>
-          {myComment && 
-          <div className="flex items-center">
-          <p className="max-w-[32rem]">{user.userName}: {myComment}</p>
-          </div>
+    <div key={post._id} className="w-[25rem]  md:w-[40rem] md:ml-3 rounded-md mt-5 bg-white">
+  <div className="ml-4">
+    <div className="flex items-center ml-5 pt-2">
+      <img
+        className="w-11 h-11 rounded-full"
+        src={post.userId.profileImage}
+        alt="img"
+      />
+      <div className="ml-8">
+        <p className="font-semibold text-lg">
+          {user._id===post.userId._id ? (<Link to={`/my-profile`}>{post.userId.userName}</Link>):
+          (<Link to={`/profile/${post.userId._id}`}>{post.userId.userName}</Link>)
           }
-          {count>1 && 
-          <p onClick={handleCommentModal}>View {count} comments</p>}
-          <hr className="bg-slate-500 mr-10"/>
-          <div className="flex items-center">
-            <img
-              className="w-9 h-9 rounded-full"
-              src={post.userId.profileImage}
-              alt="img"
-            />
-            <div className="ml-5 mb-3">
-              <div className="bg-[#EAEAEA] mt-3 h-8 w-[32rem] rounded-full flex items-center">
-                <input
-                  type="text"
-                  name="description"
-                  onChange={(e)=>setComment(e.target.value)}
-                  className="ml-2 bg-transparent border-none focus:outline-none flex-grow"
-                  placeholder="Write your comment"
-                />
+        
+        </p>
+        {/* <p className="text-xs text-[#8B8585]">10 minutes ago</p> */}
+      </div>
+      <FontAwesomeIcon
+        className="ml-auto mr-11 cursor-pointer"
+        icon={faEllipsisV}
+        onClick={handleModal}
+      />
+    </div>
+    <p className="ml-6 mt-5 my-5 font-semibold text-sm">
+      {post.description}
+    </p>
 
-                <button type="submit" onClick={()=>handlePostComment(user._id,post._id)}>
-                  <FontAwesomeIcon
-                    className="ml-7 text-[#2892FF]"
-                    size="xl"
-                    icon={faCircleChevronRight}
-                  />
-                </button>
-              </div>
-            </div>
+    <div className="flex justify-center flex-col ml-6 ">
+      <img
+        className="max-h-[500px] max-w-[560px] mr-5 rounded-lg"
+        src={post.imageUrl}
+        alt=""
+      />
+      <div className="flex gap-24 py-5">
+        <div className="flex">
+          <FontAwesomeIcon
+            className="w-6 h-6 cursor-pointer"
+            onClick={() => handleLike(user._id, post._id)}
+            style={{ color: likeColor }}
+            icon={faHeart}
+          />
+          <p className="ml-2">{likeCount}</p>
+        </div>
+        <div className="flex" onClick={count !== 0 ? handleCommentModal : null}>
+          <FontAwesomeIcon
+            className="w-6 h-6 text-[#837D7D] cursor-pointer"
+            icon={faCommentDots}
+          />
+          <p className="ml-2">{count}</p>
+        </div>
+        <FontAwesomeIcon
+          className="w-6 h-6 cursor-pointer"
+          style={{ color: savedColor }}
+          onClick={() => handleSavePost(user._id, post._id)}
+          icon={faBookmark}
+        />
+      </div>
+      {myComment && 
+      <div className="flex items-center">
+        <p className="max-w-[32rem] font-semibold">{user.userName}</p>
+        <p>:{myComment}</p>
+      </div>
+      }
+      {count>1 && 
+      <p className="text-sm mt-2 mb-1 cursor-pointer" onClick={handleCommentModal}>View {count} comments</p>}
+      <hr className="bg-slate-500 mr-10"/>
+      <div className="flex items-center">
+        <img
+          className="w-9 h-9 rounded-full"
+          src={user.profileImage}
+          alt="img"
+        />
+        <div className="ml-5 mb-3">
+          <div className="bg-[#EAEAEA] mt-3 h-8 w-[17rem] md:w-[32rem] rounded-full flex items-center">
+            <input
+              type="text"
+              name="description"
+              value={comment}
+              onChange={(e)=>setComment(e.target.value)}
+              className="ml-2 bg-transparent border-none focus:outline-none flex-grow"
+              placeholder="Write your comment"
+            />
+            {comment.length>=1 &&
+            <button type="submit" onClick={()=>handlePostComment(user._id,post._id)}>
+              <FontAwesomeIcon
+                className="ml-7 text-[#2892FF]"
+                size="xl"
+                icon={faCircleChevronRight}
+              />
+            </button>
+            }
           </div>
         </div>
       </div>
-      {isOptionsModalOpen && (
-        <OptionsModal
-          isModalOpen={handleModal}
-          onModalClose={handleModal}
-          post={post}
-        />
-      )}
-      {isCommentModalOpen && (
-        <Comments 
-          isModalOpen={handleCommentModal}
-          onModalClose={handleCommentModal}
-          post={post}
-          onDeleteComment={handleCommentDelete}
-        />
-      )}
     </div>
+  </div>
+  {isOptionsModalOpen && (
+    <OptionsModal
+      isModalOpen={handleModal}
+      onModalClose={handleModal}
+      handlePost={handlePost}
+      post={post}
+    />
+  )}
+  {isCommentModalOpen && (
+    <Comments 
+      isModalOpen={handleCommentModal}
+      onModalClose={handleCommentModal}
+      post={post}
+      onDeleteComment={handleCommentDelete}
+    />
+  )}
+</div>
+
+
   );
 }
 
