@@ -6,7 +6,7 @@ import {
   faMagnifyingGlass,
   faMultiply,
 } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import Modal from "react-modal";
@@ -19,11 +19,12 @@ import CropModal from "./Modals/CropModal";
 import getCroppedImg from "../helpers/croppedImage";
 import PostCropModal from "./Modals/PostCropModal";
 import { uploadImageToCloudinary } from "../helpers/cloudinaryUpload";
+import { setPosts } from "../utils/reducers/authSlice";
 
 // Make sure Modal is imported properly
 // Ensure that the Modal is properly styled and rendered in the component tree
 
-function AddPostModal({ isOpen, onClose }) {
+function AddPostModal({ isOpen, onClose,handlePost }) {
   const [image, setImage] = useState(null);
   const [crop, setCrop] = useState<Area>({ x: 0, y: 0, width: 1, height: 1 });
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
@@ -35,6 +36,7 @@ function AddPostModal({ isOpen, onClose }) {
   const [description, setDescription] = useState("");
 
   const user = useSelector((state:any)=>state.auth.user);
+  const dispatch = useDispatch()
   const fileInputRef = useRef(null);
   
 
@@ -60,7 +62,9 @@ function AddPostModal({ isOpen, onClose }) {
           .then((response:any)=>{
             const data = response.data;
             if(response.status===200){
-                onClose()
+                handlePost();
+                dispatch(setPosts({posts:data.post}))
+                onClose();
                 toast.success(data.message);
             }else{
                 toast.error(data.message);
@@ -239,7 +243,7 @@ function AddPostModal({ isOpen, onClose }) {
 }
 
 //------------------------------------------------------------------------------
-function AddPost() {
+function AddPost({handlePost}) {
   const user = useSelector((state) => state.auth.user);
   const [isInputValid, setIsInputValid] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -276,6 +280,7 @@ function AddPost() {
                 const data = response.data;
                 if (response.status === 200) {
                   toast.success(data.message);
+                  handlePost()
                   console.log("data", data);
                 } else {
                   toast.error(data.message);
@@ -304,15 +309,15 @@ function AddPost() {
   };
 
   return (
-    <div className="bg-white w-[40rem] ml-3 rounded-md">
-      <div className="flex ml-5 mt-5">
+    <div className=" w-[25rem] bg-white md:w-[40rem] md:ml-3 rounded-md">
+      <div className=" flex ml-5 mt-5">
         <img
           className="w-9 h-9 mt-3 rounded-full"
           src={user.profileImage}
           alt=""
         />
         <div className="ml-5">
-          <div className="bg-[#EAEAEA] mt-3 h-8 w-[32rem] rounded-full flex items-center">
+          <div className="bg-[#EAEAEA] w-[18rem] mt-3 h-8 md:w-[32rem] rounded-full flex items-center">
             <FontAwesomeIcon
               className="ml-2 text-[#837D7D]"
               icon={faMagnifyingGlass}
@@ -320,7 +325,7 @@ function AddPost() {
             <input
               type="text"
               name="description"
-              className="ml-2 bg-transparent border-none focus:outline-none flex-grow"
+              className=" ml-2 bg-transparent border-none focus:outline-none flex-grow"
               placeholder="Say Something....."
               value={formik.values.description}
               onChange={handleInputChange}
@@ -348,7 +353,7 @@ function AddPost() {
       </div>
 
       {isModalOpen && (
-        <AddPostModal isOpen={isModalOpen} onClose={closeModal} />
+        <AddPostModal isOpen={isModalOpen} onClose={closeModal} handlePost={handlePost} />
       )}
     </div>
   );

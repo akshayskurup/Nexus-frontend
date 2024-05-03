@@ -19,7 +19,7 @@ export const apiCall = async(method:string,url:string,data:any)=>{
                 response = await api.patch(url,data);
                 break;
             case "delete":
-                response = await api.delete(url,data);
+                response = await api.delete(url);
                 break;
             default:
                 throw new Error("Invalid HTTP method");

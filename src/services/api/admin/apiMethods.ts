@@ -57,3 +57,41 @@ export const changeUserStatus = (data:{userId:string,status:boolean})=>{
         }
     })
 }
+
+//@des     Get All Posts
+//method   POST
+
+export const getAllPosts = ()=>{
+    return new Promise((resolve,reject)=>{
+        try {
+            apiCall("get",adminUrl.getAllPost,"")
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            });
+        } catch (error) {
+            resolve({status:500,message:"Error in the getAllPosts"});
+        }
+    })
+}
+
+//@des     Block/UnBlock Post
+//method   POST
+
+export const changePostStatus = (data:{postId:string,status:boolean})=>{
+    return new Promise((resolve,reject)=>{
+        try {
+            apiCall("post",adminUrl.changePostStatus,data)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            });
+        } catch (error) {
+            resolve({status:500,message:"Error in the changePostStatus"});
+        }
+    })
+}
