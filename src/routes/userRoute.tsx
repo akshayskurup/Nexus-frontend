@@ -10,6 +10,7 @@ import MyProfile from "../pages/myProfile/MyProfile";
 import ProtectedRoutes from "./ProtectedRotues";
 import HomePage from "../pages/homePage/HomePage";
 import UserProfile from "../pages/userProfile/UserProfile";
+import Chat from "../pages/chat/Chat";
 
 
 function UserRoute() {
@@ -23,6 +24,7 @@ function UserRoute() {
         <Route path="/account-setup" element={<AccountSetup /> } />
         <Route path="/my-profile" element={<ProtectedRoutes><MyProfile /></ProtectedRoutes>} />
         <Route path="/home" element={<ProtectedRoutes><HomePage /></ProtectedRoutes>} />
+        <Route path="/chat" element={<ProtectedRoutes><Chat /></ProtectedRoutes>} />
         <Route path="/profile/:userId" element={<ProtectedRoutes><UserProfile /></ProtectedRoutes>} />
 
 

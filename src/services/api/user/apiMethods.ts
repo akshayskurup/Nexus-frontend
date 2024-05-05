@@ -1,4 +1,4 @@
-import { postUrl, userUrl } from "../../../constants/routes";
+import { connectionUrls, postUrl, userUrl } from "../../../constants/routes";
 import { apiCall } from "./apiCalls";
 
 
@@ -506,6 +506,65 @@ export const deleteComment = (commentId:string)=>{
             })
         } catch (error) {
             resolve({status:500,message:"Error during posting comment"});
+        }
+    })
+}
+
+//@des     Follow User
+//method   POST
+
+export const follow = (values:{userId:string,followingUser:string})=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            console.log("Valll",values);
+            
+            apiCall("post",connectionUrls.follow,values)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during following"});
+        }
+    })
+}
+
+//@des     Unfollow User
+//method   POST
+
+export const unFollow = (values:{userId:string,unFollowingUser:string})=>{
+    return new Promise ((resolve,reject)=>{
+        try {            
+            apiCall("post",connectionUrls.unFollow,values)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during unfollowing"});
+        }
+    })
+}
+
+//@des     Get User Connections
+//method   POST
+
+export const getUserConnections = (userId:any)=>{
+    return new Promise ((resolve,reject)=>{
+        try {            
+            apiCall("post",connectionUrls.getConnection,{userId})
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during unfollowing"});
         }
     })
 }

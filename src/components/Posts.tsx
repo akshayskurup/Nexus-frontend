@@ -30,7 +30,6 @@ import { Link } from "react-router-dom";
 
 function ReportOptionModal({ isOpen, onClose, post, user }) {
   const onReport = (reason: string) => {
-    console.log("Message", reason);
     ReportPost({
       userId: user._id,
       postId: post._id,
@@ -102,7 +101,6 @@ function EditPostModal({ isOpen, onClose, post, handlePost }) {
       description: Yup.string().trim().min(7, "Enter something.."),
     }),
     onSubmit: async (values) => {
-      console.log("Form submitted with values:", values);
       const data = {
         userId: user._id,
         postId: post._id,
@@ -126,11 +124,8 @@ function EditPostModal({ isOpen, onClose, post, handlePost }) {
 
   useEffect(() => {
     if (description.length >= 7) {
-      console.log(valid);
       setValid(true);
     } else {
-      console.log(valid);
-
       setValid(false);
     }
   }, [description]);
@@ -309,8 +304,6 @@ function Posts({ post, handlePost , handleSavedPost}) {
   const handleCommentDelete = () => {
     // Update state to trigger useEffect
     setRefetchData(prevState => !prevState);
-    console.log(refetchData);
-    
   };
 
 
@@ -324,7 +317,6 @@ function Posts({ post, handlePost , handleSavedPost}) {
           postId: postId
         }
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -333,8 +325,6 @@ function Posts({ post, handlePost , handleSavedPost}) {
   };
 
   useEffect(()=>{
-    console.log("post",post);
-    
   fetchData(user._id, post._id)
   .then((response: any) => {
       setMyComment(response.comment);
@@ -364,7 +354,6 @@ function Posts({ post, handlePost , handleSavedPost}) {
         setIsLikedByUser(!isLikedByUser);
         if (isLikedByUser) {
           setLikedUsers((prev) => {
-            console.log("prev", prev);
             return prev.filter((likedUser) => likedUser._id !== userId);
           });
           setLikeCount((prev) => prev - 1);
@@ -382,8 +371,6 @@ function Posts({ post, handlePost , handleSavedPost}) {
     SavePost({ userId, postId }).then((response: any) => {
       const data = response.data;
       if (response.status === 200) {
-        console.log("Saveddd",data.updatedUser);
-        
         dispatch(updateUser({ user: data.updatedUser }));
         setIsSavedByUser(!isSavedByUser);
         handleSavedPost()
@@ -392,7 +379,7 @@ function Posts({ post, handlePost , handleSavedPost}) {
       }
     });
   };
-  const handlePostComment = (userId:string,postId:string)=>{
+  const handlePostComment = (userId:string,postId:string,post:any)=>{
     addComment({userId,postId,comment})
     .then((response: any) => {
       const data = response.data;
@@ -400,9 +387,13 @@ function Posts({ post, handlePost , handleSavedPost}) {
         setComment('')
         toast.success(data.message);
         if (typeof handleSavedPost === 'function') {
+          console.log("Workingg");
           handleSavedPost();
         }
-        handlePost();
+        console.log("Thisss");
+        console.log("userId",post.userId._id);
+        
+        handlePost(post.userId._id);
       } else {
         toast.error(data.message);
       }
@@ -420,8 +411,6 @@ function Posts({ post, handlePost , handleSavedPost}) {
     setIsCommentModalOpen(!isCommentModalOpen)
   }
 
-  
-
   // const handleCommentDelete = () => {
   //   setCount((prevCount) => prevCount - 1);
   //   console.log("prevCount",count);
@@ -429,8 +418,6 @@ function Posts({ post, handlePost , handleSavedPost}) {
   // };
 
   return (
-    
-
     <div key={post._id} className="w-[25rem]  md:w-[40rem] md:ml-3 rounded-md mt-5 bg-white">
   <div className="ml-4">
     <div className="flex items-center ml-5 pt-2">
@@ -514,7 +501,7 @@ function Posts({ post, handlePost , handleSavedPost}) {
               placeholder="Write your comment"
             />
             {comment.length>=1 &&
-            <button type="submit" onClick={()=>handlePostComment(user._id,post._id)}>
+            <button type="submit" onClick={()=>handlePostComment(user._id,post._id,post)}>
               <FontAwesomeIcon
                 className="ml-7 text-[#2892FF]"
                 size="xl"
