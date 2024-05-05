@@ -24,7 +24,7 @@ function Login() {
     });
 
     useEffect(()=>{
-        if(user){
+        if(user&&!user.isBlocked){
             navigate('/my-profile')
         }
     },[]);

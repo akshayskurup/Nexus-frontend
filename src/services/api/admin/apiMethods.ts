@@ -23,10 +23,11 @@ export const adminPostLogin = (adminData:{email:string,password:string})=>{
 //@des     Get All Users
 //method   POST
 
-export const getAllUsers = ()=>{
+export const getAllUsers = (page:any)=>{
     return new Promise((resolve,reject)=>{
         try {
-            apiCall("get",adminUrl.AllUsers,"")
+            const queryParams = `?page=${page}`;
+            apiCall("get",adminUrl.AllUsers+queryParams,null)
             .then((response)=>{
                 resolve(response);
             })
@@ -61,10 +62,11 @@ export const changeUserStatus = (data:{userId:string,status:boolean})=>{
 //@des     Get All Posts
 //method   POST
 
-export const getAllPosts = ()=>{
+export const getAllPosts = (page:number)=>{
     return new Promise((resolve,reject)=>{
         try {
-            apiCall("get",adminUrl.getAllPost,"")
+            const queryParams = `?page=${page}`;
+            apiCall("get",adminUrl.getAllPost+queryParams,"")
             .then((response)=>{
                 resolve(response);
             })
@@ -80,10 +82,11 @@ export const getAllPosts = ()=>{
 //@des     Block/UnBlock Post
 //method   POST
 
-export const changePostStatus = (data:{postId:string,status:boolean})=>{
+export const changePostStatus = (data:{postId:string,status:boolean},page:number)=>{
     return new Promise((resolve,reject)=>{
         try {
-            apiCall("post",adminUrl.changePostStatus,data)
+            const queryParams = `?page=${page}`;
+            apiCall("post",adminUrl.changePostStatus+queryParams,data)
             .then((response)=>{
                 resolve(response);
             })

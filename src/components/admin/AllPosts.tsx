@@ -2,26 +2,31 @@ import { useEffect, useState } from "react"
 import AdminSidebar from "./AdminSidebar"
 import { changePostStatus, getAllPosts } from "../../services/api/admin/apiMethods"
 import { toast } from "sonner"
+import { Pagination } from "flowbite-react";
+
 
 function AllPosts() {
-    const [allPost, setAllPost] = useState([])
+    const [allPost, setAllPost] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalCount , setTotalCount] =useState(0);
 
     useEffect(()=>{
-        getAllPosts()
+        getAllPosts(currentPage)
         .then((response:any)=>{
             const data = response.data
             if(response.status===200){
-                console.log("data",data.allPosts);
-                
+                console.log("data",data);
                 setAllPost(data.allPosts);
+                const totalPostCount = Math.ceil(data.totalReportedPost/5)
+                setTotalCount(totalPostCount)
             }else{
                 toast.error(data.message);
             }
         })
-    },[])
+    },[currentPage])
 
     const handlePostBlock = (postId,status)=>{
-        changePostStatus({ postId, status })
+        changePostStatus({ postId, status },currentPage)
         .then((response: any) => {
             const data = response.data;
             console.log("dataaa",data);
@@ -33,23 +38,19 @@ function AllPosts() {
             
         }})
     }
+    const onPageChange = (page: number) => setCurrentPage(page);
   return (
     <>
     <AdminSidebar />
     <div className="ml-80">
-        
-        
-
-
-
-
 <div className="flex flex-col mt-8 w-[50rem] ">
     <div className="-my-2 py-2 overflow-x-auto sm:-mx-5 sm:px-6 lg:-mx-8 lg:px-8">
         <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
             <table className="min-w-full">
                 <thead>
                     <tr>
-                        <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Post</th>
+                        <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Content</th>
                         <th className="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Status</th>
                         <th className="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                     </tr>
@@ -70,13 +71,19 @@ function AllPosts() {
 
                                 
                                 <div className="ml-4">
-                                    <div className="text-sm leading-5 font-medium text-gray-900">{post.reason}</div>
+                                    {post.reason.map((reasons)=>(
+                                    <div className="text-sm leading-5 font-medium text-gray-900">{reasons}</div>
+                                    ))}
                                     <div className="text-sm leading-5 text-gray-500">{post.userId.userName}</div>
                                 </div>
                             </div>
                         </td>
                         
                         
+                        <td>
+                        <div className="text-sm leading-5 font-medium text-gray-900">{post.postId.description}</div>
+
+                        </td>
 
                         <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                             
@@ -106,6 +113,13 @@ function AllPosts() {
             </table>
            
         </div>
+        <Pagination
+          layout="table"
+          currentPage={currentPage}
+          totalPages={totalCount} 
+          onPageChange={onPageChange}
+          showIcons
+        />
         
     </div>
 </div>

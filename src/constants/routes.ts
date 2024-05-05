@@ -22,9 +22,9 @@ export const adminUrl = {
 }
 
 export const postUrl = {
-    addPost:"post/add-post",
-    getAllPost:"post/get-post",
-    likePost:"post/like-post",
+    addPost:"/post/add-post",
+    getAllPost:"/post/get-post",
+    likePost:"/post/like-post",
     updatePost:"/post/update-post",
     deletePost:"/post/delete-post",
     reportPost:"/post/report-post",
@@ -37,5 +37,11 @@ export const postUrl = {
     getCommentsCount:"/post/get-comments-count",
     commentDelete:"/post/delete-comment",
     replyComment:"/post/reply-comment"
+}
+
+export const connectionUrls = {
+    follow:"/connection/follow",
+    unFollow:"/connection/unfollow",
+    getConnection:"/connection/get-connection"
 }
 
