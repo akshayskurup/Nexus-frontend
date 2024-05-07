@@ -1,4 +1,4 @@
-import { connectionUrls, postUrl, userUrl } from "../../../constants/routes";
+import { chatUrl, connectionUrls, postUrl, userUrl } from "../../../constants/routes";
 import { apiCall } from "./apiCalls";
 
 
@@ -564,7 +564,107 @@ export const getUserConnections = (userId:any)=>{
                 reject(err);
             })
         } catch (error) {
-            resolve({status:500,message:"Error during unfollowing"});
+            resolve({status:500,message:"Error during getting user connection"});
+        }
+    })
+}
+
+//@des     Add New Conversations
+//method   POST
+
+export const addConversation = (senderId:any,receiverId:any)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            
+            apiCall("post",chatUrl.addConversation,{senderId,receiverId})
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during creating new conversation"});
+        }
+    })
+}
+
+//@des     Get User Conversations
+//method   GET
+
+export const getUserConversation = (userId:any)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            const url = `${chatUrl.getUserConversation}/${userId}`
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during get user conversation"});
+        }
+    })
+}
+
+//@des     Get User Conversations
+//method   GET
+
+export const findTwoUserConversation = (userId1:any,userId2:any)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            const url = `${chatUrl.findConversationOfTwoUsers}/${userId1}/${userId2}`
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during finding two user conversation"});
+        }
+    })
+}
+
+
+//@des     Get User Messages
+//method   GET
+
+export const getUserMessages = (conversationId:any)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            const url = `${chatUrl.getMessages}/${conversationId}`
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during getting user message"});
+        }
+    })
+}
+
+//@des     Add Message
+//method   POST
+
+export const addMessage = (value:any)=>{
+    return new Promise ((resolve,reject)=>{
+        try {            
+            apiCall("post",chatUrl.addMessage,value)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during adding message"});
         }
     })
 }

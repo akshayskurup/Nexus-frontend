@@ -45,3 +45,11 @@ export const connectionUrls = {
     getConnection:"/connection/get-connection"
 }
 
+export const chatUrl = {
+    addConversation: "/chat/add-conversation",
+    getUserConversation: "/chat/get-conversations",
+    findConversationOfTwoUsers: "/chat/find-conversation",
+    addMessage: "/chat/add-message",
+    getMessages: "/chat/get-messages",
+
+}
