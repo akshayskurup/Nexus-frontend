@@ -51,7 +51,7 @@ function Conversations({chatUser,currentUser,handleActiveChat,currentChatProfile
   return (
     <>
           {/* onClick={()=>handleActiveChat(user)} */}
-          <div className='flex items-center mt-5' onClick={()=>handleChat(user)}>
+          <div className='flex items-center mt-5 ml-9' onClick={()=>handleChat(user)}>
             <img src={user?.profileImage} alt="" className='w-10 h-10 rounded-full' />
             <div className='ml-24 '>
               <p>{user?.userName}</p>

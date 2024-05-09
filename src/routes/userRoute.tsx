@@ -11,6 +11,8 @@ import ProtectedRoutes from "./ProtectedRotues";
 import HomePage from "../pages/homePage/HomePage";
 import UserProfile from "../pages/userProfile/UserProfile";
 import Chat from "../pages/chat/Chat";
+import VideoCall from "../components/VideoCall";
+import AudioCall from "../components/AudioCall";
 
 
 function UserRoute() {
@@ -26,6 +28,11 @@ function UserRoute() {
         <Route path="/home" element={<ProtectedRoutes><HomePage /></ProtectedRoutes>} />
         <Route path="/chat" element={<ProtectedRoutes><Chat /></ProtectedRoutes>} />
         <Route path="/profile/:userId" element={<ProtectedRoutes><UserProfile /></ProtectedRoutes>} />
+        <Route path="/profile/:userId" element={<ProtectedRoutes><UserProfile /></ProtectedRoutes>} />
+        <Route path="/video-call/:roomId/:userId" element={<VideoCall />} />
+        <Route path="/audio-call/:roomId/:userId" element={<AudioCall />} />
+
+
 
 
         </Routes>

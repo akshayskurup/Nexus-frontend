@@ -9,7 +9,7 @@ function SendedMessage({ mess }) {
   
     return (
         <>
-      <div className="bg-blue-500 min-w-20 pr-4 rounded-lg ml-auto mr-10" style={{ maxWidth, maxHeight, wordWrap: 'break-word' }}>
+      <div className="bg-blue-500 min-w-20 pr-4 rounded-lg ml-auto mr-7 md:mr-10" style={{ maxWidth, maxHeight, wordWrap: 'break-word' }}>
         <p className="ml-4">{mess.text}</p>
       </div>
       <p className='ml-auto mr-10 text-[0.7rem] -mt-[8px]'><TimeAgo datetime={mess.updatedAt}/></p>
