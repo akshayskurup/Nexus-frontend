@@ -30,7 +30,7 @@ function NavBar() {
         <div className='lg:flex lg:gap-24 lg:ml-24 md:gap-10 md:ml-3 md:flex '>
         <FontAwesomeIcon className="text-[#2892FF]" onClick={()=>navigate('/home')} size='lg'  icon={faHome} />
         <FontAwesomeIcon className="text-[#837D7D]" size='lg' icon={faCompass} />
-        <FontAwesomeIcon className="text-[#837D7D]" size='lg' icon={faComment} />
+        <FontAwesomeIcon className="text-[#837D7D]" onClick={()=>navigate('/chat')} size='lg' icon={faComment} />
         <FontAwesomeIcon className="text-[#837D7D]" size='lg' icon={faBell} />
         <FontAwesomeIcon className="text-[#837D7D]" size='lg' icon={faPeopleGroup} />
         
