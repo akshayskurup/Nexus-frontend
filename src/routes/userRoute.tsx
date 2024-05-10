@@ -13,6 +13,7 @@ import UserProfile from "../pages/userProfile/UserProfile";
 import Chat from "../pages/chat/Chat";
 import VideoCall from "../components/VideoCall";
 import AudioCall from "../components/AudioCall";
+import GroupVideoCall from "../components/GroupVideoCall";
 
 
 function UserRoute() {
@@ -31,6 +32,8 @@ function UserRoute() {
         <Route path="/profile/:userId" element={<ProtectedRoutes><UserProfile /></ProtectedRoutes>} />
         <Route path="/video-call/:roomId/:userId" element={<VideoCall />} />
         <Route path="/audio-call/:roomId/:userId" element={<AudioCall />} />
+        <Route path="/audio-call/:roomId/:userId" element={<AudioCall />} />
+        <Route path ="/group-video-call/:roomId/:userId" element={<GroupVideoCall />} />
 
 
 

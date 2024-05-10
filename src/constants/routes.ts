@@ -52,4 +52,8 @@ export const chatUrl = {
     addMessage: "/chat/add-message",
     getMessages: "/chat/get-messages",
 
+    addGroup: "/chat/add-group",
+    getUserGroups: "/chat/get-groups",
+    addGroupMesssage:"/chat/add-group-message",
+    getGroupMessages:"/chat/get-group-messages"
 }
