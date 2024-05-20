@@ -668,3 +668,82 @@ export const addMessage = (value:any)=>{
         }
     })
 }
+
+//@des     Create New Group
+//method   POST
+
+export const createNewGroup = (userData:any)=>{
+    return new Promise((resolve,reject)=>{
+        try {
+            apiCall("post",chatUrl.addGroup,userData)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Erron in createNewGroup"});
+        }
+    });
+}
+
+//@des     Get User Groups
+//method   GET
+
+export const getUserGroups = (userId:string)=>{
+    return new Promise((resolve,reject)=>{
+        try {
+            const url = `${chatUrl.getUserGroups}/${userId}`
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Erron in createNewGroup"});
+        }
+    });
+}
+
+//@des     Add New Group Message
+//method   POST
+
+export const addNewGroupMessage = (values:{groupId:string,sender:string,text:string})=>{
+    return new Promise((resolve,reject)=>{
+        try {
+            
+            apiCall("post",chatUrl.addGroupMesssage,values)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Erron in adding new Message"});
+        }
+    });
+}
+
+//@des     Get Group Message
+//method   GET
+
+export const getGroupMessage = (groupId:string)=>{
+    return new Promise((resolve,reject)=>{
+        try {
+            const url = `${chatUrl.getGroupMessages}/${groupId}`
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Erron during fetching Messages"});
+        }
+    });
+}

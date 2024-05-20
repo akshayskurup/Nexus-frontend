@@ -43,7 +43,7 @@ function AudioCallModal({show,onHide,onAccept,onReject,caller}) {
                     
                       Accept
                     </div>
-                  </button>
+                  </button> 
                 </div>
               </div>
               </Modal>

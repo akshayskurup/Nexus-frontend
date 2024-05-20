@@ -15,8 +15,11 @@ import {
   GetUserProfile,
   addConversation,
   addMessage,
+  addNewGroupMessage,
+  getGroupMessage,
   getUserConnections,
   getUserConversation,
+  getUserGroups,
   getUserMessages,
 } from "../../services/api/user/apiMethods";
 import { useSelector } from "react-redux";
@@ -27,25 +30,34 @@ import Conversations from "../../components/chat/Conversations";
 import { useNavigate } from "react-router-dom";
 import VideoCallModal from "../../components/Modals/VideoCallModal";
 import AudioCallModal from "../../components/Modals/AudioCallModal";
+import CreateGroupModal from "../../components/Modals/CreateGroupModal";
+import UserGroup from "../../components/chat/UserGroup";
+import GroupVideoCallModal from "../../components/Modals/GroupVideoCallModal";
 
 function Chat() {
   const socket = useRef<any>(null);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [mutualConnections, setMutualConnections] = useState([]);
+  const [conversations, setConversations] = useState([]);
+  const [groups,setGroups] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [profile, setProfile] = useState(null);
   const [messages, setMessages] = useState("");
   const [newMessage, setNewMessage] = useState("");
-  const [conversations, setConversations] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState<any>(null);
+  const [groupArrivalMessage, setGroupArrivalMessage] = useState(null)
   const [videoCallRoomId, setVideoCallRoomId] = useState('')
   const [audioCallRoomId, setAudioCallRoomId] = useState('')
   const [audioCallRequestedUser, setAudioCallRequestedUser] = useState({name:'',profile:''})
   const [callRequestedUser, setCallRequestedUser] = useState({name:'',profile:''})
   const [joinAudioCall, setJoinAudioCall] = useState(false);
   const [joinVideoCall, setJoinVideoCall] = useState(false);
+  const [joinGroupVideoCall,setJoinGroupVideoCall] = useState(false);
+  const [createGroupModal,setCreateGroupModal] = useState(false);
+  
+
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const user = useSelector((state: any) => state.auth.user);
@@ -54,17 +66,35 @@ function Chat() {
   const getConversation = () => {
     getUserConversation(user._id).then((response: any) => {
       const data = response.data;
-      console.log("DATA", data);
-
       if (response.status === 200) {
         setConversations(data);
         console.log("Converas", conversations);
         setMutualConnections([]);
+        setGroups([])
       } else {
         toast.error(data.message);
       }
     });
   };
+
+  
+  const getGroupMessageFn = ()=>{
+    console.log("isnide getGroupMEsss")
+    socket.current.on("getGroupMessages", (data: any) => {
+      console.log("isnide getGroupMEsss2222")
+      GetUserProfile(data.sender).then((response: any) => {
+        console.log("get dataaa",response.data);
+        
+        setGroupArrivalMessage({
+          group: data.groupId,
+          sender: response.data.user,
+          text: data.text,
+          createdAt: Date.now(),
+        });
+        console.log("DAta from getGroupMessage",arrivalMessage);
+      })
+    })
+  }
 
   useEffect(() => {
     // Initialize socket connection and attach event listener
@@ -87,6 +117,8 @@ function Chat() {
         console.log("DAta from getMessage",arrivalMessage);
       })
     });
+
+    getGroupMessageFn()
     // console.log("ArrivalMess", arrivalMessage);
     // // Cleanup function to remove event listener when component unmounts
     // return () => {
@@ -97,16 +129,61 @@ function Chat() {
   }, []);
 
   useEffect(() => {
-    (arrivalMessage && currentChat?.members.includes(arrivalMessage?.sender)) ||
-      (currentChat?.members.find(
-        (member: any) => member._id !== arrivalMessage?.sender._id
-      ) &&
-        setMessages((prev: any) => [...prev, arrivalMessage]));
-    console.log("SET MESSSS", messages);
-    console.log("ArrivalMess", arrivalMessage);
-  }, [arrivalMessage]);
+    console.log("set Messages GROUP ARIVAL MESS",groupArrivalMessage);
+    groupArrivalMessage &&
+      currentChat?._id == groupArrivalMessage.group &&
+      setMessages((prev) => [...prev, groupArrivalMessage]);
+  }, [groupArrivalMessage, currentChat]);
+
+
+
+  // useEffect(() => {
+  //   console.log("arrivalMessage",arrivalMessage);
+  //   console.log("currentChat.members.includes",currentChat?.members.includes(arrivalMessage?.sender._id));
+  //   console.log("currentChatmembersfind",currentChat?.members.find((member: any) => member !== arrivalMessage?.sender._id));
+    
+  //   (arrivalMessage && currentChat?.members.includes(arrivalMessage?.sender._id)) ||
+  //     (currentChat?.members.find(
+  //       (member: any) => member !== arrivalMessage?.sender._id
+  //     ) &&
+  //       setMessages((prev: any) => [...prev, arrivalMessage]));
+  //   console.log("SET MESSSS", messages);
+  //   console.log("ArrivalMess", arrivalMessage);
+  // }, [arrivalMessage,currentChat]);
+
+  
+  useEffect(() => {
+    if (arrivalMessage && currentChat) {
+      // Check if the arrival message sender is already included in the chat members
+      const senderInMembers = currentChat.members.some((member: any) => member === arrivalMessage.sender._id);
+      
+      // If the sender is in the chat members, add the message to the messages state
+      if (senderInMembers) {
+        setMessages((prevMessages: any) => [...prevMessages, arrivalMessage]);
+      }
+    }
+  }, [arrivalMessage, currentChat]);
+  
 
   useEffect(() => {
+      
+    if(!currentChat?.isGroup && currentChat?.name){
+      
+      console.log("groupCurrentChat",currentChat);
+
+    getGroupMessage(currentChat?._id)
+    .then((response: any) => {
+      const data = response.data;
+      console.log("GroupChjat",data)
+      if (response.status === 200) {
+        setMessages(data);
+      } else {
+        console.log("data",data)
+        toast.error(data.message);
+      }
+    });
+  }else{
+    console.log("CurrentChatttt",currentChat);
     getUserMessages(currentChat?._id).then((response: any) => {
       const data = response.data;
       if (response.status === 200) {
@@ -115,6 +192,7 @@ function Chat() {
         toast.error(data.message);
       }
     });
+  }
   }, [currentChat]);
 
   useEffect(() => {
@@ -139,6 +217,13 @@ function Chat() {
       setJoinVideoCall(true);
       
     })
+
+    socket.current.on("GroupVideoCallResponse",(data:any)=>{
+      console.log("Inside the groupVideocall response")
+      setVideoCallRoomId(data.roomId);
+      setCallRequestedUser({name:data.groupName,profile:data.profile})
+      setJoinGroupVideoCall(true);
+    })
   },[socket])
 
   useEffect(()=>{
@@ -157,6 +242,11 @@ function Chat() {
   const handleJoinVidoCallRoom=()=>{
  
     navigate(`/video-call/${videoCallRoomId}/${user._id}`);
+   
+  }
+  const handleJoinGroupVidoCallRoom=()=>{
+ 
+    navigate(`/group-video-call/${videoCallRoomId}/${user._id}`);
    
   }
   const handleJoinAudioCallRoom=()=>{
@@ -178,6 +268,7 @@ function Chat() {
         following.some((followingUser) => followingUser._id === follower._id)
       );
       setConversations([]);
+      setGroups([])
       setMutualConnections(mutual);
 
       console.log("Mutual", mutualConnections);
@@ -193,6 +284,14 @@ function Chat() {
   const handleActiveChat = (userObj: any) => {
     setProfile(userObj);
     setCurrentChat(userObj);
+    console.log("OBJJJJ",userObj)
+    if(userObj.name){
+      const data = {
+        groupId:userObj._id,
+        userId:user._id
+      }
+      socket.current.emit("joinGroup",data)
+    }
   };
 
   const handleMessage = () => {
@@ -203,13 +302,14 @@ function Chat() {
           const data = response.data;
           if (response.status === 200) {
             console.log("New conversation created:", data);
-            handleCurrentChat(data); // Assuming this function sets the current chat
+            handleCurrentChat(data); 
           }
         })
         .catch((error: any) => {
           console.error("Error creating conversation:", error);
         });
-    } else if (currentChat && newMessage.trim() !== "") {
+    } else if (currentChat && newMessage.trim() !== "" && currentChat?.isGroup===false) {
+      console.log("Else if",currentChat)
       // If there's an active conversation, proceed with sending the message
       const receiverId = currentChat.members.find(
         (member) => member !== user._id
@@ -240,6 +340,27 @@ function Chat() {
         .catch((error: any) => {
           console.error("Error sending message:", error);
         });
+    }else{
+
+      const data = {
+        groupId:currentChat._id,
+        sender:user._id,
+        text:newMessage
+      }
+      console.log("Else case worked ",data)
+      socket.current.emit("sendGroupMessage",data)
+      
+      addNewGroupMessage(data)
+      .then((response: any) => {
+        const data = response.data;
+        console.log("Message sent:", data);
+        if (response.status === 200) {
+          setMessages([...messages, data]);
+          setNewMessage("");
+        } else {
+          toast.error(data.message);
+        }
+      })
     }
   };
 
@@ -268,6 +389,20 @@ function Chat() {
      navigate(`/video-call/${roomId}/${user._id}`);
   }
 
+  const handleGroupVideoCall = ()=>{
+    const roomId = generateRandomId(10);
+    const groupId = currentChat._id;
+    const emitData = {
+      roomId,
+      groupId,
+      groupName:currentChat.name,
+      groupProfile:currentChat.profile
+    }
+
+    socket.current.emit("GroupVideoCall",emitData)
+    navigate(`/group-video-call/${roomId}/${user._id}`);
+  }
+
   const handleAudioCall = ()=>{
     const roomId = generateRandomId(10);
     const receiverId = profile?._id;
@@ -281,6 +416,26 @@ function Chat() {
     socket.current.emit("AudioCallRequest",data);
     console.log("Audioooo",data)
      navigate(`/audio-call/${roomId}/${user._id}`);
+  }
+
+  const handleGroupAudioCall = ()=>{
+
+  }
+
+  const handleGroups = ()=>{
+    getUserGroups(user._id)
+    .then((response: any) => {
+      const data = response.data;
+      console.log("Groups Fetched:", data.groups);
+      if (response.status === 200) {
+        setGroups(data.groups);
+        setMutualConnections([]);
+        setConversations([]);
+        console.log("consoling group",groups)
+      } else {
+        toast.error(data.message);
+      }
+    })
   }
   
   return (
@@ -297,9 +452,11 @@ function Chat() {
       <div className="flex w-screen">
       <div className={`w-full md:w-1/2   bg-white border border-r-3 min-h-[90vh] ${currentChat ? 'hidden' : ''} md:block`}>
           <p className="font-semibold text-xl text-center mt-5">Messages</p>
+          <button onClick={()=>setCreateGroupModal(true)}>Add groups</button>
           <div className="flex gap-20 justify-center mt-2">
           <button onClick={getConversation}>Messages</button>
           <button className="ml-5" onClick={handleAllFriendsMessage}>Friends</button>
+          <button className="ml-5" onClick={handleGroups}>Groups</button>
           </div>
           {conversations &&
             conversations.map((c) => (
@@ -321,9 +478,20 @@ function Chat() {
                 handleActiveChat={handleActiveChat}
                 handleCurrentChat={handleCurrentChat}
               />
-              
-              
             ))}
+
+{groups && groups.map((userGroup) => (
+  <div key={userGroup.id} onClick={() => handleActiveChat(userGroup)}>
+    <UserGroup
+      group={userGroup}
+      currentUser={user}
+      handleActiveChat={handleActiveChat}
+      handleCurrentChat={handleCurrentChat}
+    />
+  </div>
+))}
+
+
         </div>
         <div className={`md:w-[90%] ${currentChat ? 'w-full' : ''} pb-10 md:pb-0 bg-[#F5F5F5] flex flex-col`} style={{ height: window.innerWidth < 768 ? '10vh' : 'auto' }}>
 
@@ -334,14 +502,14 @@ function Chat() {
 
                   <FontAwesomeIcon className="-ml-8 mr-10  md:hidden" onClick={()=>setCurrentChat(null)} icon={faArrowLeft} />
                   <img
-                    src={profile.profileImage}
+                    src={profile.profileImage?profile.profileImage:profile.profile}
                     alt=""
                     className="w-10 h-10 rounded-full"
                   />
-                  <p className="ml-2 md:ml-24">{profile.userName}</p>
+                  <p className="ml-2 md:ml-24">{profile.userName?profile.userName:profile.name}</p>
                   <div className="flex ml-auto mr-7 md:mr-24  gap-14">
-                    <FontAwesomeIcon icon={faPhone} onClick={handleAudioCall}/>
-                    <FontAwesomeIcon icon={faVideo} onClick={handleVideoCall}/>
+                    <FontAwesomeIcon icon={faPhone} onClick={profile.profileImage?handleAudioCall:handleGroupAudioCall}/>
+                    <FontAwesomeIcon icon={faVideo} onClick={profile.profileImage?handleVideoCall:handleGroupVideoCall}/>
                   </div>
                 </div>
                 <hr className="h-px my-3 bg-black border-0 " />
@@ -398,6 +566,19 @@ function Chat() {
           caller={callRequestedUser}
           />
           }
+          {joinGroupVideoCall && 
+          <GroupVideoCallModal
+          show={joinGroupVideoCall}
+          onHide={() => setJoinGroupVideoCall(false)}
+          onAccept={handleJoinGroupVidoCallRoom}
+          onReject={ () => {
+            setVideoCallRoomId('');
+            setJoinGroupVideoCall(false);
+            }}
+          caller={callRequestedUser}
+          />
+          }
+
           {joinAudioCall && 
           <AudioCallModal
           show={joinAudioCall}
@@ -408,6 +589,12 @@ function Chat() {
             setJoinAudioCall(false)
           }}
           caller={audioCallRequestedUser}
+          />
+          }
+          {createGroupModal&&
+          <CreateGroupModal 
+          show={createGroupModal}
+          onHide={()=>setCreateGroupModal(false)}
           />
           }
         </div>

@@ -7,7 +7,7 @@ function ReceivedMessage({mess,profile}) {
   return (
     <div className='ml-4'>
     <div className='flex items-center gap-4'>
-    <img className='w-8 h-8 rounded-full' src={profile.profileImage} alt="adsf" />
+    <img className='w-8 h-8 rounded-full' src={profile.profileImage?profile.profileImage:mess.sender.profileImage} alt="adsf" />
     <div className="bg-slate-200 min-w-20 pr-4 rounded-lg" style={{ maxWidth, maxHeight, wordWrap: 'break-word' }}>
       <p className="ml-4">{mess.text}</p>
     </div>
