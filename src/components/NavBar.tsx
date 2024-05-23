@@ -1,13 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { logoutUser } from '../utils/reducers/authSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBell, faComment, faCompass, faHome, faMagnifyingGlass, faPeopleGroup, faSignOut } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faCircleChevronRight, faComment, faCompass, faHome, faMagnifyingGlass, faPeopleGroup, faSignOut } from '@fortawesome/free-solid-svg-icons';
+import SearchUserModal from './Modals/SearchUserModal'
 
 function NavBar() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const location = useLocation();
+    const [searchUser,setSearchUser] = useState('')
+    const [searchUserModal,setSearchUserModal] = useState(false);
     const user = useSelector((state:any)=>state.auth.user);
 
 
@@ -15,6 +19,9 @@ function NavBar() {
         dispatch(logoutUser());
         localStorage.clear();
         navigate('/login');
+    }
+    const handleSearch = ()=>{
+      setSearchUserModal(true)
     }
   return (
     <div className='bg-white h-12 w-screen flex items-center '>
@@ -25,14 +32,26 @@ function NavBar() {
           type="text"
           className="ml-2 bg-transparent border-none focus:outline-none flex-grow"
           placeholder="Search"
+          onChange={(e)=>setSearchUser(e.target.value)}
           />
+          {searchUser.length>0 && 
+          <button className='mr-1' type="submit" onClick={handleSearch}>
+              <FontAwesomeIcon
+                className="ml-7 text-[#2892FF]"
+                size="xl"
+                icon={faCircleChevronRight}
+              />
+            </button>
+          }
     </div>
         <div className='lg:flex lg:gap-24 lg:ml-24 md:gap-10 md:ml-3 md:flex '>
-        <FontAwesomeIcon className="text-[#2892FF]" onClick={()=>navigate('/home')} size='lg'  icon={faHome} />
-        <FontAwesomeIcon className="text-[#837D7D]" size='lg' icon={faCompass} />
-        <FontAwesomeIcon className="text-[#837D7D]" onClick={()=>navigate('/chat')} size='lg' icon={faComment} />
-        <FontAwesomeIcon className="text-[#837D7D]" size='lg' icon={faBell} />
-        <FontAwesomeIcon className="text-[#837D7D]" size='lg' icon={faPeopleGroup} />
+        <FontAwesomeIcon className={`text-[${location.pathname === '/home' ? '#2892FF' : '#837D7D'}] cursor-pointer`}
+        onClick={()=>navigate('/home')} size='lg'  icon={faHome} />
+        <FontAwesomeIcon className="text-[#837D7D] cursor-pointer" size='lg' icon={faCompass} />
+        <FontAwesomeIcon className={`text-[${location.pathname === '/chat' ? '#2892FF' : '#837D7D'}] cursor-pointer`}
+        onClick={()=>navigate('/chat')} size='lg' icon={faComment} />
+        <FontAwesomeIcon className="text-[#837D7D] cursor-pointer" size='lg' icon={faBell} />
+        <FontAwesomeIcon className="text-[#837D7D] cursor-pointer" size='lg' icon={faPeopleGroup} />
         
         </div>
         
@@ -43,6 +62,14 @@ function NavBar() {
           <FontAwesomeIcon className="text-red-700 cursor-pointer mt-1" size='lg' icon={faSignOut} />
         </button>
         </div>
+
+        {searchUserModal && 
+        <SearchUserModal
+        isOpen={searchUser}
+        onClose={()=>setSearchUserModal(false)}
+        searchUser={searchUser}
+        />
+        }
     </div>
 
   )

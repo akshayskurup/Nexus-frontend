@@ -208,6 +208,46 @@ export const EditUserProfile = (values:{userId:any,userName?:string,bio?:string,
     })
 }
 
+//@des     Search User
+//method   GET
+
+export const searchUserProfile = (search:string)=>{
+    return new Promise((resolve,reject)=>{
+        try {
+            const url = `${userUrl.searchUser}?search=${search}`;
+
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Erron during fetching user"});
+        }
+    });
+}
+
+//@des     User Suggestion
+//method   GET
+
+export const suggestedUser = (userId:string)=>{
+    return new Promise((resolve,reject)=>{
+        try {
+            const url = `${userUrl.suggestion}/${userId}`;
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Erron during fetching user"});
+        }
+    });
+}
 
 //@des     Add new Post
 //method   POST
@@ -667,6 +707,26 @@ export const addMessage = (value:any)=>{
             resolve({status:500,message:"Error during adding message"});
         }
     })
+}
+
+//@des     Get Last Message
+//method   GET
+
+export const getLastMessage = (conversationId:string)=>{
+    return new Promise((resolve,reject)=>{
+        try {
+            const url = `${chatUrl.getLastMessage}/${conversationId}`
+            apiCall("get",url,null)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Erron during fetching Last Message"});
+        }
+    });
 }
 
 //@des     Create New Group

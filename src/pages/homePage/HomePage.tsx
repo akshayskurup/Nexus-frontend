@@ -37,7 +37,7 @@ function HomePage() {
   return (
     <>
     
-    <div className='hidden md:block sticky top-0 '>
+    <div className='hidden md:block z-10 sticky top-0 '>
         <NavBar />
       </div>
       <div className='sticky top-0 md:hidden'>
@@ -50,7 +50,7 @@ function HomePage() {
         
       </div>
         <div className='flex flex-row justify-center lg:flex lg:flex-row xl:justify-start lg:ml-5'>
-          <div className='hidden xl:block '>
+        <div className="hidden xl:block w-1/4 sticky top-10 h-screen">
             <UserProfile />
           </div>
             
@@ -60,9 +60,11 @@ function HomePage() {
               <Posts key={post._id} post={post} handlePost={handlePost} />
           ))}
             </div>
-            <div className='ml-5 hidden'>
+            <div className='hidden xl:block w-1/4 sticky top-10 h-screen ml-1'>
             <Suggestion />
+            {/* <UserProfile /> */}
             </div>
+           
         </div>
     
     </>

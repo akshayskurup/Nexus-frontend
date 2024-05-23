@@ -2,6 +2,9 @@ import axios from "axios";
 import { BASE_URL } from "../../../constants/urls";
 import { store } from "../../../utils/store";
 import { logoutUser, updateToken } from "../../../utils/reducers/authSlice";
+const { CancelToken } = axios;
+const cancelTokenSource = CancelToken.source();
+
 
 export const api = axios.create({
     withCredentials: true,
@@ -21,6 +24,7 @@ api.interceptors.request.use(
         if(token){
             config.headers.Authorization = `Bearer ${token}`;
         }
+            config.cancelToken = cancelTokenSource.token;
             return config;
         },
         (error:any) => {

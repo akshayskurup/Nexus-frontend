@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import NavBar from "../../components/NavBar";
 import TopNavBar from "../../components/responsiveNavBars/TopNavBar";
@@ -6,7 +7,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
   faCircleChevronRight,
+  faInfoCircle,
   faPhone,
+  faPlus,
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
 import { io } from "socket.io-client";
@@ -17,6 +20,7 @@ import {
   addMessage,
   addNewGroupMessage,
   getGroupMessage,
+  getLastMessage,
   getUserConnections,
   getUserConversation,
   getUserGroups,
@@ -33,6 +37,9 @@ import AudioCallModal from "../../components/Modals/AudioCallModal";
 import CreateGroupModal from "../../components/Modals/CreateGroupModal";
 import UserGroup from "../../components/chat/UserGroup";
 import GroupVideoCallModal from "../../components/Modals/GroupVideoCallModal";
+import GroupAudioCallModal from "../../components/Modals/GroupAudioCallModal";
+import GroupInfo from "../../components/chat/GroupInfo";
+
 
 function Chat() {
   const socket = useRef<any>(null);
@@ -55,27 +62,55 @@ function Chat() {
   const [joinAudioCall, setJoinAudioCall] = useState(false);
   const [joinVideoCall, setJoinVideoCall] = useState(false);
   const [joinGroupVideoCall,setJoinGroupVideoCall] = useState(false);
+  const [joinGroupAudioCall,setJoinGroupAudioCall] = useState(false);
   const [createGroupModal,setCreateGroupModal] = useState(false);
+  const [groupInfo,setGroupInfo] = useState(false);
   
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const user = useSelector((state: any) => state.auth.user);
   const navigate = useNavigate()
-
-  const getConversation = () => {
-    getUserConversation(user._id).then((response: any) => {
-      const data = response.data;
-      if (response.status === 200) {
-        setConversations(data);
-        console.log("Converas", conversations);
-        setMutualConnections([]);
-        setGroups([])
-      } else {
-        toast.error(data.message);
-      }
-    });
-  };
+  const getLastConversationMessage = async (conversation) => {
+        try {
+          const response = await getLastMessage(conversation._id);
+          if (response.status === 200) {
+            const data = response.data;
+            return data; // Return the latest message data
+          } else {
+            toast.error(data.message);
+            return null; // Handle potential errors gracefully (optional)
+          }
+        } catch (error) {
+          console.error("Error fetching latest message:", error);
+          return null; // Handle potential errors gracefully (optional)
+        }
+      };
+      
+      const getConversation = async () => {
+        try {
+          const response = await getUserConversation(user._id);
+          const data = response.data;
+          if (response.status === 200) {
+            const conversationsWithLatestMessage = await Promise.all(
+              data.map(async (conversation) => {
+                const latestMessage = await getLastConversationMessage(conversation);
+                return { ...conversation, latestMessage }; // Add latest message as a field
+              })
+            );
+            setConversations(conversationsWithLatestMessage);
+            console.log("Conversations with latest messages:", conversationsWithLatestMessage);
+            setMutualConnections([]);
+            setGroups([]);
+          } else {
+            toast.error(data.message);
+          }
+        } catch (error) {
+          console.error("Error fetching conversations:", error);
+          toast.error("An error occurred while fetching conversations."); // Inform user
+        }
+      };
+      
 
   
   const getGroupMessageFn = ()=>{
@@ -235,6 +270,13 @@ function Chat() {
       setJoinAudioCall(true);
       
     })
+
+    socket.current.on("groupAudioCallResponse",(data:any)=>{
+            console.log("Inside the groupGroupcall response")
+            setAudioCallRoomId(data.roomId);
+            setCallRequestedUser({name:data.groupName,profile:data.profile})
+            setJoinGroupAudioCall(true);
+          })
   },[socket])
   // navigate,socket,joinVideoCall,videoCallRoomId
   console.log("JoinVideoCAll",joinVideoCall);
@@ -254,6 +296,11 @@ function Chat() {
     navigate(`/audio-call/${audioCallRoomId}/${user._id}`);
    
   }
+  const handleJoinGroupAudioCallRoom=()=>{
+        navigate(`/group-audio-call/${audioCallRoomId}/${user._id}`);
+       
+      }
+    
 
   const handleAllFriendsMessage = () => {
     getUserConnections(user._id).then((response: any) => {
@@ -419,8 +466,17 @@ function Chat() {
   }
 
   const handleGroupAudioCall = ()=>{
-
-  }
+        const roomId = generateRandomId(10);
+        const groupId = currentChat._id;
+        const emitData = {
+          roomId,
+          groupId,
+          groupName:currentChat.name,
+          groupProfile:currentChat.profile
+        }
+        socket.current.emit("GroupAudioCall",emitData)
+        navigate(`/group-audio-call/${roomId}/${user._id}`);
+      }
 
   const handleGroups = ()=>{
     getUserGroups(user._id)
@@ -452,15 +508,15 @@ function Chat() {
       <div className="flex w-screen">
       <div className={`w-full md:w-1/2   bg-white border border-r-3 min-h-[90vh] ${currentChat ? 'hidden' : ''} md:block`}>
           <p className="font-semibold text-xl text-center mt-5">Messages</p>
-          <button onClick={()=>setCreateGroupModal(true)}>Add groups</button>
-          <div className="flex gap-20 justify-center mt-2">
+          <button className="float-right font-semibold text-sm mt-1 mr-3" onClick={()=>setCreateGroupModal(true)}><FontAwesomeIcon size="1x" icon={faPlus} /> Add groups</button>
+          <div className="flex gap-20 justify-center mt-10 font-semibold">
           <button onClick={getConversation}>Messages</button>
           <button className="ml-5" onClick={handleAllFriendsMessage}>Friends</button>
           <button className="ml-5" onClick={handleGroups}>Groups</button>
           </div>
           {conversations &&
             conversations.map((c) => (
-              <div onClick={() => handleActiveChat(c)}>
+              <div onClick={() => handleActiveChat(c)} className={`hover:bg-slate-100 cursor-pointer ${currentChat?c._id === currentChat._id ? "bg-slate-100" : "":""}`}>
                 <Conversations
                   chatUser={c}
                   currentUser={user}
@@ -510,6 +566,8 @@ function Chat() {
                   <div className="flex ml-auto mr-7 md:mr-24  gap-14">
                     <FontAwesomeIcon icon={faPhone} onClick={profile.profileImage?handleAudioCall:handleGroupAudioCall}/>
                     <FontAwesomeIcon icon={faVideo} onClick={profile.profileImage?handleVideoCall:handleGroupVideoCall}/>
+                    {groups.length>0?<FontAwesomeIcon icon={faInfoCircle} onClick={()=>setGroupInfo(true)}/>:""}
+
                   </div>
                 </div>
                 <hr className="h-px my-3 bg-black border-0 " />
@@ -591,10 +649,29 @@ function Chat() {
           caller={audioCallRequestedUser}
           />
           }
+          {joinGroupAudioCall && 
+          <GroupAudioCallModal
+          show={joinGroupAudioCall}
+          onHide={() => setJoinGroupAudioCall(false)}
+          onAccept={handleJoinGroupAudioCallRoom}
+          onReject={ () => {
+            setVideoCallRoomId('');
+            setJoinGroupVideoCall(false);
+            }}
+          caller={callRequestedUser}
+          />
+          }
           {createGroupModal&&
           <CreateGroupModal 
           show={createGroupModal}
           onHide={()=>setCreateGroupModal(false)}
+          />
+          }
+          {groupInfo && 
+          <GroupInfo 
+          show={groupInfo}
+          onHide={()=>setGroupInfo(false)}
+          group={currentChat}
           />
           }
         </div>
@@ -605,3 +682,4 @@ function Chat() {
 }
 
 export default Chat;
+
