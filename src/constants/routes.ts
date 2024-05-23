@@ -9,7 +9,9 @@ export const userUrl = {
     resetPassword:"user/reset-password",
     accountSetup:"user/account-setup",
     editProfile:"user/edit-profile",
-    userProfile:"user/user-profile"
+    userProfile:"user/user-profile",
+    searchUser:"user/search-user",
+    suggestion:"user/get-suggestion"
 
 }
 
@@ -51,6 +53,8 @@ export const chatUrl = {
     findConversationOfTwoUsers: "/chat/find-conversation",
     addMessage: "/chat/add-message",
     getMessages: "/chat/get-messages",
+    getLastMessage: "/chat/get-last-messages",
+
 
     addGroup: "/chat/add-group",
     getUserGroups: "/chat/get-groups",

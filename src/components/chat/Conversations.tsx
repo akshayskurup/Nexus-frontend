@@ -8,7 +8,7 @@ function Conversations({chatUser,currentUser,handleActiveChat,currentChatProfile
     useEffect(()=>{
         console.log("HEllloooooo",chatUser);
         
-        if(chatUser.members){
+        if(chatUser.members && !chatUser.isGroup){
         const friendId = chatUser.members.find((id)=> id!==currentUser._id)
         console.log("Frienddd",friendId);
         
@@ -51,13 +51,13 @@ function Conversations({chatUser,currentUser,handleActiveChat,currentChatProfile
   return (
     <>
           {/* onClick={()=>handleActiveChat(user)} */}
-          <div className='flex items-center mt-5 ml-9' onClick={()=>handleChat(user)}>
-            <img src={user?.profileImage} alt="" className='w-10 h-10 rounded-full' />
+          <div className='flex items-center mt-5 ml-9 pt-3' onClick={()=>handleChat(user)}>
+            <img src={user?.profileImage} alt="" className='w-12 h-12 rounded-full' />
             <div className='ml-24 '>
-              <p>{user?.userName}</p>
-              <p>newMessage</p>
+              <p className='font-semibold'>{user?.userName}</p>
+              <p className='text-sm'>{chatUser.latestMessage?chatUser.latestMessage.text:"Start a new conversation"}</p>
             </div>
-            <div className='w-3 h-3 bg-blue-800 rounded-full ml-auto mr-10'></div>
+            {/* <div className='w-3 h-3 bg-blue-800 rounded-full ml-auto mr-10'></div> */}
           </div>
           <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-black" />
           </>

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom"
 import { GetUserProfile, UserPost, UserSavedPost, getUserConnections } from "../services/api/user/apiMethods";
 import { toast } from "sonner";
 import { updateUser } from "../utils/reducers/authSlice";
+import FollowersModal from "./Modals/FollowersModal";
+import FollowingModal from "./Modals/FollowingModal";
 
 
 function UserProfile() {
@@ -13,6 +15,8 @@ function UserProfile() {
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
     const [userPost,setUserPost] = useState([]);
+    const [isFollowersModalOpen,setIsFollowersModalOpen] = useState(false)
+    const [isFollowingModalOpen,setIsFollowingModalOpen] = useState(false)
 
 
     useEffect(()=>{
@@ -46,6 +50,14 @@ function UserProfile() {
     }
   });
     },[])
+
+    const handleFollowersModal = ()=>{
+      setIsFollowersModalOpen(!isFollowersModalOpen);
+    }
+    const handleFollowingModal = ()=>{
+      setIsFollowingModalOpen(!isFollowingModalOpen);
+    
+    }
   return (
     <div className='bg-white lg:w-80 h-[23rem] mt-5 rounded-md'>
     <div className='flex flex-col items-center  '>
@@ -68,17 +80,30 @@ function UserProfile() {
     </div>
     <div>
     <p className='text-center font-medium'>{followers.length}</p>
-        <p className="text-[#8B8585] text-sm font-medium">Followers</p>
+        <p className="text-[#8B8585] text-sm font-medium cursor-pointer" onClick={handleFollowersModal}>Followers</p>
     </div>
     <div>
     <p className='text-center font-medium'>{following.length}</p>
-        <p className="text-[#8B8585] text-sm font-medium">Following</p>
+        <p className="text-[#8B8585] text-sm font-medium cursor-pointer" onClick={handleFollowingModal}>Following</p>
     </div>
   </div>
   <div className='flex justify-center mt-9'>
     <button className="mt-1 h-9 w-64 bg-[#2892FF] text-white rounded-xl " onClick={()=>navigate('/my-profile')}>My Profile</button>
   </div>
-
+  {isFollowersModalOpen && (
+    <FollowersModal 
+      isModalOpen={handleFollowersModal}
+      onModalClose={handleFollowersModal}
+      userId={user._id}
+    />
+  )}
+  {isFollowingModalOpen && (
+  <FollowingModal
+      isModalOpen={handleFollowingModal}
+      onModalClose={handleFollowingModal}
+      userId={user._id}
+    />
+  )}
 </div>
 
   )
