@@ -285,7 +285,7 @@ function OptionsModal({ isModalOpen, onModalClose, post, handlePost}) {
 
 //-----------------------------------------------------------------------------------------
 
-function Posts({ post, handlePost , handleSavedPost}) {
+function Posts({ post, handlePost , handleSavedPost,explore}) {
   const user = useSelector((state: any) => state.auth.user);
   const [likedUsers, setLikedUsers] = useState(post.likes);
   const [isLikedByUser, setIsLikedByUser] = useState(post.likes.includes(user._id));
@@ -347,6 +347,7 @@ function Posts({ post, handlePost , handleSavedPost}) {
   
 
   const handleLike = (userId: string, postId: string) => {
+    setIsLikedByUser(!isLikedByUser);
     LikePost(userId, postId).then((response: any) => {
       const data = response.data;
       if (response.status === 200) {
@@ -363,6 +364,7 @@ function Posts({ post, handlePost , handleSavedPost}) {
         }
       } else {
         toast.error(data.message);
+        setIsLikedByUser(!isLikedByUser);
       }
     });
   };
@@ -390,10 +392,11 @@ function Posts({ post, handlePost , handleSavedPost}) {
           console.log("Workingg");
           handleSavedPost();
         }
-        console.log("Thisss");
-        console.log("userId",post.userId._id);
-        
+        if(!explore){
         handlePost(post.userId._id);
+        }else{
+          handlePost(post._id);
+        }
       } else {
         toast.error(data.message);
       }
@@ -418,9 +421,9 @@ function Posts({ post, handlePost , handleSavedPost}) {
   // };
 
   return (
-    <div key={post._id} className="w-[25rem]  md:w-[40rem] md:ml-3 rounded-md mt-5 bg-white">
-  <div className="ml-4">
-    <div className="flex items-center ml-5 pt-2">
+<div key={post._id} className={`w-[25rem] ${explore ? 'md:w-[40rem]' : 'md:w-[40rem]'} md:ml-3 rounded-md mt-5 bg-white`}>
+  <div className={` ${explore ? 'ml-0':'ml-4'}`}>
+    <div className={`flex items-center ml-5 ${explore ? 'pt-0':'pt-2'}`}>
       <img
         className="w-11 h-11 rounded-full"
         src={post.userId.profileImage}
@@ -441,17 +444,17 @@ function Posts({ post, handlePost , handleSavedPost}) {
         onClick={handleModal}
       />
     </div>
-    <p className="ml-6 mt-5 my-5 font-semibold text-sm">
+    <p className={`ml-6 ${explore ? "mt-2 my-2":"mt-5 my-5"} font-semibold text-sm`}>
       {post.description}
     </p>
 
     <div className="flex justify-center flex-col ml-6 ">
       <img
-        className="max-h-[500px] max-w-[560px] mr-5 rounded-lg"
+        className={` ${explore ? "max-h-[300px] max-w-[360px] ml-auto mr-auto":"max-h-[500px] max-w-[560px] mr-5"}  rounded-lg`}
         src={post.imageUrl}
         alt=""
       />
-      <div className="flex gap-24 py-5">
+      <div className={`flex ${explore ? "py-2 gap-20":"py-5 gap-24"}`}>
         <div className="flex">
           <FontAwesomeIcon
             className="w-6 h-6 cursor-pointer"

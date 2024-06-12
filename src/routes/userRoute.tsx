@@ -15,6 +15,7 @@ import VideoCall from "../components/VideoCall";
 import AudioCall from "../components/AudioCall";
 import GroupVideoCall from "../components/GroupVideoCall";
 import GroupAudioCall from "../components/GroupAudioCall";
+import Explore from "../pages/explore/Explore";
 
 
 function UserRoute() {
@@ -31,6 +32,7 @@ function UserRoute() {
         <Route path="/chat" element={<ProtectedRoutes><Chat /></ProtectedRoutes>} />
         <Route path="/profile/:userId" element={<ProtectedRoutes><UserProfile /></ProtectedRoutes>} />
         <Route path="/profile/:userId" element={<ProtectedRoutes><UserProfile /></ProtectedRoutes>} />
+        <Route path="/explore" element={<ProtectedRoutes><Explore /></ProtectedRoutes>} />
         <Route path="/video-call/:roomId/:userId" element={<VideoCall />} />
         <Route path="/audio-call/:roomId/:userId" element={<AudioCall />} />
         {/* <Route path="/audio-call/:roomId/:userId" element={<AudioCall />} /> */}

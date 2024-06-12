@@ -157,9 +157,12 @@ const fetchUserConnections = (userId: any) => {
       </button>
       </div>
           <div className='flex flex-col items-center'>
-          {userPost && userPost.map((post)=>(
-              <Posts key={post._id} post={post} handleSavedPost={handleSavedPost}/>
-          ))}
+            
+          {userPost && (userPost.length!=0?userPost.map((post)=>(
+              <Posts key={post._id} post={post} handleSavedPost={handleSavedPost} />
+          )):
+          <p className='mt-5 text-lg font-semibold'>No Post Available</p>
+          )}
           </div>
       </div>
     </div>

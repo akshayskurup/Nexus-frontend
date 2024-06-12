@@ -27,6 +27,7 @@ export const postUrl = {
     addPost:"/post/add-post",
     getAllPost:"/post/get-post",
     likePost:"/post/like-post",
+    getPost:"/post/find-post",
     updatePost:"/post/update-post",
     deletePost:"/post/delete-post",
     reportPost:"/post/report-post",
@@ -60,4 +61,9 @@ export const chatUrl = {
     getUserGroups: "/chat/get-groups",
     addGroupMesssage:"/chat/add-group-message",
     getGroupMessages:"/chat/get-group-messages"
+}
+
+export const assistant = {
+    askAssistant : '/assistant/ask',
+    clearConversation : '/assistant/clear'
 }

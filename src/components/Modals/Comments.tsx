@@ -97,8 +97,9 @@ function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }) {
 
        
         <p className='text-xs  font-semibold cursor-pointer' onClick={()=>handleReplyButton(comment._id,comment.userId.userName,comment.comment)}>reply</p>
+        {comment.replies.length>0 && 
         <p className='text-xs font-semibold cursor-pointer' onClick={()=>toggleReplies(comment._id)}>{visibleReplies[comment._id] ? 'Hide Replies' : 'View Replies'}</p>
-        
+        }
         
         </div>
         

@@ -183,60 +183,62 @@ function AccountSetup() {
     }
   };
   return (
-    <div className='w-screen'>
-      <div className='w-screen bg-white h-11 '>
-        <p className='text-center text-2xl font-bold'>Account Setup</p>
+    <div className='w-screen bg-gray-100 min-h-screen'>
+      <div className='w-screen bg-gradient-to-r from-blue-500 to-indigo-600 h-16 shadow-md'>
+        <p className='text-center text-3xl font-extrabold text-white py-3'>SocialConnect</p>
       </div>
-      <div className='h-[130vh] flex justify-center mt-5 rounded-md '>
-        <div className=" bg-white w-[70rem] md:w-[60rem] text-center rounded-md ">
+      <div className='flex justify-center mt-8 rounded-lg'>
+        <div className="bg-white w-full max-w-4xl shadow-xl rounded-lg overflow-hidden">
           <Formik 
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
-            >
+          >
             {({ values, setFieldValue, errors }) => (
             <Form>
-              <div className='w-full h-[12rem] bg-[#32A6D5] rounded-md'>
-              <img src={bgCroppedImage?bgCroppedImage:"https://getuikit.com/v2/docs/images/placeholder_600x400.svg"} className='w-full h-[11.99rem]' alt="" />
-              
-              
+              <div className='w-full h-64 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-t-lg'>
+                <img src={bgCroppedImage || "https://getuikit.com/v2/docs/images/placeholder_600x400.svg"} className='w-full h-64 object-cover opacity-80' alt="" />
               </div>
-              <div className='flex justify-center flex-col items-center -mt-12'>
-                <div className='bg-blue-400 w-32 h-32 border rounded-full'>
-                  <img src={croppedImage?croppedImage:"https://upload.wikimedia.org/wikipedia/commons/b/b5/Windows_10_Default_Profile_Picture.svg"} alt="Cropped" className='rounded-full' />
+              <div className='flex justify-center flex-col items-center -mt-20'>
+                <div className='bg-gradient-to-r from-blue-500 to-indigo-600 w-40 h-40 rounded-full shadow-lg border-4 border-white z-10'>
+                  <img src={croppedImage || "https://upload.wikimedia.org/wikipedia/commons/b/b5/Windows_10_Default_Profile_Picture.svg"} alt="Cropped" className='rounded-full w-full h-full object-cover' />
                 </div>
-                
               </div>
-              <div className="flex justify-center flex-col w-[24rem] ml-[4rem] md:ml-[18rem]">
-                <div className='flex flex-row gap-32'>
-                <p className='mt-5 font-semibold text-[#837D7D]'>Username</p>
-                <Field type="text" name="userName" className="mt-3 h-9  border border-neutral-300 rounded-md"  />
-                </div>
-                <ErrorMessage name="userName" component="div" className="text-red-500 ml-[7.1rem] w-full" />
-                <div className='flex flex-row gap-32'>
-                <p className='mt-5 font-semibold text-[#837D7D]'>Bio</p>
-                <Field as="textarea" type="text" name="bio" className="mt-3 w-[30rem] h-9 ml-12 rounded-md border border-neutral-300" />
-                </div>
-                <ErrorMessage name="bio" component="div" className=" text-red-500 ml-[5.5rem] w-full" />
-                <div className='flex flex-row gap-32'>
-                <p className='mt-5 font-semibold rounded-md text-[#837D7D]'>Gender</p>
-
-                <select name="gender"onChange={(e) => setFieldValue('gender', e.target.value)}
-                className="mt-3 ml-5 h-9 border border-neutral-300 rounded-md ">
-                <option value="">Select Gender</option> 
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-                </select>     
-                </div>           
-                <ErrorMessage name="gender" component="div" className="text-red-500" />
-                <div className='flex flex-row gap-32'>
-                <p className='mt-5 font-semibold text-[#837D7D]'>Phone</p>
-                <Field type="number" name="phone"  className="mt-3 ml-7 h-9 rounded-md border border-neutral-300" />
-                </div>
-                <ErrorMessage name="phone" component="div" className="text-red-500 ml-[6.4rem] w-full" />
-                {showModal && (
-                  <CropModal
+              <div className="flex justify-center flex-col w-full px-8 md:px-16 py-6">
+                <h2 className="text-3xl font-bold text-gray-800 mb-6">Complete Your Profile</h2>
+                <div className='space-y-6'>
+                  <div className='flex flex-col md:flex-row md:items-center gap-4'>
+                    <label className='font-medium text-gray-700 md:w-1/4'>Username</label>
+                    <Field type="text" name="userName" className="flex-grow h-10 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="@johndoe" />
+                  </div>
+                  <ErrorMessage name="userName" component="div" className="text-red-500 ml-auto w-3/4" />
+                  
+                  <div className='flex flex-col md:flex-row md:items-center gap-4'>
+                    <label className='font-medium text-gray-700 md:w-1/4'>Bio</label>
+                    <Field as="textarea" type="text" name="bio" className="flex-grow h-20 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tell us about yourself..." />
+                  </div>
+                  <ErrorMessage name="bio" component="div" className="text-red-500 ml-auto w-3/4" />
+                  
+                  <div className='flex flex-col md:flex-row md:items-center gap-4'>
+                    <label className='font-medium text-gray-700 md:w-1/4'>Gender</label>
+                    <select name="gender" onChange={(e) => setFieldValue('gender', e.target.value)}
+                    className="flex-grow h-10 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option value="">Select Gender</option> 
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>     
+                  </div>           
+                  <ErrorMessage name="gender" component="div" className="text-red-500 ml-auto w-3/4" />
+                  
+                  <div className='flex flex-col md:flex-row md:items-center gap-4'>
+                    <label className='font-medium text-gray-700 md:w-1/4'>Phone</label>
+                    <Field type="number" name="phone" className="flex-grow h-10 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="(123) 456-7890" />
+                  </div>
+                  <ErrorMessage name="phone" component="div" className="text-red-500 ml-auto w-3/4" />
+  
+                  {showModal && (
+                    <CropModal 
                     image={URL.createObjectURL(image)}
                     crop={crop}
                     setCroppedAreaPixels={setCroppedAreaPixels}
@@ -244,35 +246,37 @@ function AccountSetup() {
                     onCropComplete={onCropComplete}
                     onClose={handleCloseModal}
                     onCropImage={handleCropImage}
-                  />  
-                )}
-                <label className="block mb-2  font-semibold text-[#837D7D]  dark:text-white">Upload Profile Photo </label>
-                <input 
+                    />  
+                  )}
+  
+                  <div className='flex flex-col md:flex-row md:items-center gap-4'>
+                    <label className="font-medium text-gray-700 md:w-1/4">Profile Photo</label>
+                    <input 
                       ref={inputRef} 
                       onChange={handleFileChange}  
                       onClick={() => setPreview(true)} 
                       accept="image/*"
-                      className=" my-2 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                      className="flex-grow text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" 
                       type="file"
-                />
-                <ErrorMessage name="profileImage" component="div" className="text-red-500 ml-[6.4rem] w-full" />
-
-
-                <label className="block mb-1 font-semibold text-[#837D7D] dark:text-white">Upload Background Image </label>
-                <input 
+                    />
+                  </div>
+                  <ErrorMessage name="profileImage" component="div" className="text-red-500 ml-auto w-3/4" />
+  
+                  <div className='flex flex-col md:flex-row md:items-center gap-4'>
+                    <label className="font-medium text-gray-700 md:w-1/4">Cover Photo</label>
+                    <input 
                       type="file"
                       ref={inputRef}
                       onChange={handleBGFileChange}
                       accept="image/*"
-                      className=" my-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                      className="flex-grow text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" 
                       onClick={() => setBGPreview(true)}
-                />
-                <ErrorMessage name="image" component="div" className="text-red-500 ml-[6.4rem] w-full" />
-
-
-                
-                {showBGModal && (
-                  <BGCropModal
+                    />
+                  </div>
+                  <ErrorMessage name="image" component="div" className="text-red-500 ml-auto w-3/4" />
+  
+                  {showBGModal && (
+                    <BGCropModal 
                     image={URL.createObjectURL(bgImage)}
                     crop={bgCrop}
                     setCroppedAreaPixels={setBGCroppedAreaPixels}
@@ -280,10 +284,11 @@ function AccountSetup() {
                     onCropComplete={onBGCropComplete}
                     onClose={handleBGCloseModal}
                     onCropImage={handleBGCropImage}
-                  />
-                )}
-                
-                <button className='mt-7 h-10 w-full bg-[#8B8DF2] text-white rounded-md' type="submit">Submit</button>
+                     />
+                  )}
+                  
+                  <button className='w-full h-12 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 ease-in-out' type="submit">Create Account</button>
+                </div>
               </div>
             </Form>
           )}
