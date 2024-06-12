@@ -1,4 +1,4 @@
-import { chatUrl, connectionUrls, postUrl, userUrl } from "../../../constants/routes";
+import { assistant, chatUrl, connectionUrls, postUrl, userUrl } from "../../../constants/routes";
 import { apiCall } from "./apiCalls";
 
 
@@ -283,6 +283,26 @@ export const getAllPost = ()=>{
             })
         } catch (error) {
             resolve({status:500,message:"Error in getAllPost"});
+        }
+    })
+}
+
+//@des     Get One Post
+//method   GET
+
+export const getPost = (postId:string)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            const url = `${postUrl.getPost}/${postId}`
+            apiCall("get",url,"")
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error in getOnePost"});
         }
     })
 }
@@ -806,4 +826,42 @@ export const getGroupMessage = (groupId:string)=>{
             resolve({status:500,message:"Erron during fetching Messages"});
         }
     });
+}
+
+//@des     Assistant
+//method   POST
+
+export const assistantConversation = (data:{prompt:any})=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            apiCall("post",assistant.askAssistant,data)
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during reporting post"});
+        }
+    })
+}
+
+//@des     Clear Assistant Conversation
+//method   POST
+
+export const clearAssistantConversation = ()=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            apiCall("post",assistant.clearConversation,"")
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during conversation clearing"});
+        }
+    })
 }

@@ -9,144 +9,136 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import FollowersModal from '../../components/Modals/FollowersModal';
 import FollowingModal from '../../components/Modals/FollowingModal';
+import Suggestion from '../../components/Suggestion';
 
 function UserProfile() {
   const { userId } = useParams();
   const [profile, setProfile] = useState(null);
   const [userPost, setUserPost] = useState([]);
-  const [isFollowing,setIsFollowing] = useState(false)
-  const [connections,setConnections] = useState(null)
+  const [isFollowing, setIsFollowing] = useState(false);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
-  const [isFollowersModalOpen,setIsFollowersModalOpen] = useState(false)
-  const [isFollowingModalOpen,setIsFollowingModalOpen] = useState(false)
-  const user = useSelector((state:any) => state.auth.user);
+  const [isFollowersModalOpen, setIsFollowersModalOpen] = useState(false);
+  const [isFollowingModalOpen, setIsFollowingModalOpen] = useState(false);
+  const [refresh,setRefresh] = useState(false);
+  const user = useSelector((state: any) => state.auth.user);
+  const [followUnfollowState, setFollowUnfollowState] = useState(0);
 
-  const fetchUserConnections = (userId: any) => {
-    getUserConnections(userId)
-        .then((response: any) => {
-            const connectionData = response.data.connection;
-            console.log(response.data.connection);
-            setFollowing(connectionData.following);
-            setFollowers(connectionData.followers);
-            console.log(connections);
-            console.log("USerer",userId);
-            
-            setIsFollowing(connectionData.followers.map(user => user._id).includes(user._id));
-            
-              console.log("Follower IDs:", connectionData.followers.map(user => user._id));
+const handleFollowUnfollowChange = () => {
+  setFollowUnfollowState(prevState => prevState + 1);
+};
 
-        })
-}
+  const fetchUserConnections = async (userId: any) => {
+    try {
+      const response = await getUserConnections(userId);
+      const connectionData = response.data.connection;
+      setFollowing(connectionData.following);
+      setFollowers(connectionData.followers);
+      setIsFollowing(connectionData.followers.some((follower: any) => follower._id === user._id));
+    } catch (error) {
+      console.error('Error fetching user connections:', error);
+      toast.error('Failed to fetch user connections');
+    }
+  };
 
-useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
-        try {
-            const response: any = await GetUserProfile(userId);
-            if (response.status === 200) {
-                setConnections(response.data.connections)
-                setProfile(response.data.user);
-
-                // Fetch user posts
-                fetchUserPosts(userId);
-                fetchUserConnections(userId);
-            } else {
-                toast.error(response.data.message);
-            }
-        } catch (error) {
-            console.error('Error fetching user profile:', error);
-            toast.error('Failed to fetch user profile');
+      try {
+        const response: any = await GetUserProfile(userId);
+        if (response.status === 200) {
+          setProfile(response.data.user);
+          await fetchUserConnections(userId);
+          fetchUserPosts(userId);
+        } else {
+          toast.error(response.data.message);
         }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        toast.error('Failed to fetch user profile');
+      }
     };
 
-
     fetchData();
-}, [userId]);
+  }, [userId,refresh]);
 
-  const fetchUserPosts = (userId) => {
-    console.log("fetchUserPosts",userId);
-    
-    UserPost(userId)
-      .then((response:any) => {
-        const data = response.data;
-        if (response.status === 200) {
-          setUserPost(data.posts);
-        } else {
-          toast.error(data.message);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching user posts:', error);
-        toast.error('Failed to fetch user posts');
-      });
+  const fetchUserPosts = async (userId: any) => {
+    try {
+      const response = await UserPost(userId);
+      if (response.status === 200) {
+        setUserPost(response.data.posts);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error fetching user posts:', error);
+      toast.error('Failed to fetch user posts');
+    }
   };
 
-  const handleSavedPost = () => {
-    UserSavedPost(user._id)
-      .then((response) => {
-        const data = response.data;
-        if (response.status === 200) {
-          setUserPost(data.savedposts);
-        } else {
-          toast.error(data.message);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching saved posts:', error);
-        toast.error('Failed to fetch saved posts');
-      });
+  const handleSavedPost = async () => {
+    try {
+      const response = await UserSavedPost(user._id);
+      if (response.status === 200) {
+        setUserPost(response.data.savedposts);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error fetching saved posts:', error);
+      toast.error('Failed to fetch saved posts');
+    }
   };
 
-  const handleFollow = () => {
-    if (profile) {
-        const data = {
-            userId: user._id,
-            followingUser: profile._id
-        }
-        follow(data)
-            .then((response: any) => {
-                const data = response.data;
-                if (response.status === 200) {
-                    toast.success(data.message);
-                    setIsFollowing(true); // Update isFollowing state here
-                    setFollowers([...followers, profile]); // Update followers state
+  const handleFollow = async () => {
+    try {
+      const response = await follow({ userId: user._id, followingUser: profile._id });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setIsFollowing(true);
+        setFollowers((prevFollowers) => [...prevFollowers, user]);
+        handleFollowUnfollowChange();
 
-                } else {
-                    toast.error(data.message);
-                }
-            })
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error following user:', error);
+      toast.error('Failed to follow user');
     }
-}
+  };
 
-const handleUnfollow = () => {
-    const data = {
-        userId: user._id,
-        unFollowingUser: profile._id
+  const handleUnfollow = async () => {
+    try {
+      const response = await unFollow({ userId: user._id, unFollowingUser: profile._id });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setIsFollowing(false);
+        setFollowers((prevFollowers) => prevFollowers.filter((follower: any) => follower._id !== user._id));
+        handleFollowUnfollowChange();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error unfollowing user:', error);
+      toast.error('Failed to unfollow user');
     }
-    unFollow(data)
-        .then((response: any) => {
-            const data = response.data;
-            if (response.status === 200) {
-                setIsFollowing(false); // Update isFollowing state here
-                setFollowers(followers.filter((follower) => follower._id !== profile._id)); // Update followers state
-                toast.success(data.message);
-            } else {
-                toast.error(data.message);
-            }
-        })
-}
+  };
 
-const handleFollowersModal = ()=>{
-  setIsFollowersModalOpen(!isFollowersModalOpen);
-}
-const handleFollowingModal = ()=>{
-  setIsFollowingModalOpen(!isFollowingModalOpen);
+  const handleFollowersModal = () => {
+    setIsFollowersModalOpen(!isFollowersModalOpen);
+  };
 
-}
+  const handleFollowingModal = () => {
+    setIsFollowingModalOpen(!isFollowingModalOpen);
+  };
+  const handleSuggestedFollow = ()=>{
+    setRefresh(!refresh);
+  }
 
   return (
+    
     <div>
-      <div className='hidden md:block sticky top-0'>
+      <div className='hidden md:block sticky top-0 z-10'>
         <NavBar />
       </div>
       <div className='sticky top-0 md:hidden'>
@@ -155,7 +147,8 @@ const handleFollowingModal = ()=>{
       <div className='fixed bottom-0 w-full md:hidden'>
         <BottomNavBar />
       </div>
-      <div className='mt-5 xl:ml-6 xl:w-3/4 bg-white'>
+      <div className='flex'>
+        <div className='mt-5 xl:ml-10 xl:w-3/4 bg-white'>
         {profile && (
           <>
             <div className='bg-slate-400 w-full xl:h-64'>
@@ -172,32 +165,33 @@ const handleFollowingModal = ()=>{
               <div>
                 <div className='ml-14 gap-7 md:ml-44 md:gap-24 xl:ml-44 xl:gap-32 mt-5 flex text-center'>
                   <div className='flex flex-col'>
-                    <p className='font-medium'>{userPost?userPost.length:0}</p>
+                    <p className='font-medium'>{userPost.length}</p>
                     <p className='text-[#8B8585] font-medium xl:text-md text-sm'>Post</p>
                   </div>
                   <div className='flex flex-col'>
                     <p className='font-medium'>{followers.length}</p>
-                    <p className='text-[#8B8585] font-medium xl:text-md text-sm' onClick={handleFollowersModal}>Follower</p>
+                    <p className='text-[#8B8585] font-medium xl:text-md text-sm cursor-pointer' onClick={handleFollowersModal}>Follower</p>
                   </div>
                   <div className='flex flex-col'>
                     <p className='font-medium'>{following.length}</p>
-                    <p className='text-[#8B8585] font-medium xl:text-md text-sm' onClick={handleFollowingModal}>Following</p>
+                    <p className='text-[#8B8585] font-medium xl:text-md text-sm cursor-pointer' onClick={handleFollowingModal}>Following</p>
                   </div>
                 </div>
                 <p className='mt-6 ml-14 md:ml-44 xl:w-96 xl:ml-44'>{profile.bio}</p>
                 <div className='ml-14 md:ml-44 lg:ml-44 mt-6'>
-                  {isFollowing!=true?
-                  (<button className='border  rounded-lg px-1 py-1 pl-12 pr-12 bg-[#2892FF] text-white font-medium'
-                  onClick={handleFollow}
-                  >
-                    Follow
-                  </button>)
-                  :
-                  (<button className='border border-red-600 rounded-lg px-1 py-1 pl-12 pr-12 bg-white text-red-600 font-medium'
-                  onClick={handleUnfollow}
-                  >
-                    Unfollow
-                  </button>)}
+                  {!isFollowing ? (
+                    <button className='border rounded-lg px-1 py-1 pl-12 pr-12 bg-[#2892FF] text-white font-medium '
+                      onClick={handleFollow}
+                    >
+                      Follow
+                    </button>
+                  ) : (
+                    <button className='border border-red-600 rounded-lg px-1 py-1 pl-12 pr-12 bg-white text-red-600 font-medium'
+                      onClick={handleUnfollow}
+                    >
+                      Unfollow
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -205,26 +199,42 @@ const handleFollowingModal = ()=>{
         )}
         <hr className="h-px my-3 bg-gray-200 border-1 dark:bg-gray-700" />
         <div className='flex flex-col items-center'>
-          {userPost && userPost.map((post) => (
-            <Posts key={post._id} post={post} handleSavedPost={handleSavedPost} handlePost={fetchUserPosts}/>
-          ))}
+          {userPost && (userPost.length!=0?userPost.map((post)=>(
+            // <Posts key={post._id} post={post} handleSavedPost={handleSavedPost} handlePost={fetchUserPosts} />
+            
+              <Posts key={post._id} post={post} handleSavedPost={handleSavedPost} handlePost={fetchUserPosts} />
+          )):
+          <p className='mt-5 text-lg font-semibold'>No Post Available</p>
+          )
+          }
+          
         </div>
+        
       </div>
+      
       {isFollowersModalOpen && (
-    <FollowersModal 
-      isModalOpen={handleFollowersModal}
-      onModalClose={handleFollowersModal}
-      userId={userId}
-    />
-  )}
-  {isFollowingModalOpen && (
-  <FollowingModal
-      isModalOpen={handleFollowingModal}
-      onModalClose={handleFollowingModal}
-      userId={userId}
-    />
-  )}
+        <FollowersModal
+          isModalOpen={handleFollowersModal}
+          onModalClose={handleFollowersModal}
+          userId={userId}
+        />
+      )}
+      {isFollowingModalOpen && (
+        <FollowingModal
+          isModalOpen={handleFollowingModal}
+          onModalClose={handleFollowingModal}
+          userId={userId}
+        />
+      )}
+      <div className='-mr-14 hidden xl:block w-1/4 sticky top-10 h-screen ml-1 z-0'>
+      <Suggestion handleSuggestedFollow = {handleSuggestedFollow} followUnfollowState={followUnfollowState}/>
+      </div>
+      </div>
+        
+      
     </div>
+   
+  
   );
 }
 

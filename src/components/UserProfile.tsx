@@ -8,7 +8,7 @@ import FollowersModal from "./Modals/FollowersModal";
 import FollowingModal from "./Modals/FollowingModal";
 
 
-function UserProfile() {
+function UserProfile({userProfileRefresh}) {
     const user = useSelector((state:any)=>state.auth.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -49,7 +49,7 @@ function UserProfile() {
       toast.error(data.message);
     }
   });
-    },[])
+    },[userProfileRefresh])
 
     const handleFollowersModal = ()=>{
       setIsFollowersModalOpen(!isFollowersModalOpen);

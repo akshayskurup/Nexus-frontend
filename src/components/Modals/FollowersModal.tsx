@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import { getUserConnections } from '../../services/api/user/apiMethods';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
 function FollowersModal({isModalOpen,onModalClose,userId}) {
+  const currentUser = useSelector((state:any)=>state.auth.user)
     const [followers,setFollowers] = useState([]);
-
+    const navigate = useNavigate()
     useEffect(()=>{
             getUserConnections(userId)
                 .then((response: any) => {
@@ -15,6 +18,13 @@ function FollowersModal({isModalOpen,onModalClose,userId}) {
                     console.log("USerer",connectionData.followers);        
                 })
     },[])
+    const handleClick = (user:any)=>{
+      if(user._id===currentUser._id){
+        navigate('/my-profile') 
+      }else{
+        navigate(`/profile/${user._id}`)
+      }
+    }
   return (
     <Modal 
     isOpen={isModalOpen}
@@ -26,12 +36,11 @@ function FollowersModal({isModalOpen,onModalClose,userId}) {
     <h2 className="text-2xl font-bold mb-4 text-center">Followers</h2>
     <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
     {followers&& followers.map((user)=>
-    <div className='flex items-center gap-24 mb-5 ml-10'>
+    <div className='flex items-center gap-24 mb-5 ml-10 cursor-pointer' onClick={()=>handleClick(user)}>
         <img src={user.profileImage} alt="" className='w-12 h-12 rounded-full'/>
         <p>{user.userName}</p>
     </div>
 )}
-
 </div>
     </Modal>
   )
