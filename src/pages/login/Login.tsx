@@ -6,13 +6,15 @@ import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login,updateToken } from "../../utils/reducers/authSlice";
-import { useEffect } from "react";
+import HashLoader from "react-spinners/HashLoader";
+import { useEffect, useState } from "react";
 
 function Login() {
     
     const user = useSelector((state:any)=>state.auth.user);
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [loading, setLoading] = useState(false);
     const initialValues = {
         email:"",
         password:""
@@ -25,12 +27,15 @@ function Login() {
 
     useEffect(()=>{
         if(user&&!user.isBlocked){
-            navigate('/my-profile')
+            navigate('/home')
         }
     },[]);
 
-    const onSubmit = (values: { email: string; password: string }) => {
-        postLogin(values)
+    const onSubmit = async  (values: { email: string; password: string }) => {
+        setLoading(true);
+        console.log("dataa",loading)
+        try {
+            await postLogin(values)
             .then((response: any) => {
                 const data = response.data;
                 if (response.status === 200) {
@@ -53,6 +58,12 @@ function Login() {
                     toast.error(data.message);
                 }
             });
+        } catch (error) {
+            toast.error("An error occurred while logging in.");
+        } finally {
+      setLoading(false);
+    }
+        
     };
   return (
     <div className='bg-[#F7FCF6] h-screen grid md:grid-cols-2 items-center justify-center w-screen'> 
@@ -71,7 +82,10 @@ function Login() {
                 <Field className="mt-3 h-9 w-full border border-neutral-300" type="password" name="password" />
                 <ErrorMessage name="password" component="div" className="text-red-500" />
                 <Link className="flex mt-2 text-xs text-[#837D7D] w-full md:w-[96px]" to="/forget-password">Forget Password?</Link> 
-                <button className="mt-4 h-10 w-full bg-[#8B8DF2] text-white rounded-md" type="submit">Login</button>
+                <button className="mt-4 h-10 w-full bg-[#8B8DF2] text-white rounded-md" type="submit" disabled={loading}>
+                {loading ? <HashLoader size={20} color="#ffffff" className="mt-1" /> : "Login"}
+                </button>
+
                 <Link className="flex mt-2 text-xs text-[#837D7D] w-full" to="/signup">New User? Signup</Link> 
             </Form>
         </Formik>

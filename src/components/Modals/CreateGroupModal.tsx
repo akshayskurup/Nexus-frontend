@@ -8,6 +8,9 @@ import { Area } from 'react-easy-crop';
 import { createNewGroup } from "../../services/api/user/apiMethods";
 import { uploadImageToCloudinary } from "../../helpers/cloudinaryUpload";
 import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
+import HashLoader from "react-spinners/HashLoader";
 
 
 function CreateGroupModal({ show, onHide }) {
@@ -23,6 +26,7 @@ function CreateGroupModal({ show, onHide }) {
     const [preview, setPreview] = useState(true);
     const [crop, setCrop] = useState<Area>({ x: 0, y: 0, width: 1, height: 1 });
     const [groupName,setGroupName] = useState('')
+    const [loading ,setLoading] = useState(false)
     
 
 
@@ -91,25 +95,33 @@ function CreateGroupModal({ show, onHide }) {
       };
 
       const handleNewGroup = async()=>{
-        const imageUrl = await uploadImageToCloudinary(croppedImage);
-        setSelectedUsers(selectedUsers.push(user._id))
-        const groupData = {
-            profile:imageUrl,
-            name: groupName,
-            users: selectedUsers
-        }
-        console.log("groupdata",groupData)
-        createNewGroup(groupData)
-        .then((response:any)=>{
-            const data = response.data;
-            console.log(data)
-            if(response.status===200){
-              toast.success(data.message)
-              onHide();  
-            }else{
-              toast.error(data.error);
+        setLoading(true)
+        try {
+          const imageUrl = await uploadImageToCloudinary(croppedImage);
+          setSelectedUsers(selectedUsers.push(user._id))
+          const groupData = {
+              profile:imageUrl,
+              name: groupName,
+              users: selectedUsers
           }
-          })    
+          console.log("groupdata",groupData)
+          createNewGroup(groupData)
+          .then((response:any)=>{
+              const data = response.data;
+              console.log(data)
+              if(response.status===200){
+                toast.success(data.message)
+                onHide();  
+              }else{
+                toast.error(data.error);
+            }
+            })    
+          
+        } catch (error:any) {
+          toast.error(error)
+      } finally {
+        setLoading(false)
+      }
       }
   return (
   <Modal isOpen={show} onRequestClose={onHide}
@@ -118,11 +130,12 @@ function CreateGroupModal({ show, onHide }) {
         <h2 className="text-2xl font-bold mb-4 text-center">Create Group</h2>
         <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
         <label
-      className="bg-blue-500 w-20 h-20 rounded-full ml-auto mr-auto hover:cursor-pointer flex items-center justify-center relative"
+      className="bg-slate-200 w-20 h-20 rounded-full ml-auto mr-auto hover:cursor-pointer flex items-center justify-center relative"
       onMouseEnter={handleHover}
       onMouseLeave={handleMouseLeave}
     >
-      {isHovered && <p className="text-white z-10">Edit</p>}
+      <FontAwesomeIcon size="3x" icon={faCamera}/>
+      {/* {isHovered && <p className="text-white z-10">Edit</p>} */}
       {croppedImage && (
         <img
           className="w-20 h-20 rounded-full absolute top-0 left-0"
@@ -135,15 +148,21 @@ function CreateGroupModal({ show, onHide }) {
         accept="image/*"
         onChange={handleImageSelect}
         className="hidden"
+        disabled={loading}
       />
     </label>
         <div className="w-44 ml-auto mr-auto ">
         <p className="font-bold">Title</p>
-        <input onChange={(e)=>setGroupName(e.target.value)} className="bg-slate-200 rounded-md border border-black" type="text" />
-        <button className="bg-purple-400 pr-3 pl-3 rounded-full mt-4 ml-6" onClick={()=>setFriendsModal(true)}>Add Members</button>
+        <input onChange={(e)=>setGroupName(e.target.value)} className="bg-slate-200 rounded-md border border-black" type="text" disabled={loading}/>
+        
+        <button className='border rounded-lg  pl-2 pr-2 mt-4 ml-6 bg-[#2892FF] text-white font-medium ' onClick={()=>setFriendsModal(true)} disabled={loading}>Add Members</button>
+
         </div>
         {selectedUsers.length>=1 && croppedImage  && 
-        <button className="bg-blue-400 pl-3 pr-3 pt-1 pb-1 rounded-full float-right mt-10" onClick={handleNewGroup}>Save</button>
+        <button className="bg-[#2892FF] pl-3 pr-3 pt-1 pb-1 rounded-full float-right mt-10" onClick={handleNewGroup}
+        disabled={loading}>
+        {loading ? <HashLoader size={20} className='ml-auto mr-auto' color="#ffffff" /> : "Save"}
+        </button>
         }
         {friendsModal && 
         <FriendsModal 

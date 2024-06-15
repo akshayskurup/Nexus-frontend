@@ -1,4 +1,4 @@
-import { assistant, chatUrl, connectionUrls, postUrl, userUrl } from "../../../constants/routes";
+import { assistant, chatUrl, connectionUrls, payment, postUrl, userUrl } from "../../../constants/routes";
 import { apiCall } from "./apiCalls";
 
 
@@ -862,6 +862,45 @@ export const clearAssistantConversation = ()=>{
             })
         } catch (error) {
             resolve({status:500,message:"Error during conversation clearing"});
+        }
+    })
+}
+
+//@des     create order
+//method   GET
+
+export const createOrder = ()=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            apiCall("get",payment.createOrder,"")
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during creating order"});
+        }
+    })
+}
+
+//@des     capturePayment
+//method   Post
+
+export const capturePayment = (paymentId:string)=>{
+    return new Promise ((resolve,reject)=>{
+        try {
+            const url = `${payment.capturePayment}/${paymentId}`
+            apiCall("post",url,"")
+            .then((response)=>{
+                resolve(response);
+            })
+            .catch((err)=>{
+                reject(err);
+            })
+        } catch (error) {
+            resolve({status:500,message:"Error during capturing payment"});
         }
     })
 }

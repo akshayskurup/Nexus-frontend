@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import { getUserConnections } from '../../services/api/user/apiMethods';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 
 function FollowingModal({isModalOpen,onModalClose,userId}) {
@@ -30,7 +32,7 @@ function FollowingModal({isModalOpen,onModalClose,userId}) {
     <Link to={`/profile/${user._id}`}>
     <div className='flex items-center gap-24 mb-5 ml-10 cursor-pointer rounded-md mr-5 hover:bg-slate-100'>
         <img src={user.profileImage} alt="" className='w-12 h-12 rounded-full ml-2'/>
-        <p>{user.userName}</p>
+        <p>{user.userName} {user.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</p>
     </div>
     </Link>
 )}

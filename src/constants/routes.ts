@@ -67,3 +67,9 @@ export const assistant = {
     askAssistant : '/assistant/ask',
     clearConversation : '/assistant/clear'
 }
+
+export const payment = {
+    createOrder : '/payment/order',
+    capturePayment : "/payment/capture"
+    
+}
