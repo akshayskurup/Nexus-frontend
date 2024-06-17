@@ -1,4 +1,4 @@
-import { faCircleChevronRight, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faCircleChevronRight, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react'
 import Modal from "react-modal";
@@ -57,7 +57,7 @@ function SearchUserModal({isOpen,onClose,searchUser}) {
             (<div className='flex items-center gap-36 mt-5 hover:bg-slate-200 rounded-lg pt-1 pb-1 cursor-pointer' 
             onClick={()=>{User._id===user._id?navigate('/my-profile'):navigate(`/profile/${user._id}`)}}>
             <img className='rounded-full w-11 h-11 ml-2' src={user.profileImage} alt="" />
-            <p>{user.userName}</p>
+            <p>{user.userName} {user.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</p>
         </div>)
         ))
     :

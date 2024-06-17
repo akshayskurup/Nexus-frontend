@@ -20,6 +20,7 @@ import getCroppedImg from "../helpers/croppedImage";
 import PostCropModal from "./Modals/PostCropModal";
 import { uploadImageToCloudinary } from "../helpers/cloudinaryUpload";
 import { setPosts } from "../utils/reducers/authSlice";
+import HashLoader from "react-spinners/HashLoader";
 
 // Make sure Modal is imported properly
 // Ensure that the Modal is properly styled and rendered in the component tree
@@ -34,6 +35,8 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
   const [addImageBtn, setAddImageBtn] = useState(true);
   const [valid, setValid] = useState(false);
   const [description, setDescription] = useState("");
+  const [loading,setLoading] = useState(false)
+
 
   const user = useSelector((state:any)=>state.auth.user);
   const dispatch = useDispatch()
@@ -50,7 +53,9 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
     onSubmit: async(values) => {
       console.log("Form submitted with values:", values);
       console.log("Image:", image);
-      const imageUrl = await uploadImageToCloudinary(croppedImage);
+      setLoading(true)
+      try {
+        const imageUrl = await uploadImageToCloudinary(croppedImage);
       const data = {
         userId: user._id,
         description: values.description,
@@ -58,7 +63,7 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
       };
       if(valid){
 
-          addPost(data)
+          await addPost(data)
           .then((response:any)=>{
             const data = response.data;
             if(response.status===200){
@@ -71,6 +76,12 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
             }
           })
       }
+      } catch (error) {
+        toast.error(error)
+          } finally {
+            setLoading(false)
+          }
+      
 
     },
   });
@@ -187,7 +198,7 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
           <div className="rounded-md w-36 h-48 relative">
             <>
               <div
-                className="absolute top-2 right-2 flex justify-center items-center bg-black opacity-75 w-6 h-6 rounded-full"
+                className="absolute top-2 right-2 flex justify-center items-center bg-black opacity-75 w-6 h-6 rounded-full cursor-pointer hover:bg-red-500"
                 onClick={handleRemoveImage}
               >
                 <FontAwesomeIcon icon={faMultiply} className="text-white" />
@@ -221,8 +232,11 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
             className={` ${valid ? "bg-blue-500" : "bg-slate-400"} ${
               valid ? "" : "disabled"
             } h-8 flex items-center text-white px-4 py-2 rounded-md`}
+            disabled={loading}
           >
-            Add
+              {loading ? <HashLoader size={20} className='mt-1' color="#ffffff" /> : "Add"}
+
+            
           </button>}
           
         </div>
@@ -345,8 +359,9 @@ function AddPost({handlePost}) {
       <p className="text-center font-semibold">OR</p>
       <div className="flex justify-center ">
         <button
-          className="mt-1 h-8 w-1/2  bg-[#2892FF] text-white rounded-xl mb-4"
+          className="mt-1 h-8 w-1/2  bg-[#2892FF] text-white rounded-xl mb-4 hover:shadow-md"
           onClick={openModal}
+          
         >
           Add Post
         </button>

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
   faCircleChevronRight,
+  faCommentMedical,
   faInfoCircle,
   faPhone,
   faPlus,
@@ -65,6 +66,7 @@ function Chat() {
   const [joinGroupAudioCall,setJoinGroupAudioCall] = useState(false);
   const [createGroupModal,setCreateGroupModal] = useState(false);
   const [groupInfo,setGroupInfo] = useState(false);
+  const [activeTab, setActiveTab] = useState('messages');
   
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -89,6 +91,7 @@ function Chat() {
       
       const getConversation = async () => {
         try {
+          setActiveTab('messages')
           const response = await getUserConversation(user._id);
           const data = response.data;
           if (response.status === 200) {
@@ -303,6 +306,7 @@ function Chat() {
     
 
   const handleAllFriendsMessage = () => {
+    setActiveTab("friends")
     getUserConnections(user._id).then((response: any) => {
       const connectionData = response.data.connection;
       console.log("connections", response.data.connection);
@@ -479,6 +483,7 @@ function Chat() {
       }
 
   const handleGroups = ()=>{
+    setActiveTab('groups')
     getUserGroups(user._id)
     .then((response: any) => {
       const data = response.data;
@@ -510,9 +515,24 @@ function Chat() {
           <p className="font-semibold text-xl text-center mt-5">Messages</p>
           <button className="float-right font-semibold text-sm mt-1 mr-3" onClick={()=>setCreateGroupModal(true)}><FontAwesomeIcon size="1x" icon={faPlus} /> Add groups</button>
           <div className="flex gap-20 justify-center mt-10 font-semibold">
-          <button onClick={getConversation}>Messages</button>
-          <button className="ml-5" onClick={handleAllFriendsMessage}>Friends</button>
-          <button className="ml-5" onClick={handleGroups}>Groups</button>
+          <button
+        onClick={getConversation}
+        className={`ml-5 ${activeTab === 'messages' ? 'bg-[#2892FF] rounded-lg pl-2 pr-2 text-white' : ''}`}
+      >
+        Messages
+      </button>
+      <button
+        onClick={handleAllFriendsMessage}
+        className={`ml-5 ${activeTab === 'friends' ? 'bg-[#2892FF] rounded-lg pl-2 pr-2 text-white' : ''}`}
+      >
+        Friends
+      </button>
+      <button
+        onClick={handleGroups}
+        className={`ml-5 ${activeTab === 'groups' ? 'bg-[#2892FF] rounded-lg pl-2 pr-2 text-white' : ''}`}
+      >
+        Groups
+      </button>
           </div>
           {conversations &&
             conversations.map((c) => (
@@ -537,7 +557,7 @@ function Chat() {
             ))}
 
 {groups && groups.map((userGroup) => (
-  <div key={userGroup.id} onClick={() => handleActiveChat(userGroup)}>
+  <div key={userGroup.id} onClick={() => handleActiveChat(userGroup)} className={`hover:bg-slate-100 pt-2 cursor-pointer ${currentChat?userGroup._id === currentChat._id ? "bg-slate-100" : "":""}`}>
     <UserGroup
       group={userGroup}
       currentUser={user}
@@ -549,69 +569,73 @@ function Chat() {
 
 
         </div>
-        <div className={`md:w-[90%] ${currentChat ? 'w-full' : ''} pb-10 md:pb-0 bg-[#F5F5F5] flex flex-col`} style={{ height: window.innerWidth < 768 ? '10vh' : 'auto' }}>
-
-          {currentChat !== null && (
-            <>
-              <div>
-                <div className="flex items-center mt-5 ml-10">
-
-                  <FontAwesomeIcon className="-ml-8 mr-10  md:hidden" onClick={()=>setCurrentChat(null)} icon={faArrowLeft} />
-                  <img
-                    src={profile.profileImage?profile.profileImage:profile.profile}
-                    alt=""
-                    className="w-10 h-10 rounded-full"
-                  />
-                  <p className="ml-2 md:ml-24">{profile.userName?profile.userName:profile.name}</p>
-                  <div className="flex ml-auto mr-7 md:mr-24  gap-14">
-                    <FontAwesomeIcon icon={faPhone} onClick={profile.profileImage?handleAudioCall:handleGroupAudioCall}/>
-                    <FontAwesomeIcon icon={faVideo} onClick={profile.profileImage?handleVideoCall:handleGroupVideoCall}/>
-                    {groups.length>0?<FontAwesomeIcon icon={faInfoCircle} onClick={()=>setGroupInfo(true)}/>:""}
-
-                  </div>
-                </div>
-                <hr className="h-px my-3 bg-black border-0 " />
-                <div
-                  className="flex flex-col gap-4 max-h-[75vh] md:max-h-[70vh] "
-                  style={{  overflowY: "auto" }}
-                  ref={scrollRef}
-                >
-                  {messages &&
-                    messages.map((mess) =>
-                      (mess.sender._id ? mess.sender._id : mess.sender) ===
-                      user._id ? (
-                        <SendedMessage mess={mess} />
-                      ) : (
-                        <ReceivedMessage mess={mess} profile={profile} />
-                      )
-                    )}
-                </div>
-             
+        <div className={`md:w-[90%] ${currentChat ? 'w-full' : ''} pb-10 md:pb-0 bg-[#F5F5F5] flex flex-col`} style={{ height: window.innerWidth < 768 ? '90vh' : 'auto' }}>
+      {currentChat !== null && (
+        <>
+          <div>
+            <div className="flex items-center mt-5 ml-10">
+              <FontAwesomeIcon className="-ml-8 mr-10 md:hidden" onClick={() => setCurrentChat(null)} icon={faArrowLeft} />
+              <img
+                src={profile.profileImage ? profile.profileImage : profile.profile}
+                alt=""
+                className="w-10 h-10 rounded-full"
+              />
+              <p className="ml-2 md:ml-24">{profile.userName ? profile.userName : profile.name}</p>
+              <div className="flex ml-auto mr-7 md:mr-24 gap-14">
+                <FontAwesomeIcon icon={faPhone} onClick={profile.profileImage ? handleAudioCall : handleGroupAudioCall} />
+                <FontAwesomeIcon icon={faVideo} onClick={profile.profileImage ? handleVideoCall : handleGroupVideoCall} />
+                {groups.length > 0 && <FontAwesomeIcon icon={faInfoCircle} onClick={() => setGroupInfo(true)} />}
               </div>
-              <div className="flex -mb-8  md:items-center md:justify-between md:ml-10 border md:mt-2 border-slate-400  bg-[#EAEAEA] h-8 w-full md:w-[90%] rounded-full px-2">
+            </div>
+            <hr className="h-px my-3 bg-black border-0" />
+          </div>
+          <div className="flex-grow flex flex-col justify-between">
+            <div
+              className="flex flex-col gap-4 max-h-[75vh] md:max-h-[70vh] pb-2 overflow-y-auto"
+              ref={scrollRef}
+            >
+              {messages.length===0 ? (
+                <div className="ml-auto mr-auto mt-20 flex flex-col">
+                <FontAwesomeIcon size="10x" icon={faCommentMedical} />
+                <p className="font-semibold text-2xl">Start new conversation</p>
+                </div>
+              ) 
+              :
+              (
+                messages.map((mess) =>
+                  (mess.sender._id ? mess.sender._id : mess.sender) === user._id ? (
+                    <SendedMessage key={mess._id} mess={mess} />
+                  ) : (
+                    <ReceivedMessage key={mess._id} mess={mess} profile={profile} />
+                  )
+                )
+              )
+              }
+            </div>
+            <div className="fixed bottom-0 left-0 right-0 md:left-auto md:right-auto md:w-[64%] p-2 bg-[#EAEAEA] border-t border-slate-400">
+              <div className="flex items-center w-full rounded-full px-2 bg-white shadow-md">
                 <input
                   type="text"
                   name="description"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  className="bg-transparent border-none focus:outline-none flex-grow"
+                  className="bg-transparent border-none focus:outline-none flex-grow p-2"
                   placeholder="Message..."
                 />
-                {newMessage.length>=1 && 
-                <button type="submit">
-                  <FontAwesomeIcon
-                    className="text-[#2892FF]"
-                    size="lg"
-                    icon={faCircleChevronRight}
-                    onClick={handleMessage}
-                  />
-                </button>
+                {newMessage.length >= 1 &&
+                  <button type="submit" onClick={handleMessage}>
+                    <FontAwesomeIcon
+                      className="text-[#2892FF]"
+                      size="lg"
+                      icon={faCircleChevronRight}
+                    />
+                  </button>
                 }
               </div>
-              
-              
-            </>
-          )}
+            </div>
+          </div>
+        </>
+      )}
           {joinVideoCall && 
           <VideoCallModal 
           show={joinVideoCall}

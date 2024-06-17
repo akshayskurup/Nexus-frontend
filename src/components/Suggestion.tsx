@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { follow, suggestedUser } from '../services/api/user/apiMethods';
 import SuggestionsModal from './Modals/SuggestionsModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 function Suggestion({handleSuggestedFollow,followUnfollowState}) {
   const navigate = useNavigate();
@@ -51,7 +53,7 @@ function Suggestion({handleSuggestedFollow,followUnfollowState}) {
         >
           <img className='w-11 h-11 rounded-full' src={user.profileImage} alt="" />
           <div className='flex flex-col'>
-            <p className='font-semibold'>{user.userName}</p>
+            <p className='font-semibold'>{user.userName} {user.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</p>
             <p className='text-sm text-[#837D7D]'>Suggested For You</p>
           </div>
           <p

@@ -3,7 +3,7 @@ import Modal from 'react-modal'
 import { commentReply, deleteComment, getAllComments } from '../../services/api/user/apiMethods'
 import { toast } from 'sonner'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleChevronRight, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle, faCircleChevronRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -86,7 +86,7 @@ function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }) {
         <div className='flex my-2 items-center'>
         <img className='w-9 h-9 rounded-full' src={comment.userId.profileImage} alt="" />
         <p className='ml-3 font-semibold'>
-        {user._id===comment.userId._id?"You":(<Link to={`/profile/${comment.userId._id}`}>{comment.userId.userName}</Link>)}        </p>
+        {user._id===comment.userId._id?"You":(<Link to={`/profile/${comment.userId._id}`}>{comment.userId.userName} {comment.userId.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</Link>)}        </p>
         <p className='ml-5 max-w-80'>{comment.comment}</p>
         <p className='text-xs ml-auto'>{comment.elapsed}</p>
         
@@ -106,7 +106,7 @@ function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }) {
         {visibleReplies[comment._id] && comment.replies.map((cmt:any)=>(
           <div className='flex gap-5 ml-12 mt-2 mb-2 items-center'>
             <img className='w-7 h-7 rounded-full' src={cmt.userId.profileImage} alt="" />
-          <p className='text-sm font-semibold'>{user._id===cmt.userId._id?"You":(<Link to={`/profile/${cmt.userId._id}`}>{cmt.userId.userName}</Link>)}</p>
+          <p className='text-sm font-semibold'>{user._id===cmt.userId._id?"You":(<Link to={`/profile/${cmt.userId._id}`}>{cmt.userId.userName} {cmt.userId.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</Link>)}</p>
           <p className='text-sm'>{cmt.reply}</p>
           </div>
         ))
@@ -123,12 +123,12 @@ function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }) {
       <>
       <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
       <p className='text-sm'>Replying to {replyCommentDetails.userName}: {replyCommentDetails.comment}</p>
-      <div className="bg-[#EAEAEA] mt-3 h-8 w-[40rem] rounded-full flex items-center">
+      <div className="bg-[#EAEAEA] mt-3 h-8 md:w-[40rem] rounded-full flex items-center">
 
       <input
               type="text"
               name="description"
-              className="ml-2 bg-transparent border-none focus:outline-none flex-grow"
+              className="ml-2  bg-transparent border-none focus:outline-none flex-grow"
               placeholder="Write your comment"
               onChange={(e)=>setReplyComment(e.target.value)}
               value={replyComment}

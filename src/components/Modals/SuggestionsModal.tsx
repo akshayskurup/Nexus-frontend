@@ -39,23 +39,33 @@ function SuggestionsModal({isOpen,onClose,getSuggestedUser}) {
       <h2 className="text-2xl font-bold mb-4 text-center tracking-wider ">Suggested For You</h2>
             <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
     <div className='bg-white w-90 max-h-80 overflow-y-auto  mt-5 rounded-md'>
-      
-        {suggestedUsers.map((users:any)=>(
-          
-          <div 
-          className='flex items-center justify-between ml-3 mt-4 cursor-pointer hover:bg-slate-100 pt-1 pb-1 rounded-md'
-          onClick={()=>navigate(`/profile/${users._id}`)}
-          >
-          <img className='w-11 h-11 rounded-full' src={users.profileImage} alt="" />
-          <div className='flex flex-col'>
-        <p className='font-semibold'>{users.userName}</p>
+    {suggestedUsers.length === 0 ? (
+  <p className='text-center font-semibold'>No Suggestions</p>
+) : (
+  suggestedUsers.map((user: any) => (
+    <div 
+      key={user._id}
+      className='flex items-center justify-between ml-3 mt-4 cursor-pointer hover:bg-slate-100 pt-1 pb-1 rounded-md'
+      onClick={() => navigate(`/profile/${user._id}`)}
+    >
+      <img className='w-11 h-11 rounded-full' src={user.profileImage} alt="" />
+      <div className='flex flex-col'>
+        <p className='font-semibold'>{user.userName}</p>
         <p className='text-sm text-[#837D7D]'>Suggested For You</p>
-        </div>
-        <p className='mr-1 text-[#4d99db] font-medium tracking-wide cursor-pointer'
-        onClick={(e)=>handleFollow(users._id,e)}
-        >Follow</p>
-        </div>
-        ))}
+      </div>
+      <p 
+        className='mr-1 text-[#4d99db] font-medium tracking-wide cursor-pointer'
+        onClick={(e) => {
+          e.stopPropagation(); // Prevents triggering the parent onClick
+          handleFollow(user._id, e);
+        }}
+      >
+        Follow
+      </p>
+    </div>
+  ))
+)}
+
         
         
       

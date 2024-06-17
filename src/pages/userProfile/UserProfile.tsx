@@ -10,6 +10,8 @@ import { useParams } from 'react-router-dom';
 import FollowersModal from '../../components/Modals/FollowersModal';
 import FollowingModal from '../../components/Modals/FollowingModal';
 import Suggestion from '../../components/Suggestion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 function UserProfile() {
   const { userId } = useParams();
@@ -159,7 +161,7 @@ const handleFollowUnfollowChange = () => {
                 <div className='pt-1 mt-5 bg-white w-[6.5rem] h-[6.5rem] xl:w-44 xl:h-44 rounded-full'>
                   <img className='h-24 w-24 ml-1 xl:ml-1 xl:w-[10.5rem] xl:h-[10.5rem] rounded-full' src={profile.profileImage} alt="Profile" />
                 </div>
-                <p className='font-semibold text-lg'>{profile.name}</p>
+                <p className='font-semibold text-lg'>{profile.name} {profile.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</p>
                 <p className='text-[#837D7D] text-sm'>@{profile.userName}</p>
               </div>
               <div>

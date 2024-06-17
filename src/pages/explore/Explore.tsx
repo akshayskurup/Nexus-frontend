@@ -55,12 +55,12 @@ function Explore() {
         <div className="hidden xl:block w-1/4 sticky top-10 h-screen">
         {loading ? <SkeletonUserProfile /> : <UserProfile />}
           </div>
-          <div className="md:ml-10 mt-5 flex flex-wrap gap-x-10">
+          <div className="justify-center md:justify-normal md:ml-10 mt-5 flex flex-wrap gap-x-10 gap-y-5">
           {loading 
             ? Array(6).fill().map((_, index) => <SkeletonPostThumbnail key={index} />)
             : allPost && allPost.map((Post) => (
                 Post.imageUrl !== "" && (
-                  <div className=" w-64 h-64" onClick={() => handlePost(Post)} key={Post._id}>
+                  <div className=" w-64 h-64 cursor-pointer" onClick={() => handlePost(Post)} key={Post._id}>
                     <img src={Post.imageUrl} alt="" />
                   </div>
                 )

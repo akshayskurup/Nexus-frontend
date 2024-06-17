@@ -3,6 +3,8 @@ import Modal from 'react-modal'
 import { getUserConnections } from '../../services/api/user/apiMethods';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 
 function FollowersModal({isModalOpen,onModalClose,userId}) {
@@ -38,7 +40,7 @@ function FollowersModal({isModalOpen,onModalClose,userId}) {
     {followers&& followers.map((user)=>
     <div className='flex items-center gap-24 mb-5 ml-10 cursor-pointer' onClick={()=>handleClick(user)}>
         <img src={user.profileImage} alt="" className='w-12 h-12 rounded-full'/>
-        <p>{user.userName}</p>
+        <p>{user.userName} {user.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</p>
     </div>
 )}
 </div>

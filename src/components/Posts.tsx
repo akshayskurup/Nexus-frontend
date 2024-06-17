@@ -1,5 +1,6 @@
 import {
   faBookmark,
+  faCheckCircle,
   faCircleChevronRight,
   faCommentDots,
   faEllipsisV,
@@ -431,8 +432,8 @@ function Posts({ post, handlePost , handleSavedPost,explore}) {
       />
       <div className="ml-8">
         <p className="font-semibold text-lg">
-          {user._id===post.userId._id ? (<Link to={`/my-profile`}>{post.userId.userName}</Link>):
-          (<Link to={`/profile/${post.userId._id}`}>{post.userId.userName}</Link>)
+          {user._id===post.userId._id ? (<Link to={`/my-profile`}>{post.userId.userName} {post.userId.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</Link>):
+          (<Link to={`/profile/${post.userId._id}`}>{post.userId.userName} {post.userId.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</Link>)
           }
         
         </p>

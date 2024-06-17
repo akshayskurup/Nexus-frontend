@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { postOTP, postRegister, postResendOtp } from "../../services/api/user/apiMethods"
 import { toast } from "sonner"
 import { useState, useRef, useEffect } from "react"
+import HashLoader from "react-spinners/HashLoader";
 
 
 
@@ -16,6 +17,7 @@ function OTPModal({ email, onClose }: OTPModalProps): JSX.Element {
     const [OTP, setOtp] = useState(['', '', '', '', '', '']);
     const [timer,setTimer] = useState(60)
     const [resendVisible,setResendVisible] = useState(false)
+    const [loading ,setLoading] = useState(false)
     const otpInputs = Array.from({ length: 6 }, (_, i) => i); 
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const navigate = useNavigate();
@@ -72,19 +74,27 @@ function OTPModal({ email, onClose }: OTPModalProps): JSX.Element {
         })
     }
 
-    const handleSubmit = ()=>{
+    const handleSubmit = async()=>{
+        setLoading(true)
         const otp:string = OTP.join('');
-        postOTP({otp})
-        .then((response:any)=>{
-            const data = response.data;
-            if(response.status===200){
-                toast.success(data.message);
-                localStorage.setItem('userId',data.newUser._id);
-                navigate('/login')
-            }else{
-                toast.error(data.error);
-            }
-        })
+        try {
+            await postOTP({otp})
+            .then((response:any)=>{
+                const data = response.data;
+                if(response.status===200){
+                    toast.success(data.message);
+                    localStorage.setItem('userId',data.newUser._id);
+                    navigate('/login')
+                }else{
+                    toast.error(data.error);
+                }
+            }) 
+        } catch (error:any) {
+            toast.error(error)
+        } finally {
+          setLoading(false)
+        }
+        
     }
 
     return (
@@ -128,8 +138,11 @@ function OTPModal({ email, onClose }: OTPModalProps): JSX.Element {
                 type="submit"
                 onClick={handleSubmit}
                 className="w-[9rem] mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                disabled={loading}
                 >
-            Submit OTP
+              {loading ? <HashLoader size={20} className='ml-auto mr-auto' color="#ffffff" /> : "Submit OTP"}
+
+            
         </button>
     )}
                 
@@ -148,6 +161,7 @@ function OTPModal({ email, onClose }: OTPModalProps): JSX.Element {
 function Signup() {
     const [showOTPModal, setShowOTPModal] = useState<boolean>(false);
     const [email, setEmail] = useState<string>('');
+    const [loading ,setLoading] = useState(false)
     
     const initialValues = {
         name:"",
@@ -162,9 +176,10 @@ function Signup() {
         password:yup.string().min(6,"Password must be at least 6 characters").required("Required"),
         confirmPassword: yup.string().oneOf([yup.ref('password')], 'Passwords must match').required('Please confirm your password')
     })
-    const onSubmit = (values:{name:string,email:string,password:string,confirmPassword:string})=>{
-        postRegister(values)
-        
+    const onSubmit = async(values:{name:string,email:string,password:string,confirmPassword:string})=>{
+        setLoading(true)
+        try {
+            await postRegister(values)    
         .then((response:any)=>{
             const data = response.data;
             if(response.status===200){
@@ -176,12 +191,18 @@ function Signup() {
                 toast.error(data.message)
             }
         })
+        } catch (error) {
+            toast.error(error)
+        } finally {
+          setLoading(false)
+        }
     }
   return (
     <div className=' bg-[#F7FCF6] w-screen h-screen  grid md:grid-cols-2 items-center justify-center'>
-        <div className="hidden md:block">
-            <img className="h-[100vh] w-[50vw]" src="../public/images/Img.jpg" alt="" />
-        </div>
+        <div className='relative hidden md:block'> 
+    <img className="h-[100vh] w-[50vw] object-cover" src="../public/images/Img.jpg" alt="Welcome Image" />
+    <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-6xl tracking-wide font-bold">Join With Us !</p>
+</div>
         <div className='bg-[#F7FCF6] md:col-start-2 pl-[9vw] mt-6 md:mt-[-90px]'>
             <p className='text-5xl mb-4 font-bold'>Signup</p>
             
@@ -200,7 +221,10 @@ function Signup() {
             <Field className="mt-3 h-9 w-full border border-neutral-300" type="password" name="confirmPassword" />
             <ErrorMessage name="confirmPassword" component="div" className="text-red-500" />
             
-            <button  type="submit" className="mt-4 h-10 w-full bg-[#8B8DF2] text-white rounded-md">Signup</button>
+            <button  type="submit" className="mt-4 h-10 w-full bg-[#8B8DF2] text-white rounded-md hover:shadow-md" disabled={loading}>
+              {loading ? <HashLoader size={20} className='mt-1' color="#ffffff" /> : "Signup"}
+
+            </button>
             <Link className="flex mt-2 text-xs text-[#837D7D] w-full md:w-[196px]" to="/login">Already have an account? SignIn</Link>
             
             </Form>

@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { updateUser } from "../utils/reducers/authSlice";
 import FollowersModal from "./Modals/FollowersModal";
 import FollowingModal from "./Modals/FollowingModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 
 function UserProfile({userProfileRefresh}) {
@@ -68,7 +70,7 @@ function UserProfile({userProfileRefresh}) {
     <img className=" w-[90px] h-[90px] rounded-full" src={user.profileImage} alt="" />
   </div>
   <div>
-    <p className="text-center font-semibold">{user.name}</p>
+    <p className="text-center font-semibold">{user.name} {user.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</p>
     <p className='text-center mt-1 text-[#837D7D] font-semibold text-sm'>@{user.userName}</p>
   </div>
   
@@ -88,7 +90,7 @@ function UserProfile({userProfileRefresh}) {
     </div>
   </div>
   <div className='flex justify-center mt-9'>
-    <button className="mt-1 h-9 w-64 bg-[#2892FF] text-white rounded-xl " onClick={()=>navigate('/my-profile')}>My Profile</button>
+    <button className="mt-1 h-9 w-64 bg-[#2892FF] text-white rounded-xl hover:shadow-md" onClick={()=>navigate('/my-profile')}>My Profile</button>
   </div>
   {isFollowersModalOpen && (
     <FollowersModal 

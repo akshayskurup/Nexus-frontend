@@ -22,7 +22,7 @@ function TopNavBar() {
         
         
         <div className="flex ml-auto gap-10 mr-6">
-        <FontAwesomeIcon className="text-[#837D7D]" size='lg' icon={faComment} />
+        <FontAwesomeIcon className={`text-[${location.pathname === '/chat' ? '#2892FF' : '#837D7D'}] cursor-pointer`} size='lg' onClick={()=>navigate('/chat')} icon={faComment} />
 
         </div>
     </div>
