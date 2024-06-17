@@ -7,6 +7,7 @@ import { faBell, faCircleChevronRight, faComment, faCompass, faHome, faMagnifyin
 import SearchUserModal from './Modals/SearchUserModal'
 import SuggestionsModal from './Modals/SuggestionsModal'
 import AssistantModal from './Modals/AssistantModal'
+import { clearAssistantConversation } from '../services/api/user/apiMethods'
 
 function NavBar() {
     const navigate = useNavigate()
@@ -17,9 +18,17 @@ function NavBar() {
     const [suggestionModal,setSuggestionModal] = useState(false);
     const [assistantModal,setAssistantModal] = useState(false)
     const user = useSelector((state:any)=>state.auth.user);
+    const message = useSelector((state:any)=>state.auth.message)
 
 
-    const handleLogout = ()=>{
+    const handleLogout = async()=>{
+      if(message.length>0){
+        await clearAssistantConversation().then((res:any)=>{
+          if(res.status===200){
+            console.log("DAta cleared succesfully")
+          }
+        })
+      }
         dispatch(logoutUser());
         localStorage.clear();
         navigate('/login');

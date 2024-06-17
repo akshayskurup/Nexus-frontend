@@ -90,7 +90,7 @@ function UserProfile({userProfileRefresh}) {
     </div>
   </div>
   <div className='flex justify-center mt-9'>
-    <button className="mt-1 h-9 w-64 bg-[#2892FF] text-white rounded-xl " onClick={()=>navigate('/my-profile')}>My Profile</button>
+    <button className="mt-1 h-9 w-64 bg-[#2892FF] text-white rounded-xl hover:shadow-md" onClick={()=>navigate('/my-profile')}>My Profile</button>
   </div>
   {isFollowersModalOpen && (
     <FollowersModal 

@@ -7,7 +7,7 @@ import { GetUserProfile, UserPost, UserSavedPost, capturePayment, createOrder, g
 import Posts from '../../components/Posts';
 import EditProfile from '../../components/Modals/EditProfile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookmark, faCheckCircle, faTableCellsLarge } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark, faCheckCircle, faCrown, faTableCellsLarge } from '@fortawesome/free-solid-svg-icons';
 import TopNavBar from '../../components/responsiveNavBars/TopNavBar';
 import BottomNavBar from '../../components/responsiveNavBars/BottomNavBar';
 import { login, updateUser } from '../../utils/reducers/authSlice';
@@ -23,6 +23,7 @@ interface Window {
 
 function MyProfile() {
   const [userPost,setUserPost] = useState([]);
+  const [userSavedPost,setUserSavedPost] = useState([]);
   const [isEditProfileModalOpen,setIsEditProfileModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('posts');
   const [followers, setFollowers] = useState([]);
@@ -37,6 +38,7 @@ function MyProfile() {
   
   
   const fetchPost = ()=>{
+    setUserPost([])
     UserPost(user._id)
   .then((response: any) => {
     const data = response.data;
@@ -87,7 +89,7 @@ const fetchUserConnections = (userId: any) => {
     .then((response: any) => {
       const data = response.data;
       if (response.status === 200) {
-        setUserPost(data.savedposts);
+        setUserSavedPost(data.savedposts);
         setActiveTab('saved');
       } else {
         toast.error(data.message);
@@ -140,6 +142,7 @@ const fetchUserConnections = (userId: any) => {
     }
   };
   const handleUserPost = ()=>{
+    setUserSavedPost([])
     fetchPost();
     setActiveTab('posts');
   }
@@ -204,9 +207,9 @@ const fetchUserConnections = (userId: any) => {
             </div>
 
             <p className='mt-6 ml-14 md:ml-44 xl:w-96 xl:ml-44'>{user.bio}</p>
-            <div className='ml-14 md:ml-44 lg:ml-44 mt-6'>
-            <button className='border border-blue-500 rounded-lg px-1 py-1 pl-3 pr-3 text-[#2892FF] font-medium' onClick={handleEditProfile}>Edit Profile</button>
-            <button onClick={handlePurchase}>premium</button>
+            <div className='ml-5 md:ml-44 lg:ml-44 mt-6'>
+            <button className='border border-blue-500 rounded-lg px-1 py-1 pl-3 pr-3 text-[#2892FF] font-medium hover:shadow-md' onClick={handleEditProfile}>Edit Profile</button>
+            {!user.premium && <button className='ml-5 md:ml-20 border border-[#FFD700] rounded-lg px-1 py-1 pl-3 pr-3 text-[#FFD700] font-medium hover:shadow-md' onClick={handlePurchase}><FontAwesomeIcon icon={faCrown} /> Get Premium</button>}
             </div>
           </div>
           {isEditProfileModalOpen&& <EditProfile isOpen={openModal} onClose={closeModal} />}
@@ -222,10 +225,10 @@ const fetchUserConnections = (userId: any) => {
       </div>
           <div className='flex flex-col items-center'>
             
-          {userPost && (userPost.length!=0?userPost.map((post)=>(
+          {userSavedPost && (userSavedPost.length!=0?userSavedPost.map((post)=>(
               <Posts key={post._id} post={post} handleSavedPost={handleSavedPost} />
           )):
-          <p className='mt-5 text-lg font-semibold'>No Post Available</p>
+          <p className='mt-5 text-lg font-semibold h-[50vh]'>No Post Available</p>
           )}
           </div>
       </div>

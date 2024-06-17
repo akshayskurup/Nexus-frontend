@@ -359,7 +359,7 @@ function AddPost({handlePost}) {
       <p className="text-center font-semibold">OR</p>
       <div className="flex justify-center ">
         <button
-          className="mt-1 h-8 w-1/2  bg-[#2892FF] text-white rounded-xl mb-4"
+          className="mt-1 h-8 w-1/2  bg-[#2892FF] text-white rounded-xl mb-4 hover:shadow-md"
           onClick={openModal}
           
         >

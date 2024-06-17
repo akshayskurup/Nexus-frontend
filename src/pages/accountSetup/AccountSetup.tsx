@@ -12,6 +12,8 @@ import { updateUser } from '../../utils/reducers/authSlice';
 import CropModal from '../../components/Modals/CropModal';
 import BGCropModal from '../../components/Modals/BGCropModal';
 import { uploadImageToCloudinary } from '../../helpers/cloudinaryUpload';
+import NexusIcon from "../../assets/favicon.svg"
+import HashLoader from "react-spinners/HashLoader";
 
 function AccountSetup() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,6 +29,7 @@ function AccountSetup() {
   const [bgPreview, setBGPreview] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showBGModal, setShowBGModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -139,6 +142,7 @@ function AccountSetup() {
   };
 
   const onSubmit = async (values: { userName: string, gender: string, bio: string, phone: number, profileImage: string, bgImage: string, userId:string }) => {
+    setLoading(true)
     try {
       
       if (croppedAreaPixels && image) {
@@ -180,12 +184,14 @@ function AccountSetup() {
       })     
     } catch (error) {
       console.error('Error submitting form:', error);
+    } finally{
+      setLoading(false)
     }
   };
   return (
     <div className='w-screen bg-gray-100 min-h-screen'>
       <div className='w-screen bg-gradient-to-r from-blue-500 to-indigo-600 h-16 shadow-md'>
-        <p className='text-center text-3xl font-extrabold text-white py-3'>SocialConnect</p>
+        <img src={NexusIcon} className='w-10 h-14 ml-auto mr-auto pt-2' alt="" />
       </div>
       <div className='flex justify-center mt-8 rounded-lg'>
         <div className="bg-white w-full max-w-4xl shadow-xl rounded-lg overflow-hidden">
@@ -233,7 +239,7 @@ function AccountSetup() {
                   
                   <div className='flex flex-col md:flex-row md:items-center gap-4'>
                     <label className='font-medium text-gray-700 md:w-1/4'>Phone</label>
-                    <Field type="number" name="phone" className="flex-grow h-10 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="(123) 456-7890" />
+                    <Field type="number" name="phone" className="flex-grow h-10 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="+91-1234859403" />
                   </div>
                   <ErrorMessage name="phone" component="div" className="text-red-500 ml-auto w-3/4" />
   
@@ -287,7 +293,7 @@ function AccountSetup() {
                      />
                   )}
                   
-                  <button className='w-full h-12 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 ease-in-out' type="submit">Create Account</button>
+                  <button className='w-full h-12 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 ease-in-out' type="submit" disabled={loading}>{loading ? <HashLoader size={20} color="#ffffff" className="mt-1" /> : "Create Account"}</button>
                 </div>
               </div>
             </Form>

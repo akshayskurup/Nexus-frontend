@@ -199,9 +199,10 @@ function Signup() {
     }
   return (
     <div className=' bg-[#F7FCF6] w-screen h-screen  grid md:grid-cols-2 items-center justify-center'>
-        <div className="hidden md:block">
-            <img className="h-[100vh] w-[50vw]" src="../public/images/Img.jpg" alt="" />
-        </div>
+        <div className='relative hidden md:block'> 
+    <img className="h-[100vh] w-[50vw] object-cover" src="../public/images/Img.jpg" alt="Welcome Image" />
+    <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-6xl tracking-wide font-bold">Join With Us !</p>
+</div>
         <div className='bg-[#F7FCF6] md:col-start-2 pl-[9vw] mt-6 md:mt-[-90px]'>
             <p className='text-5xl mb-4 font-bold'>Signup</p>
             
@@ -220,7 +221,7 @@ function Signup() {
             <Field className="mt-3 h-9 w-full border border-neutral-300" type="password" name="confirmPassword" />
             <ErrorMessage name="confirmPassword" component="div" className="text-red-500" />
             
-            <button  type="submit" className="mt-4 h-10 w-full bg-[#8B8DF2] text-white rounded-md" disabled={loading}>
+            <button  type="submit" className="mt-4 h-10 w-full bg-[#8B8DF2] text-white rounded-md hover:shadow-md" disabled={loading}>
               {loading ? <HashLoader size={20} className='mt-1' color="#ffffff" /> : "Signup"}
 
             </button>

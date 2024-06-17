@@ -123,12 +123,12 @@ function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }) {
       <>
       <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
       <p className='text-sm'>Replying to {replyCommentDetails.userName}: {replyCommentDetails.comment}</p>
-      <div className="bg-[#EAEAEA] mt-3 h-8 w-[40rem] rounded-full flex items-center">
+      <div className="bg-[#EAEAEA] mt-3 h-8 md:w-[40rem] rounded-full flex items-center">
 
       <input
               type="text"
               name="description"
-              className="ml-2 bg-transparent border-none focus:outline-none flex-grow"
+              className="ml-2  bg-transparent border-none focus:outline-none flex-grow"
               placeholder="Write your comment"
               onChange={(e)=>setReplyComment(e.target.value)}
               value={replyComment}

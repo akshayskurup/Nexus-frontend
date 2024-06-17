@@ -168,7 +168,7 @@ function ForgetPassword() {
                 <Field name="email" className="mt-3 h-9 w-full border border-neutral-300" type="text"  />
                 <ErrorMessage name="email" component="div" className="text-red-500" />
             
-                <button className=" mt-4 h-10 w-full bg-[#8B8DF2] text-white rounded-md">Submit</button>
+                <button className=" mt-4 h-10 w-full bg-[#8B8DF2] text-white rounded-md hover:shadow-md">Submit</button>
             </Form>
             </Formik>
         </div>

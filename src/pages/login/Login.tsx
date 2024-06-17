@@ -67,9 +67,11 @@ function Login() {
     };
   return (
     <div className='bg-[#F7FCF6] h-screen grid md:grid-cols-2 items-center justify-center w-screen'> 
-    <div className='hidden md:block'> 
-        <img className="h-[100vh] w-[50vw]" src="../public/images/Img.jpg" alt="" />
-    </div>
+    <div className='relative hidden md:block'> 
+    <img className="h-[100vh] w-[50vw] object-cover" src="../public/images/Img.jpg" alt="Welcome Image" />
+    <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-6xl tracking-wide font-bold">Welcome Back !</p>
+</div>
+
     <div className='bg-[#F7FCF6] -ml-5 md:col-start-2 pl-[9vw]  mt-5 md:mt-[-90px] md:ml-5'> 
         <p className='text-5xl font-bold'>Login</p>
         <p className='mt-7 text-[#837D7D]'>Welcome back! Please login to your account</p>
@@ -82,7 +84,7 @@ function Login() {
                 <Field className="mt-3 h-9 w-full border border-neutral-300" type="password" name="password" />
                 <ErrorMessage name="password" component="div" className="text-red-500" />
                 <Link className="flex mt-2 text-xs text-[#837D7D] w-full md:w-[96px]" to="/forget-password">Forget Password?</Link> 
-                <button className="mt-4 h-10 w-full bg-[#8B8DF2] text-white rounded-md" type="submit" disabled={loading}>
+                <button className="mt-4 h-10 w-full bg-[#8B8DF2] text-white rounded-md hover:shadow-md" type="submit" disabled={loading}>
                 {loading ? <HashLoader size={20} color="#ffffff" className="mt-1" /> : "Login"}
                 </button>
 
