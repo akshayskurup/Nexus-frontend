@@ -35,6 +35,7 @@ function AccountSetup() {
   const dispatch = useDispatch()
   const validationSchema = Yup.object().shape({
     userName: Yup.string()
+    .trim()
     .required('Username is required')
     .min(5,"Requires more that 5 letters")
     .max(15,"Limit exceeded"),

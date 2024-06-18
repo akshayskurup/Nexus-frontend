@@ -43,13 +43,13 @@ function AdminLogin() {
         })
     }
     return (
-        <div className='bg-[#F7FCF6] grid md:grid-cols-2 items-center justify-center w-screen'> 
+        <div className='bg-[#F7FCF6] grid md:grid-cols-2 items-center justify-center w-screen h-screen'> 
         <div className='hidden md:block'> 
             <img className="h-[100vh] w-[50vw]" src="../public/images/Img.jpg" alt="" />
         </div>
         <div className='bg-[#F7FCF6] md:col-start-2 pl-[9vw] mt-5 md:mt-[-90px]'> 
             <p className='text-5xl font-bold'>Admin Login</p>
-            <p className='mt-7 text-[#837D7D]'>Welcome back! Please login to your account</p>
+            <p className='mt-7 text-[#837D7D]'>Welcome back!</p>
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
                 <Form className="mt-5 w-full md:w-[18.5rem]">
                     <p className="text-[#837D7D]">Email:</p>
