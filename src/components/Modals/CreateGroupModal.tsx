@@ -13,12 +13,12 @@ import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import HashLoader from "react-spinners/HashLoader";
 
 
-function CreateGroupModal({ show, onHide }) {
+function CreateGroupModal({ show, onHide }:any) {
     const user = useSelector((state:any)=>state.auth.user);
 
     const [friendsModal,setFriendsModal] = useState(false);
-    const [selectedUsers, setSelectedUsers] = useState([]);
-    const [isHovered, setIsHovered] = useState(false);
+    const [selectedUsers, setSelectedUsers] = useState<any>([]);
+    const [isHovered, setIsHovered] = useState<any>(false);
     const [image, setImage] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
@@ -31,7 +31,7 @@ function CreateGroupModal({ show, onHide }) {
 
 
 
-
+  console.log(isHovered,preview)
 
   const handleHover = () => {
     setIsHovered(true);
@@ -41,7 +41,7 @@ function CreateGroupModal({ show, onHide }) {
     setIsHovered(false);
   };
 
-  const handleImageSelect = (e) => {
+  const handleImageSelect = (e:any) => {
     const file = e.target.files[0];
     console.log("Selected file:", file);
     if (
@@ -58,7 +58,7 @@ function CreateGroupModal({ show, onHide }) {
   };
 
 
-    const handleSaveSelectedUsers = (users) => {
+    const handleSaveSelectedUsers = (users:any) => {
         setSelectedUsers(users);
         console.log("This is from create group",selectedUsers)
       };
@@ -85,7 +85,7 @@ function CreateGroupModal({ show, onHide }) {
         setPreview(true);
       };
 
-      const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
+      const onCropComplete = useCallback(( croppedAreaPixels: Area) => {
         setCroppedAreaPixels(croppedAreaPixels);
       }, []);
 
@@ -97,7 +97,7 @@ function CreateGroupModal({ show, onHide }) {
       const handleNewGroup = async()=>{
         setLoading(true)
         try {
-          const imageUrl = await uploadImageToCloudinary(croppedImage);
+          const imageUrl = await uploadImageToCloudinary(croppedImage?croppedImage:"");
           setSelectedUsers(selectedUsers.push(user._id))
           const groupData = {
               profile:imageUrl,
@@ -175,7 +175,7 @@ function CreateGroupModal({ show, onHide }) {
 
         {showModal && (
         <CropModal
-          image={URL.createObjectURL(image)}
+          image={image?URL.createObjectURL(image):""}
           crop={crop}
           setCroppedAreaPixels={setCroppedAreaPixels}
           onCropChange={onCropChange}

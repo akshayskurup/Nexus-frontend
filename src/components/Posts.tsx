@@ -5,10 +5,9 @@ import {
   faCommentDots,
   faEllipsisV,
   faHeart,
-  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import  {useEffect, useState } from "react";
 import Modal from "react-modal";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -29,7 +28,7 @@ import { BASE_URL } from "../constants/urls";
 import Comments from "./Modals/Comments";
 import { Link } from "react-router-dom";
 
-function ReportOptionModal({ isOpen, onClose, post, user }) {
+function ReportOptionModal({ isOpen, onClose, post, user }:any) {
   const onReport = (reason: string) => {
     ReportPost({
       userId: user._id,
@@ -88,7 +87,7 @@ function ReportOptionModal({ isOpen, onClose, post, user }) {
   );
 }
 
-function EditPostModal({ isOpen, onClose, post, handlePost }) {
+function EditPostModal({ isOpen, onClose, post, handlePost }:any) {
   const [valid, setValid] = useState(false);
   const [description, setDescription] = useState("");
 
@@ -154,11 +153,11 @@ function EditPostModal({ isOpen, onClose, post, handlePost }) {
             }}
             onBlur={formik.handleBlur}
           />
-          {formik.touched.description && formik.errors.description && (
-            <div className="text-red-500 text-sm mt-1">
-              {formik.errors.description}
-            </div>
-          )}
+          {formik.touched.description && formik.errors.description && typeof formik.errors.description === 'string' && (
+        <div className="text-red-500 text-sm mt-1">
+          {formik.errors.description}
+        </div>
+      )}
         </div>
         {post.imageUrl && (
           <div className="rounded-md w-36 h-48 relative">
@@ -191,7 +190,7 @@ function EditPostModal({ isOpen, onClose, post, handlePost }) {
 
 //----------------------------------------------------------------------------------------------
 
-function OptionsModal({ isModalOpen, onModalClose, post, handlePost}) {
+function OptionsModal({ isModalOpen, onModalClose, post, handlePost}:any) {
   const dispatch = useDispatch()
   const [isEditPostModalOpen, setIsEditPostModalOpen] = useState(false);
   const [reportOptionModal, setReportOptionModal] = useState(false);
@@ -286,7 +285,7 @@ function OptionsModal({ isModalOpen, onModalClose, post, handlePost}) {
 
 //-----------------------------------------------------------------------------------------
 
-function Posts({ post, handlePost , handleSavedPost,explore}) {
+function Posts({ post, handlePost , handleSavedPost,explore}:any) {
   const user = useSelector((state: any) => state.auth.user);
   const [likedUsers, setLikedUsers] = useState(post.likes);
   const [isLikedByUser, setIsLikedByUser] = useState(post.likes.includes(user._id));
@@ -300,7 +299,7 @@ function Posts({ post, handlePost , handleSavedPost,explore}) {
   const dispatch = useDispatch();
 
   const [refetchData, setRefetchData] = useState(false);
-
+  console.log(likedUsers)
   // Define a callback function to trigger refetch of data
   const handleCommentDelete = () => {
     // Update state to trigger useEffect
@@ -355,13 +354,13 @@ function Posts({ post, handlePost , handleSavedPost,explore}) {
         dispatch(setPosts({ posts: data.posts }));
         setIsLikedByUser(!isLikedByUser);
         if (isLikedByUser) {
-          setLikedUsers((prev) => {
-            return prev.filter((likedUser) => likedUser._id !== userId);
+          setLikedUsers((prev:any) => {
+            return prev.filter((likedUser:any) => likedUser._id !== userId);
           });
-          setLikeCount((prev) => prev - 1);
+          setLikeCount((prev:any) => prev - 1);
         } else {
-          setLikedUsers((prev) => [...prev, user]);
-          setLikeCount((prev) => prev + 1);
+          setLikedUsers((prev:any) => [...prev, user]);
+          setLikeCount((prev:any) => prev + 1);
         }
       } else {
         toast.error(data.message);
@@ -465,7 +464,7 @@ function Posts({ post, handlePost , handleSavedPost,explore}) {
           />
           <p className="ml-2">{likeCount}</p>
         </div>
-        <div className="flex" onClick={count !== 0 ? handleCommentModal : null}>
+        <div className="flex" onClick={count !== 0 ? handleCommentModal : ()=>{}}>
           <FontAwesomeIcon
             className="w-6 h-6 text-[#837D7D] cursor-pointer"
             icon={faCommentDots}

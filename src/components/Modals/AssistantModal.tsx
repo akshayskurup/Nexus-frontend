@@ -1,5 +1,5 @@
 import Modal from 'react-modal';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { assistantConversation, clearAssistantConversation } from '../../services/api/user/apiMethods';
 import { toast } from 'sonner';
 import Skeleton from 'react-loading-skeleton';
@@ -9,18 +9,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentMedical } from '@fortawesome/free-solid-svg-icons';
 
-function AssistantModal({ isOpen, onClose }) {
+function AssistantModal({ isOpen, onClose }:any) {
   const dispatch = useDispatch();
-  const messagesFromStore = useSelector((state) => state.auth.message);
+  const messagesFromStore = useSelector((state:any) => state.auth.message);
   const [messages, setMessages] = useState(messagesFromStore);
   const [userInput, setUserInput] = useState(''); 
   const [loading, setLoading] = useState(false);
 
   console.log("Messages",messages)
-  const sendMessage = async (text) => {
+  const sendMessage = async (text:any) => {
     const userMessage = { isUser: true, text: `You said: ${text}.` };
-    setMessages((prev) => {
-      const updatedMessages = [...prev, userMessage];
+    setMessages((prev:any) => {
+      const updatedMessages:any = [...prev, userMessage];
       dispatch(setMessage(updatedMessages));
       return updatedMessages;
     });
@@ -30,11 +30,11 @@ function AssistantModal({ isOpen, onClose }) {
     setLoading(true);
 
     try {
-      const res = await assistantConversation(data);
+      const res:any = await assistantConversation(data);
       if (res.status === 200) {
         const botReply = { isUser: false, text: `replied: ${res.data.response}...` };
-        setMessages((prev) => {
-          const updatedMessages = [...prev, botReply];
+        setMessages((prev:any) => {
+          const updatedMessages:any = [...prev, botReply];
           dispatch(setMessage(updatedMessages));
           return updatedMessages;
         });
@@ -51,8 +51,8 @@ function AssistantModal({ isOpen, onClose }) {
     clearAssistantConversation().then((res:any)=>{
       if(res.status===200){
         setMessages(()=>{
-          const updatedMess = []
-          dispatch(setMessage([]))
+          const updatedMess:any = []
+          dispatch(setMessage(updatedMess))//error
           return updatedMess
         })
       }else{
@@ -82,7 +82,7 @@ function AssistantModal({ isOpen, onClose }) {
         </div>
       ) : (
         <div className="flex-grow max-h-[45vh] overflow-y-auto p-4">
-          {messages.map((message, index) => (
+          {messages.map((message:any, index:any) => (
             <div key={index} className={`mb-4 ${message.isUser ? 'text-right' : 'text-left'}`}>
               <p className={`inline-block px-4 py-2 rounded-lg ${message.isUser ? 'bg-indigo-500 text-white' : 'bg-slate-200'}`}>
                 {message.text}

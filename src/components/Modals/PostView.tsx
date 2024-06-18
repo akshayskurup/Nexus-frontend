@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Modal from 'react-modal'
 import Posts from '../Posts'
 import { getPost } from '../../services/api/user/apiMethods'
 
 
-function PostView({ isModalOpen, onModalClose, post }) {
+function PostView({ isModalOpen, onModalClose, post }:any) {
   const [currentPost, setCurrentPost] = useState(post);
 
-  const handlePost = (postId) => {
-    getPost(postId).then((res) => {
+  const handlePost = (postId:any) => {
+    getPost(postId).then((res:any) => {
       if (res.status === 200) {
         console.log("me",res.data.post)
         setCurrentPost(res.data.post);

@@ -59,7 +59,7 @@ function Login() {
                 }
             });
         } catch (error) {
-            toast.error("An error occurred while logging in.");
+            console.log(error)
         } finally {
       setLoading(false);
     }

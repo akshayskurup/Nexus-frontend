@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { getUserConnections } from "../../services/api/user/apiMethods";
 import { useSelector } from "react-redux";
 
-function FriendsModal({ show, onHide, onSaveSelectedUsers, usersSelected }) {
+function FriendsModal({ show, onHide, onSaveSelectedUsers, usersSelected }:any) {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [mutualConnections, setMutualConnections] = useState([]);
@@ -11,6 +11,7 @@ function FriendsModal({ show, onHide, onSaveSelectedUsers, usersSelected }) {
 
   const user = useSelector((state: any) => state.auth.user);
 
+  console.log(followers,following)
   useEffect(() => {
     getUserConnections(user._id).then((response: any) => {
       const connectionData = response.data.connection;
@@ -31,9 +32,9 @@ function FriendsModal({ show, onHide, onSaveSelectedUsers, usersSelected }) {
   }, [user._id]);
 
   const handleCheckboxChange = (userId: string) => {
-    setSelectedUsers((prevSelectedUsers) => {
+    setSelectedUsers((prevSelectedUsers:any) => {
       if (prevSelectedUsers.includes(userId)) {
-        return prevSelectedUsers.filter((id) => id !== userId);
+        return prevSelectedUsers.filter((id:any) => id !== userId);
       } else {
         return [...prevSelectedUsers, userId];
       }

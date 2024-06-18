@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import { getUserConnections } from '../../services/api/user/apiMethods';
 import { useSelector } from 'react-redux';
@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 
-function FollowersModal({isModalOpen,onModalClose,userId}) {
+function FollowersModal({isModalOpen,onModalClose,userId}:any) {
   const currentUser = useSelector((state:any)=>state.auth.user)
     const [followers,setFollowers] = useState([]);
     const navigate = useNavigate()
@@ -37,7 +37,7 @@ function FollowersModal({isModalOpen,onModalClose,userId}) {
 
     <h2 className="text-2xl font-bold mb-4 text-center">Followers</h2>
     <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
-    {followers&& followers.map((user)=>
+    {followers&& followers.map((user:any)=>
     <div className='flex items-center gap-24 mb-5 ml-10 cursor-pointer' onClick={()=>handleClick(user)}>
         <img src={user.profileImage} alt="" className='w-12 h-12 rounded-full'/>
         <p>{user.userName} {user.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</p>

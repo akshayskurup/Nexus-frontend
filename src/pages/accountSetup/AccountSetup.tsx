@@ -1,13 +1,13 @@
 
 import React, { useState, useRef, useCallback } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage, FormikValues } from 'formik';
 import * as Yup from 'yup';
 import { Area } from 'react-easy-crop';
 import getCroppedImg from '../../helpers/croppedImage';
 import { accountSetup } from '../../services/api/user/apiMethods';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { updateUser } from '../../utils/reducers/authSlice';
 import CropModal from '../../components/Modals/CropModal';
 import BGCropModal from '../../components/Modals/BGCropModal';
@@ -31,9 +31,10 @@ function AccountSetup() {
   const [showBGModal, setShowBGModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  console.log(preview,bgPreview)
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const validationSchema = Yup.object().shape({
+  const validationSchema:Yup.ObjectSchema<FormikValues> = Yup.object().shape({
     userName: Yup.string()
     .trim()
     .required('Username is required')
@@ -52,7 +53,7 @@ function AccountSetup() {
     .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
   });
 
-  const initialValues = { userName: '', gender: '', bio: '', phone: '' };
+  const initialValues:any = { userName: '', gender: '', bio: '', phone: '' };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -88,11 +89,11 @@ function AccountSetup() {
     setBGCroppedAreaPixels(croppedAreaPixels);
   };
 
-  const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
+  const onCropComplete = useCallback((croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  const onBGCropComplete = useCallback((croppedArea: Area, bgCroppedAreaPixels: Area) => {
+  const onBGCropComplete = useCallback((bgCroppedAreaPixels: Area) => {
     setBGCroppedAreaPixels(bgCroppedAreaPixels);
   }, []);
 
@@ -201,7 +202,7 @@ function AccountSetup() {
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >
-            {({ values, setFieldValue, errors }) => (
+            {({ setFieldValue }) => (
             <Form>
               <div className='w-full h-64 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-t-lg'>
                 <img src={bgCroppedImage || "https://getuikit.com/v2/docs/images/placeholder_600x400.svg"} className='w-full h-64 object-cover opacity-80' alt="" />
@@ -246,7 +247,7 @@ function AccountSetup() {
   
                   {showModal && (
                     <CropModal 
-                    image={URL.createObjectURL(image)}
+                    image ={image ? URL.createObjectURL(image) : undefined}
                     crop={crop}
                     setCroppedAreaPixels={setCroppedAreaPixels}
                     onCropChange={onCropChange}
@@ -284,7 +285,7 @@ function AccountSetup() {
   
                   {showBGModal && (
                     <BGCropModal 
-                    image={URL.createObjectURL(bgImage)}
+                    image={bgImage? URL.createObjectURL(bgImage) : undefined}
                     crop={bgCrop}
                     setCroppedAreaPixels={setBGCroppedAreaPixels}
                     onCropChange={onBGCropChange}

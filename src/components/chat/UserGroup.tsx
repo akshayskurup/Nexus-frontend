@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
 
-function UserGroup({currentUser,group,handleActiveChat,handleCurrentChat}) {
+function UserGroup({group}:any) {
     
     
   return (

@@ -1,7 +1,6 @@
-import React from 'react';
 import TimeAgo from 'timeago-react'; 
 
-function ReceivedMessage({mess,profile}) {
+function ReceivedMessage({mess,profile}:any) {
     const maxWidth = `${Math.min(mess.text.length * 15, 280)}px`; // Adjust the multiplier as needed
   const maxHeight = '100px'; // Set a maximum height as needed
   return (

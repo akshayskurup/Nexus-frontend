@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { GetUserProfile } from '../../services/api/user/apiMethods';
 import { toast } from 'sonner';
 
-function GroupInfo({ show, onHide, group }) {
-    const [users, setUsers] = useState([]);
+function GroupInfo({ show, onHide, group }:any) {
+    const [users, setUsers] = useState<any>([]);
 
     useEffect(() => {
         const fetchGroupMembers = async () => {
@@ -17,7 +17,7 @@ function GroupInfo({ show, onHide, group }) {
                     processedUserIds.add(userId); // Add the user ID to the processed set
 
                     try {
-                        const response = await GetUserProfile(userId);
+                        const response:any = await GetUserProfile(userId);
                         const data = response.data;
 
                         if (response.status === 200) {
@@ -70,7 +70,7 @@ function GroupInfo({ show, onHide, group }) {
                                 <div className='max-h-[10rem] overflow-y-auto'>
                                 {users && 
                                 
-                                    users.map((user) => (
+                                    users.map((user:any) => (
                                         <div className='flex items-center gap-10 mb-2 ml-5 '>
                                         <img className='w-10 h-10 rounded-full' src={user.profileImage} alt="" />
                                         <p key={user._id}>{user.name}</p>

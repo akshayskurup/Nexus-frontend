@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
@@ -27,7 +27,7 @@ function GroupAudioCall() {
             const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
               appId,
               serverSecret,
-              roomId,
+              roomId?roomId:"",
               userId,
               userName,
             );

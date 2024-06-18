@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import TopNavBar from '../../components/responsiveNavBars/TopNavBar';
 import BottomNavBar from '../../components/responsiveNavBars/BottomNavBar';
@@ -15,10 +15,10 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 function UserProfile() {
   const { userId } = useParams();
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState<any>(null);
   const [userPost, setUserPost] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [followers, setFollowers] = useState([]);
+  const [followers, setFollowers] = useState<any>([]);
   const [following, setFollowing] = useState([]);
   const [isFollowersModalOpen, setIsFollowersModalOpen] = useState(false);
   const [isFollowingModalOpen, setIsFollowingModalOpen] = useState(false);
@@ -32,7 +32,7 @@ const handleFollowUnfollowChange = () => {
 
   const fetchUserConnections = async (userId: any) => {
     try {
-      const response = await getUserConnections(userId);
+      const response:any = await getUserConnections(userId);
       const connectionData = response.data.connection;
       setFollowing(connectionData.following);
       setFollowers(connectionData.followers);
@@ -65,7 +65,7 @@ const handleFollowUnfollowChange = () => {
 
   const fetchUserPosts = async (userId: any) => {
     try {
-      const response = await UserPost(userId);
+      const response:any = await UserPost(userId);
       if (response.status === 200) {
         setUserPost(response.data.posts);
       } else {
@@ -79,7 +79,7 @@ const handleFollowUnfollowChange = () => {
 
   const handleSavedPost = async () => {
     try {
-      const response = await UserSavedPost(user._id);
+      const response:any = await UserSavedPost(user._id);
       if (response.status === 200) {
         setUserPost(response.data.savedposts);
       } else {
@@ -93,11 +93,11 @@ const handleFollowUnfollowChange = () => {
 
   const handleFollow = async () => {
     try {
-      const response = await follow({ userId: user._id, followingUser: profile._id });
+      const response:any = await follow({ userId: user._id, followingUser: profile._id });
       if (response.status === 200) {
         toast.success(response.data.message);
         setIsFollowing(true);
-        setFollowers((prevFollowers) => [...prevFollowers, user]);
+        setFollowers((prevFollowers:any) => [...prevFollowers, user]);
         handleFollowUnfollowChange();
 
       } else {
@@ -111,11 +111,11 @@ const handleFollowUnfollowChange = () => {
 
   const handleUnfollow = async () => {
     try {
-      const response = await unFollow({ userId: user._id, unFollowingUser: profile._id });
+      const response:any = await unFollow({ userId: user._id, unFollowingUser: profile._id });
       if (response.status === 200) {
         toast.success(response.data.message);
         setIsFollowing(false);
-        setFollowers((prevFollowers) => prevFollowers.filter((follower: any) => follower._id !== user._id));
+        setFollowers((prevFollowers:any) => prevFollowers.filter((follower: any) => follower._id !== user._id));
         handleFollowUnfollowChange();
       } else {
         toast.error(response.data.message);
@@ -201,10 +201,10 @@ const handleFollowUnfollowChange = () => {
         )}
         <hr className="h-px my-3 bg-gray-200 border-1 dark:bg-gray-700" />
         <div className='flex flex-col items-center'>
-          {userPost && (userPost.length!=0?userPost.map((post)=>(
+          {userPost && (userPost.length!=0?userPost.map((post:any)=>(
             // <Posts key={post._id} post={post} handleSavedPost={handleSavedPost} handlePost={fetchUserPosts} />
             
-              <Posts key={post._id} post={post} handleSavedPost={handleSavedPost} handlePost={fetchUserPosts} />
+              <Posts key={post?._id} post={post} handleSavedPost={handleSavedPost} handlePost={fetchUserPosts} />
           )):
           <p className='mt-5 text-lg font-semibold'>No Post Available</p>
           )

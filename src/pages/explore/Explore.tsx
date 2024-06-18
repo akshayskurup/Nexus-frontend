@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import NavBar from '../../components/NavBar'
 import TopNavBar from '../../components/responsiveNavBars/TopNavBar'
 import BottomNavBar from '../../components/responsiveNavBars/BottomNavBar'
 import UserProfile from '../../components/UserProfile'
-import Suggestion from '../../components/Suggestion'
 import { getAllPost } from '../../services/api/user/apiMethods'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
 import { setPosts } from '../../utils/reducers/authSlice'
 import PostView from '../../components/Modals/PostView'
@@ -16,7 +15,7 @@ function Explore() {
   const [allPost,setAllPost] = useState([])
   const [isPostModalOpen,setIsPostModalOpen] = useState(false)
   const [loading,setLoading] = useState(false)
-  const [post,setPost] = useState();
+  const [post,setPost] = useState<any>();
     const dispatch = useDispatch();
     useEffect(()=>{
             setLoading(true)
@@ -57,8 +56,9 @@ function Explore() {
           </div>
           <div className="justify-center md:justify-normal md:ml-10 mt-5 flex flex-wrap gap-x-10 gap-y-5">
           {loading 
-            ? Array(6).fill().map((_, index) => <SkeletonPostThumbnail key={index} />)
-            : allPost && allPost.map((Post) => (
+           
+            ? Array.from({ length: 6 }).map((_, index) => <SkeletonPostThumbnail key={index} />)
+            : allPost && allPost.map((Post:any) => (
                 Post.imageUrl !== "" && (
                   <div className=" w-64 h-64 cursor-pointer" onClick={() => handlePost(Post)} key={Post._id}>
                     <img src={Post.imageUrl} alt="" />

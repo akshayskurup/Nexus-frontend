@@ -1,8 +1,7 @@
-import React from 'react'
 import Modal from 'react-modal'
 
 
-function GroupAudioCallModal({show,onHide,onAccept,onReject,caller}) {
+function GroupAudioCallModal({show,onHide,onAccept,onReject,caller}:any) {
   return (
     <>
     {show && (

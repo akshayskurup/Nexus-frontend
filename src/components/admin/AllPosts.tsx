@@ -25,7 +25,7 @@ function AllPosts() {
         })
     },[currentPage])
 
-    const handlePostBlock = (postId,status)=>{
+    const handlePostBlock = (postId:any,status:any)=>{
         changePostStatus({ postId, status },currentPage)
         .then((response: any) => {
             const data = response.data;
@@ -58,7 +58,7 @@ function AllPosts() {
 
                 <tbody className="bg-white">
                
-                {allPost && allPost.map((post) => ( 
+                {allPost && allPost.map((post:any) => ( 
 
                 
                     <tr>
@@ -71,7 +71,7 @@ function AllPosts() {
 
                                 
                                 <div className="ml-4">
-                                    {post.reason.map((reasons)=>(
+                                    {post.reason.map((reasons:any)=>(
                                     <div className="text-sm leading-5 font-medium text-gray-900">{reasons}</div>
                                     ))}
                                     <div className="text-sm leading-5 text-gray-500">{post.userId.userName}</div>

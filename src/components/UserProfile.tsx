@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { GetUserProfile, UserPost, UserSavedPost, getUserConnections } from "../services/api/user/apiMethods";
+import { GetUserProfile, UserPost, getUserConnections } from "../services/api/user/apiMethods";
 import { toast } from "sonner";
 import { updateUser } from "../utils/reducers/authSlice";
 import FollowersModal from "./Modals/FollowersModal";
@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 
-function UserProfile({userProfileRefresh}) {
+function UserProfile({userProfileRefresh}:any) {
     const user = useSelector((state:any)=>state.auth.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();

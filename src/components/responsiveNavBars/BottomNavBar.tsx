@@ -1,6 +1,6 @@
-import { faBell, faCompass, faHome, faPeopleGroup, faRobot, faSignOut } from '@fortawesome/free-solid-svg-icons';
+import {faCompass, faHome, faPeopleGroup, faRobot, faSignOut } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { logoutUser } from '../../utils/reducers/authSlice';
