@@ -15,7 +15,6 @@ import { toast } from "sonner";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { Area } from "react-easy-crop";
-import CropModal from "./Modals/CropModal";
 import getCroppedImg from "../helpers/croppedImage";
 import PostCropModal from "./Modals/PostCropModal";
 import { uploadImageToCloudinary } from "../helpers/cloudinaryUpload";
@@ -25,11 +24,11 @@ import HashLoader from "react-spinners/HashLoader";
 // Make sure Modal is imported properly
 // Ensure that the Modal is properly styled and rendered in the component tree
 
-function AddPostModal({ isOpen, onClose,handlePost }) {
+function AddPostModal({ isOpen, onClose,handlePost }:any) {
   const [image, setImage] = useState(null);
   const [crop, setCrop] = useState<Area>({ x: 0, y: 0, width: 1, height: 1 });
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [croppedImage, setCroppedImage] = useState<string>(null);
+  const [croppedImage, setCroppedImage] = useState<any>(null);
   const [preview, setPreview] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [addImageBtn, setAddImageBtn] = useState(true);
@@ -40,8 +39,9 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
 
   const user = useSelector((state:any)=>state.auth.user);
   const dispatch = useDispatch()
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<any>(null);
   
+  console.log(preview)
 
   const formik = useFormik({
     initialValues: {
@@ -76,7 +76,7 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
             }
           })
       }
-      } catch (error) {
+      } catch (error:any) {
         toast.error(error)
           } finally {
             setLoading(false)
@@ -98,7 +98,7 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
     }
   }, [image, description]);
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e:any) => {
     const selectedImage = e.target.files[0];
     if (
       selectedImage.type === "image/png" ||
@@ -121,7 +121,7 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
   };
 
   const handleAddPhotoClick = () => {
-    fileInputRef.current.click();
+    fileInputRef.current?.click();
   };
 
   const handleRemoveImage = () => {
@@ -134,7 +134,7 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
     setCroppedAreaPixels(croppedAreaPixels);
   };
   const onCropComplete = useCallback(
-    (croppedArea: Area, croppedAreaPixels: Area) => {
+    (croppedAreaPixels: Area) => {
       setCroppedAreaPixels(croppedAreaPixels);
     },
     []
@@ -243,7 +243,7 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
       </form>
       {showModal && (
         <PostCropModal
-          image={URL.createObjectURL(image)}
+          image={image?URL.createObjectURL(image):""}
           crop={crop}
           setCroppedAreaPixels={setCroppedAreaPixels}
           onCropChange={onCropChange}
@@ -257,8 +257,8 @@ function AddPostModal({ isOpen, onClose,handlePost }) {
 }
 
 //------------------------------------------------------------------------------
-function AddPost({handlePost}) {
-  const user = useSelector((state) => state.auth.user);
+function AddPost({handlePost}:any) {
+  const user = useSelector((state:any) => state.auth.user);
   const [isInputValid, setIsInputValid] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -311,7 +311,7 @@ function AddPost({handlePost}) {
     },
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e:any) => {
     formik.handleChange(e);
 
     formik.validateForm().then((errors) => {
@@ -345,7 +345,7 @@ function AddPost({handlePost}) {
               onChange={handleInputChange}
             />
             {isInputValid && (
-              <button type="submit" onClick={formik.handleSubmit}>
+              <button type="submit" onClick={()=>formik.handleSubmit}>
                 <FontAwesomeIcon
                   className="ml-7 text-[#2892FF]"
                   size="xl"

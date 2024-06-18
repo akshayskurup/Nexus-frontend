@@ -191,7 +191,7 @@ function Signup() {
                 toast.error(data.message)
             }
         })
-        } catch (error) {
+        } catch (error:any) {
             toast.error(error)
         } finally {
           setLoading(false)

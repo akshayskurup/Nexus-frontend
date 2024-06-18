@@ -1,12 +1,8 @@
-import React from 'react'
 import Modal from 'react-modal'
 
-function VideoCallModal({show,onHide,onAccept,onReject,caller}) {
-  console.log("Workeddddd")
+function VideoCallModal({show,onHide,onAccept,onReject,caller}:any) {
   return (
     <>
-    
-    
       {show && (
         <Modal 
         isOpen={show}

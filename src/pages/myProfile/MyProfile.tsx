@@ -10,16 +10,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark, faCheckCircle, faCrown, faTableCellsLarge } from '@fortawesome/free-solid-svg-icons';
 import TopNavBar from '../../components/responsiveNavBars/TopNavBar';
 import BottomNavBar from '../../components/responsiveNavBars/BottomNavBar';
-import { login, updateUser } from '../../utils/reducers/authSlice';
+import {updateUser } from '../../utils/reducers/authSlice';
 import Suggestion from '../../components/Suggestion';
 import FollowingModal from '../../components/Modals/FollowingModal';
 import FollowersModal from '../../components/Modals/FollowersModal';
-
-interface Window {
-  Razorpay: any;
-}
-
-
 
 function MyProfile() {
   const [userPost,setUserPost] = useState([]);
@@ -133,7 +127,7 @@ const fetchUserConnections = (userId: any) => {
             },
           };
   
-          const rzp1 = new window.Razorpay(options);
+          const rzp1 = new (window as any).Razorpay(options);
           rzp1.open();
         }
       });
@@ -225,7 +219,7 @@ const fetchUserConnections = (userId: any) => {
       </div>
           <div className='flex flex-col items-center'>
             
-          {userSavedPost && (userSavedPost.length!=0?userSavedPost.map((post)=>(
+          {userSavedPost && (userSavedPost.length!=0?userSavedPost.map((post:any)=>(
               <Posts key={post._id} post={post} handleSavedPost={handleSavedPost} />
           )):
           <p className='mt-5 text-lg font-semibold h-[50vh]'>No Post Available</p>

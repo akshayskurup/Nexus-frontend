@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { logoutUser } from '../utils/reducers/authSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBell, faCircleChevronRight, faComment, faCompass, faHome, faMagnifyingGlass, faPeopleGroup, faRobot, faSignOut } from '@fortawesome/free-solid-svg-icons';
+import {  faCircleChevronRight, faComment, faCompass, faHome, faMagnifyingGlass, faPeopleGroup, faRobot, faSignOut } from '@fortawesome/free-solid-svg-icons';
 import SearchUserModal from './Modals/SearchUserModal'
 import SuggestionsModal from './Modals/SuggestionsModal'
 import AssistantModal from './Modals/AssistantModal'

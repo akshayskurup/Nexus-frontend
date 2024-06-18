@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import UserProfile from '../../components/UserProfile'
 import NavBar from '../../components/NavBar'
 import AddPost from '../../components/AddPost'
@@ -6,7 +6,7 @@ import Suggestion from '../../components/Suggestion'
 import { getAllPost } from '../../services/api/user/apiMethods'
 import { toast } from 'sonner'
 import Posts from '../../components/Posts'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setPosts } from '../../utils/reducers/authSlice'
 import BottomNavBar from '../../components/responsiveNavBars/BottomNavBar'
 import TopNavBar from '../../components/responsiveNavBars/TopNavBar'
@@ -23,20 +23,23 @@ function HomePage() {
 
   const handlePost = ()=>{
     setLoading(true)
-    getAllPost()
+    try {
+      getAllPost()
     .then((response:any)=>{
       const data = response.data;
       if(response.status===200){
         dispatch(setPosts({posts:data.post}))
         setAllPost(data.post);
-        setTimeout(()=>{
-        setLoading(false)
-
-        },1500)
       }else{
         toast.error(data.message)
       }
     })
+    } catch (error:any) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+    
   }
 
   useEffect(()=>{
@@ -61,9 +64,9 @@ function HomePage() {
         </div>
         <div className='md:ml-4'>
           {loading ? <SkeletonAddPost /> : <AddPost handlePost={handlePost} />}
-          {loading
-            ? Array(3).fill().map((_, index) => <SkeletonPost key={index} />)
-            : allPost && allPost.map(post => (
+          {loading    
+            ? Array.from({ length: 3 }).map((_, index) => <SkeletonPost key={index} />)
+            : allPost && allPost.map((post:any) => (
               <Posts key={post._id} post={post} handlePost={handlePost} explore={false} />
             ))}
         </div>

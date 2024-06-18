@@ -1,13 +1,13 @@
 import { faCheckCircle, faCircleChevronRight, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import Modal from "react-modal";
 import { searchUserProfile } from '../../services/api/user/apiMethods';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-function SearchUserModal({isOpen,onClose,searchUser}) {
+function SearchUserModal({isOpen,onClose,searchUser}:any) {
     const [users,setUsers] = useState([]);
     const [searchUsers,setSearchUsers] = useState('');
     const navigate = useNavigate()
@@ -53,7 +53,7 @@ function SearchUserModal({isOpen,onClose,searchUser}) {
     </div>
     <div className=' mt-5 max-h-[20rem] overflow-y-auto'>
         {users.length>0 ?
-        users.map((user)=>(
+        users.map((user:any)=>(
             (<div className='flex items-center gap-36 mt-5 hover:bg-slate-200 rounded-lg pt-1 pb-1 cursor-pointer' 
             onClick={()=>{User._id===user._id?navigate('/my-profile'):navigate(`/profile/${user._id}`)}}>
             <img className='rounded-full w-11 h-11 ml-2' src={user.profileImage} alt="" />

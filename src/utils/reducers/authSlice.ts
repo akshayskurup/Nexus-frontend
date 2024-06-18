@@ -15,7 +15,7 @@ interface initialStateType{
     user:UserData | null;
     token:string | null;
     posts:any[];
-    message:any[]
+    message:any
 } 
 
 const initialState:initialStateType = {

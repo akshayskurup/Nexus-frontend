@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { follow, suggestedUser } from '../services/api/user/apiMethods';
@@ -6,7 +6,7 @@ import SuggestionsModal from './Modals/SuggestionsModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
-function Suggestion({handleSuggestedFollow,followUnfollowState}) {
+function Suggestion({handleSuggestedFollow,followUnfollowState}:any) {
   const navigate = useNavigate();
   const user = useSelector((state: any) => state.auth.user);
   const [suggestedUsers, setSuggestedUsers] = useState([]);

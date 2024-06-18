@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import{ useEffect, useState } from 'react'
 import { GetUserProfile, findTwoUserConversation } from '../../services/api/user/apiMethods'
 import { toast } from 'sonner'
 
-function Conversations({chatUser,currentUser,handleActiveChat,currentChatProfile,handleCurrentChat}) {
-    const [user,setUser] = useState(null)
+function Conversations({chatUser,currentUser,handleActiveChat,handleCurrentChat}:any) {
+    const [user,setUser] = useState<any>(null)
 
     useEffect(()=>{
         console.log("HEllloooooo",chatUser);
         
         if(chatUser.members && !chatUser.isGroup){
-        const friendId = chatUser.members.find((id)=> id!==currentUser._id)
+        const friendId = chatUser.members.find((id:any)=> id!==currentUser._id)
         console.log("Frienddd",friendId);
         
         GetUserProfile(friendId)
@@ -17,7 +17,6 @@ function Conversations({chatUser,currentUser,handleActiveChat,currentChatProfile
             const data = response.data;
             if(response.status===200){
                 setUser(data.user)
-                console.log("friend",data.user);  
             }else{
                 toast.error(data.message)
             }

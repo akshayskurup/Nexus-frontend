@@ -1,6 +1,6 @@
-import Cropper, { Area } from 'react-easy-crop';
+import Cropper from 'react-easy-crop';
 
-function BGCropModal({ image, crop, setCroppedAreaPixels, onCropChange, onCropComplete, onClose, onCropImage }) {
+function BGCropModal({ image, crop, onCropChange, onCropComplete, onClose, onCropImage }:any) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-lg">
         <div className="w-[40rem] h-[40rem] relative">

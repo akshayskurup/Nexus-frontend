@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import { commentReply, deleteComment, getAllComments } from '../../services/api/user/apiMethods'
-import { toast } from 'sonner'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle, faCircleChevronRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }) {
+function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }:any) {
     const [allComments,setAllComments] = useState([]);
     const [replyComment,setReplyComment] = useState('');
     const [replyCommentDetails,setReplyCommentDetails] = useState({userName:"",comment:""})
     const [commentId,setCommentId] = useState(null);
-    const [visibleReplies, setVisibleReplies] = useState({});
+    const [visibleReplies, setVisibleReplies] = useState<any>({});
     const [reply,setReply] = useState(false)
 
     const user = useSelector((state:any)=>state.auth.user);
@@ -56,7 +55,7 @@ function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }) {
       }
     }
 
-    const toggleReplies = (commentId) => {
+    const toggleReplies = (commentId:any) => {
       setVisibleReplies((prevVisibleReplies:any) => ({
         ...prevVisibleReplies,
         [commentId]: !prevVisibleReplies[commentId],
@@ -81,7 +80,7 @@ function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }) {
 
         <h2 className="text-2xl font-bold mb-4 text-center">Comments</h2>
       <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
-      {allComments && allComments.map((comment)=>(
+      {allComments && allComments.map((comment:any)=>(
         <>
         <div className='flex my-2 items-center'>
         <img className='w-9 h-9 rounded-full' src={comment.userId.profileImage} alt="" />

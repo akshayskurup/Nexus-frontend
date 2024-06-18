@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Modal from "react-modal";
 import { follow, suggestedUser } from '../../services/api/user/apiMethods';
 
-function SuggestionsModal({isOpen,onClose,getSuggestedUser}) {
+function SuggestionsModal({isOpen,onClose,getSuggestedUser}:any) {
   const navigate = useNavigate();
     const user = useSelector((state:any)=>state.auth.user);
     const [suggestedUsers,setSuggestedUsers] = useState([])

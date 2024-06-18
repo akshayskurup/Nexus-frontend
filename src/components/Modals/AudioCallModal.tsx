@@ -1,7 +1,6 @@
-import React from 'react'
 import Modal from 'react-modal'
 
-function AudioCallModal({show,onHide,onAccept,onReject,caller}) {
+function AudioCallModal({show,onHide,onAccept,onReject,caller}:any) {
     return (
         <>
         

@@ -13,14 +13,14 @@ import BGCropModal from './BGCropModal';
 import CropModal from './CropModal';
 import { uploadImageToCloudinary } from '../../helpers/cloudinaryUpload';
 import { EditUserProfile } from '../../services/api/user/apiMethods';
-import { login, updateUser } from '../../utils/reducers/authSlice';
+import { login } from '../../utils/reducers/authSlice';
 
-function EditProfile({ isOpen, onClose }) {
+function EditProfile({ isOpen, onClose }:any) {
     const user = useSelector((state: any) => state.auth.user);
 
         const [valid, setValid] = useState(false);
         const [description, setDescription] = useState(user.bio);
-        const inputRef = useRef<HTMLInputElement>(null);
+        
   const [image, setImage] = useState<File | null>(null);
   const [bgImage, setBGImage] = useState<File | null>(null);
   const [crop, setCrop] = useState<Area>({ x: 0, y: 0, width: 1, height: 1 });
@@ -35,6 +35,7 @@ function EditProfile({ isOpen, onClose }) {
   const [showModal, setShowModal] = useState(false);
   const [showBGModal, setShowBGModal] = useState(false);
 
+  console.log(preview,bgPreview)
       
         const dispatch = useDispatch();
         const formik = useFormik({
@@ -49,9 +50,8 @@ function EditProfile({ isOpen, onClose }) {
           onSubmit: async (values) => {
             console.log("Form submitted with values:", values);
             if (valid&&!img) {
-            const profileImageUrl = await uploadImageToCloudinary(croppedImage);
-            const bgImageUrl = await uploadImageToCloudinary(bgCroppedImage);
-            console.log("UUUUU",user);
+            const profileImageUrl = await uploadImageToCloudinary(croppedImage?croppedImage:"");
+            const bgImageUrl = await uploadImageToCloudinary(bgCroppedImage?bgCroppedImage:"");
             
             const data = {
               userId: user._id,
@@ -60,7 +60,6 @@ function EditProfile({ isOpen, onClose }) {
               profileImage: profileImageUrl,
               bgImage: bgImageUrl
             };
-            console.log("data before sendng",data);
             
               EditUserProfile(data)
               .then((response:any)=>{
@@ -81,21 +80,7 @@ function EditProfile({ isOpen, onClose }) {
             }
           },
         });
-    //   const handleSubmit = async()=>{
-    //     const profileImageUrl = await uploadImageToCloudinary(croppedImage);
-    //         const bgImageUrl = await uploadImageToCloudinary(bgCroppedImage);
-    //         const data = {
-    //           userId: user._id,
-    //           bio: formik.values.bio,
-    //           userName: formik.values.userName,
-    //           profileImage: profileImageUrl,
-    //           bgImage: bgImageUrl
-    //         };
-    //         if (valid) {
-    //             console.log("sdfsdf",data);
-                
-    //           }
-    //   }
+    
         useEffect(() => {
           if (description.length >= 7 || image!==null || bgImage!==null) {
             setValid(true);
@@ -105,31 +90,9 @@ function EditProfile({ isOpen, onClose }) {
         }, [description,image,bgImage]);
         
         const fileInputRef = useRef<HTMLInputElement | null>(null); // Define useRef inside the component function body
-        const bgFileInputRef = useRef(null); // Add this line
+        const bgFileInputRef = useRef<any>(null); // Add this line
 
-//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     if (e.target.files && e.target.files.length > 0) {
-//       const selectedImage = e.target.files[0];
-//       if (selectedImage.type === 'image/png' || selectedImage.type === 'image/jpeg') {
-//         setImage(selectedImage);
-//         setShowModal(true);
-//       }else {
-//         toast.error('Only PNG and JPEG image files are allowed for the Profile image.');
-//       }
-//     }
-//   };
-//   const handleBGFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     if (e.target.files && e.target.files.length > 0) {
-//       const selectedImage = e.target.files[0];
-//       if (selectedImage.type === 'image/png' || selectedImage.type === 'image/jpeg') {
-//         setBGImage(selectedImage);
-//         setShowBGModal(true);
-//       } else {
-//         toast.error('Only PNG and JPEG image files are allowed for the background image.');
-//       }
-//     }
-//   };
-  
+
 
   const onCropChange = (crop: Area, croppedAreaPixels: Area) => {
     setCrop(crop);
@@ -141,11 +104,11 @@ function EditProfile({ isOpen, onClose }) {
     setBGCroppedAreaPixels(croppedAreaPixels);
   };
 
-  const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
+  const onCropComplete = useCallback((croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  const onBGCropComplete = useCallback((croppedArea: Area, bgCroppedAreaPixels: Area) => {
+  const onBGCropComplete = useCallback(( bgCroppedAreaPixels: Area) => {
     setBGCroppedAreaPixels(bgCroppedAreaPixels);
   }, []);
 
@@ -206,11 +169,11 @@ function EditProfile({ isOpen, onClose }) {
     }; 
   const handleAddBGClick = () => {
     setImg(true)
-    bgFileInputRef.current.click();
+    bgFileInputRef.current?.click();
   };
   
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0];
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImage:any = e.target.files ? e.target.files[0] : null;
     if (
       selectedImage.type === "image/png" ||
       selectedImage.type === "image/jpeg"
@@ -225,7 +188,7 @@ function EditProfile({ isOpen, onClose }) {
 }
 
 
-const handleBGImageChange = (e) => {
+const handleBGImageChange = (e:any) => {
     e.preventDefault()
     const selectedImage = e.target.files[0];
     if (
@@ -289,7 +252,7 @@ const handleBGImageChange = (e) => {
                 />
                 {formik.touched.bio && formik.errors.bio && (
                   <div className="text-red-500 text-sm mt-1">
-                    {formik.errors.bio}
+                    {formik.errors.bio as React.ReactNode}
                   </div>
                 )}
                 <label className="block text-sm font-medium mb-2">UserName:</label>
@@ -305,7 +268,7 @@ const handleBGImageChange = (e) => {
                 />
                 {formik.touched.userName && formik.errors.userName && (
                   <div className="text-red-500 text-sm mt-1">
-                    {formik.errors.userName}
+                    {formik.errors.userName as React.ReactNode}
                   </div>
                 )}
               </div>
@@ -352,7 +315,7 @@ const handleBGImageChange = (e) => {
                 )}
                 {showBGModal && (
                   <BGCropModal
-                    image={URL.createObjectURL(bgImage)}
+                  image={bgImage ? URL.createObjectURL(bgImage) : undefined}
                     crop={bgCrop}
                     setCroppedAreaPixels={setBGCroppedAreaPixels}
                     onCropChange={onBGCropChange}
@@ -364,7 +327,7 @@ const handleBGImageChange = (e) => {
 
                 {showModal && (
                   <CropModal
-                    image={URL.createObjectURL(image)}
+                  image={image ? URL.createObjectURL(image) : undefined}
                     crop={crop}
                     setCroppedAreaPixels={setCroppedAreaPixels}
                     onCropChange={onCropChange}

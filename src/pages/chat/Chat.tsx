@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NavBar from "../../components/NavBar";
 import TopNavBar from "../../components/responsiveNavBars/TopNavBar";
 import BottomNavBar from "../../components/responsiveNavBars/BottomNavBar";
@@ -49,13 +49,13 @@ function Chat() {
   const [mutualConnections, setMutualConnections] = useState([]);
   const [conversations, setConversations] = useState([]);
   const [groups,setGroups] = useState([]);
-  const [currentChat, setCurrentChat] = useState(null);
-  const [profile, setProfile] = useState(null);
-  const [messages, setMessages] = useState("");
+  const [currentChat, setCurrentChat] = useState<any>(null);
+  const [profile, setProfile] = useState<any>(null);
+  const [messages, setMessages] = useState<any>("");
   const [newMessage, setNewMessage] = useState("");
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState<any>(null);
-  const [groupArrivalMessage, setGroupArrivalMessage] = useState(null)
+  const [groupArrivalMessage, setGroupArrivalMessage] = useState<any>(null)
   const [videoCallRoomId, setVideoCallRoomId] = useState('')
   const [audioCallRoomId, setAudioCallRoomId] = useState('')
   const [audioCallRequestedUser, setAudioCallRequestedUser] = useState({name:'',profile:''})
@@ -68,16 +68,16 @@ function Chat() {
   const [groupInfo,setGroupInfo] = useState(false);
   const [activeTab, setActiveTab] = useState('messages');
   
-
+  console.log(onlineUsers,following,followers)
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const user = useSelector((state: any) => state.auth.user);
   const navigate = useNavigate()
-  const getLastConversationMessage = async (conversation) => {
+  const getLastConversationMessage = async (conversation:any) => {
         try {
-          const response = await getLastMessage(conversation._id);
+          const response:any = await getLastMessage(conversation._id);
+          const data = response.data;
           if (response.status === 200) {
-            const data = response.data;
             return data; // Return the latest message data
           } else {
             toast.error(data.message);
@@ -92,11 +92,11 @@ function Chat() {
       const getConversation = async () => {
         try {
           setActiveTab('messages')
-          const response = await getUserConversation(user._id);
+          const response:any = await getUserConversation(user._id);
           const data = response.data;
           if (response.status === 200) {
-            const conversationsWithLatestMessage = await Promise.all(
-              data.map(async (conversation) => {
+            const conversationsWithLatestMessage:any = await Promise.all(
+              data.map(async (conversation:any) => {
                 const latestMessage = await getLastConversationMessage(conversation);
                 return { ...conversation, latestMessage }; // Add latest message as a field
               })
@@ -167,10 +167,10 @@ function Chat() {
   }, []);
 
   useEffect(() => {
-    console.log("set Messages GROUP ARIVAL MESS",groupArrivalMessage);
+    
     groupArrivalMessage &&
-      currentChat?._id == groupArrivalMessage.group &&
-      setMessages((prev) => [...prev, groupArrivalMessage]);
+    (currentChat as any)?._id == (groupArrivalMessage as any)?.group &&
+      setMessages((prev:any) => [...prev, groupArrivalMessage]);
   }, [groupArrivalMessage, currentChat]);
 
 
@@ -315,8 +315,8 @@ function Chat() {
       const { followers, following } = connectionData;
 
       // Find mutual connections
-      const mutual = followers.filter((follower) =>
-        following.some((followingUser) => followingUser._id === follower._id)
+      const mutual = followers.filter((follower:any) =>
+        following.some((followingUser:any) => followingUser._id === follower._id)
       );
       setConversations([]);
       setGroups([])
@@ -348,6 +348,7 @@ function Chat() {
   const handleMessage = () => {
     if (currentChat === "No conversation") {
       // If there's no active conversation, handle creating a new conversation
+      if (profile !== null) {
       addConversation(user._id, profile._id)
         .then((response: any) => {
           const data = response.data;
@@ -359,11 +360,12 @@ function Chat() {
         .catch((error: any) => {
           console.error("Error creating conversation:", error);
         });
+      }
     } else if (currentChat && newMessage.trim() !== "" && currentChat?.isGroup===false) {
       console.log("Else if",currentChat)
       // If there's an active conversation, proceed with sending the message
       const receiverId = currentChat.members.find(
-        (member) => member !== user._id
+        (member:any) => member !== user._id
       );
       socket.current.emit("sendMessage", {
         senderId: user._id,
@@ -535,13 +537,14 @@ function Chat() {
       </button>
           </div>
           {conversations &&
-            conversations.map((c) => (
+            conversations.map((c:any) => (
               <div onClick={() => handleActiveChat(c)} className={`hover:bg-slate-100 cursor-pointer ${currentChat?c._id === currentChat._id ? "bg-slate-100" : "":""}`}>
                 <Conversations
                   chatUser={c}
                   currentUser={user}
                   handleActiveChat={handleActiveChat}
                   handleCurrentChat={handleCurrentChat}
+                  currentChatProfile={null}
                 />
               </div>
             ))}
@@ -553,10 +556,11 @@ function Chat() {
                 currentUser={user}
                 handleActiveChat={handleActiveChat}
                 handleCurrentChat={handleCurrentChat}
+                currentChatProfile={null}
               />
             ))}
 
-{groups && groups.map((userGroup) => (
+{groups && groups.map((userGroup:any) => (
   <div key={userGroup.id} onClick={() => handleActiveChat(userGroup)} className={`hover:bg-slate-100 pt-2 cursor-pointer ${currentChat?userGroup._id === currentChat._id ? "bg-slate-100" : "":""}`}>
     <UserGroup
       group={userGroup}
@@ -602,7 +606,7 @@ function Chat() {
               ) 
               :
               (
-                messages.map((mess) =>
+                messages.map((mess:any) =>
                   (mess.sender._id ? mess.sender._id : mess.sender) === user._id ? (
                     <SendedMessage key={mess._id} mess={mess} />
                   ) : (

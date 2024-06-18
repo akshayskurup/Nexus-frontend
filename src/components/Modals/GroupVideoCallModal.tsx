@@ -1,7 +1,6 @@
-import React from 'react'
 import Modal from 'react-modal'
 
-function GroupVideoCallModal({show,onHide,onAccept,onReject,caller}) {
+function GroupVideoCallModal({show,onHide,onAccept,onReject,caller}:any) {
 console.log("Caller0",caller)
   return (
 
