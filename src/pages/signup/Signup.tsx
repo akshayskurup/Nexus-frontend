@@ -170,7 +170,7 @@ function Signup() {
         confirmPassword:""
     }
     const validationSchema = yup.object({
-        name:yup.string().matches(/^[A-Za-z]+$/, "Name must contain only characters")
+        name:yup.string().trim().matches(/^[A-Za-z\s]+$/, "Name must contain only letters")
         .min(3,"Name must be at least 3 character").required("Required").max(25,"Name cannot be more than 25 characters"),
         email:yup.string().email("Invalid email address").required("Required"),
         password:yup.string().min(6,"Password must be at least 6 characters").required("Required"),
