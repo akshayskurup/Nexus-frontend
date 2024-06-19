@@ -85,9 +85,13 @@ function CreateGroupModal({ show, onHide }:any) {
         setPreview(true);
       };
 
-      const onCropComplete = useCallback(( croppedAreaPixels: Area) => {
-        setCroppedAreaPixels(croppedAreaPixels);
-      }, []);
+      const onCropComplete = useCallback(
+        (croppedArea: Area,croppedAreaPixels: Area) => {
+          console.log(croppedArea)
+          setCroppedAreaPixels(croppedAreaPixels);
+        },
+        []
+      );
 
       const onCropChange = (crop: Area, croppedAreaPixels: Area) => {
         setCrop(crop);

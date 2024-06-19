@@ -134,7 +134,8 @@ function AddPostModal({ isOpen, onClose,handlePost }:any) {
     setCroppedAreaPixels(croppedAreaPixels);
   };
   const onCropComplete = useCallback(
-    (croppedAreaPixels: Area) => {
+    (croppedArea: Area,croppedAreaPixels: Area) => {
+      console.log(croppedArea)
       setCroppedAreaPixels(croppedAreaPixels);
     },
     []

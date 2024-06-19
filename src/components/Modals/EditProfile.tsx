@@ -104,9 +104,13 @@ function EditProfile({ isOpen, onClose }:any) {
     setBGCroppedAreaPixels(croppedAreaPixels);
   };
 
-  const onCropComplete = useCallback((croppedAreaPixels: Area) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
+  const onCropComplete = useCallback(
+    (croppedArea: Area,croppedAreaPixels: Area) => {
+      console.log(croppedArea)
+      setCroppedAreaPixels(croppedAreaPixels);
+    },
+    []
+  );
 
   const onBGCropComplete = useCallback(( bgCroppedAreaPixels: Area) => {
     setBGCroppedAreaPixels(bgCroppedAreaPixels);

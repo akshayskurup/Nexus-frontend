@@ -70,7 +70,7 @@ function AssistantModal({ isOpen, onClose }:any) {
       <div className="h-16 w-full bg-slate-200 flex items-center rounded-lg">
         <img
           className="w-12 h-12 ml-3 rounded-lg border border-black object-cover"
-          src="../public/images/friends.png"
+          src="/images/friends.png"
           alt="AI Avatar"
         />
         <p className='ml-auto mr-auto font-semibold'>Virtual Friend</p>
