@@ -158,7 +158,7 @@ function ForgetPassword() {
   return (
     <div className='bg-[#F7FCF6] h-screen w-screen grid md:grid-cols-2 items-center justify-center'>
         <div className='hidden md:block'>
-            <img className="h-[100vh] w-[50vw]" src="../public/images/Img.jpg" alt="" />
+            <img className="h-[100vh] w-[50vw]" src="/images/Img.jpg" alt="" />
         </div>
         <div className='bg-[#F7FCF6] -ml-8 md:col-start-2 pl-[9vw] mt-5 md:mt-[-210px] md:ml-8'>
             <p className=' text-4xl font-bold'>Forget Password?</p>

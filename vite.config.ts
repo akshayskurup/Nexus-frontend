@@ -10,16 +10,4 @@ export default defineConfig({
   define: {
     'process.env': process.env
   },
-  optimizeDeps: {
-    exclude: ['@zegocloud/zego-uikit-prebuilt']
-  },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'zego-uikit-prebuilt': ['@zegocloud/zego-uikit-prebuilt']
-        }
-      }
-    }
-  }
 })

@@ -200,7 +200,7 @@ function Signup() {
   return (
     <div className=' bg-[#F7FCF6] w-screen h-screen  grid md:grid-cols-2 items-center justify-center'>
         <div className='relative hidden md:block'> 
-    <img className="h-[100vh] w-[50vw] object-cover" src="../public/images/Img.jpg" alt="Welcome Image" />
+    <img className="h-[100vh] w-[50vw] object-cover" src="/images/Img.jpg" alt="Welcome Image" />
     <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-6xl tracking-wide font-bold">Join With Us !</p>
 </div>
         <div className='bg-[#F7FCF6] md:col-start-2 pl-[9vw] mt-6 md:mt-[-90px]'>
