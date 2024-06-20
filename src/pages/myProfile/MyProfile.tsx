@@ -149,7 +149,7 @@ const fetchUserConnections = (userId: any) => {
   const closeModal = () => {
     setIsEditProfileModalOpen(false);
   };  
-  const handleSuggestedFollow = ()=>{
+  const handleSuggestedFollow:any = ()=>{
     setRefresh(!refresh);
   }
   const handleFollowingModal = ()=>{
