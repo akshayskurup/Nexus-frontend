@@ -97,7 +97,8 @@ function AccountSetup() {
     []
   );
 
-  const onBGCropComplete = useCallback((bgCroppedAreaPixels: Area) => {
+  const onBGCropComplete = useCallback((croppedArea: Area,bgCroppedAreaPixels: Area) => {
+    console.log(croppedArea)
     setBGCroppedAreaPixels(bgCroppedAreaPixels);
   }, []);
 
