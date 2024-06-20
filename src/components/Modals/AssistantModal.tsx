@@ -73,12 +73,12 @@ function AssistantModal({ isOpen, onClose }:any) {
           src="/images/friends.png"
           alt="AI Avatar"
         />
-        <p className='ml-auto mr-auto font-semibold'>Virtual Friend</p>
+        <p className='ml-auto mr-auto font-semibold text-black'>Virtual Friend</p>
       </div>
       {messages.length === 0 ? (
         <div className='flex flex-col items-center pt-20 pb-20'>
         <FontAwesomeIcon color='#837D7D' size='6x' icon={faCommentMedical} />
-        <p className='font-semibold'>Start new conversation</p>
+        <p className='font-semibold text-black'>Start new conversation</p>
         </div>
       ) : (
         <div className="flex-grow max-h-[45vh] overflow-y-auto p-4">

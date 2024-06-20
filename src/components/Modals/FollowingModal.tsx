@@ -22,7 +22,7 @@ function FollowingModal({isModalOpen,onModalClose,userId}:any) {
     <Modal
     isOpen={isModalOpen}
     onRequestClose={onModalClose}
-    className=" border-2 border-black absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-3/4 md:w-2/3 lg:w-4 xl:w-[25rem] bg-white rounded-lg shadow-lg p-6"
+    className="text-black border-2 border-black absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-3/4 md:w-2/3 lg:w-4 xl:w-[25rem] bg-white rounded-lg shadow-lg p-6"
     >
         <div className="max-h-[54vh] overflow-y-auto">
 

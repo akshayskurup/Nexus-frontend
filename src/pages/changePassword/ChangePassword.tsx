@@ -35,7 +35,7 @@ function ChangePassword() {
         <img className="h-[100vh] w-[50vw]" src="/images/Img.jpg" alt="" />
     </div>
     <div className='md:col-start-2 pl-[9vw] mt-5 md:mt-[-90px]'> 
-        <p className='text-5xl font-bold'>Change Password</p>
+        <p className='text-5xl font-bold text-black'>Change Password</p>
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             <Form className="mt-5 w-full md:w-[18.5rem]">
                 <p className="text-[#837D7D]">New Password:</p>

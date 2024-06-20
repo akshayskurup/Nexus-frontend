@@ -149,7 +149,7 @@ const handleFollowUnfollowChange = () => {
       <div className='fixed bottom-0 w-full md:hidden'>
         <BottomNavBar />
       </div>
-      <div className='flex'>
+      <div className='flex text-black'>
         <div className='mt-5 xl:ml-10 xl:w-3/4 bg-white'>
         {profile && (
           <>

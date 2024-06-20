@@ -42,12 +42,12 @@ function NavBar() {
     // }
   return (
     <div className='bg-white h-12 w-screen flex items-center '>
-        <p className="mr-3 ml-5 font-bold text-2xl -mt-2 tracking-wide">Nexus</p>
-        <div className="bg-[#EAEAEA] ml-8 h-8 w-72 rounded-full flex items-center md:w-44 md:ml-2 lg:w-72">
+        <p className="mr-3 ml-5 font-bold text-2xl -mt-2 tracking-wide text-black">Nexus</p>
+        <div className="bg-[#EAEAEA] text-black ml-8 h-8 w-72 rounded-full flex items-center md:w-44 md:ml-2 lg:w-72">
           <FontAwesomeIcon className="ml-2 text-[#837D7D]" icon={faMagnifyingGlass} />
           <input
           type="text"
-          className="ml-2 bg-transparent border-none focus:outline-none flex-grow"
+          className="ml-2 text-black bg-transparent border-none focus:outline-none flex-grow"
           placeholder="Search"
           onChange={(e)=>setSearchUser(e.target.value)}
           />

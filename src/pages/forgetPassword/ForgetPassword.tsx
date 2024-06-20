@@ -85,9 +85,9 @@ function OTPModal({email,onClose}:OTPModalProps){
                 <span className="absolute top-0 right-0 m-4 text-gray-700 cursor-pointer" onClick={onClose}>
                     &times;
                 </span>
-                <h2 className="text-xl font-bold mb-4">Enter OTP</h2>
-                <p>An OTP has been sent to {email}.</p>
-                <p className="mb-4">Please enter the OTP below:</p>
+                <h2 className="text-xl font-bold mb-4 text-black">Enter OTP</h2>
+                <p className='text-black'>An OTP has been sent to {email}.</p>
+                <p className="mb-4 text-black">Please enter the OTP below:</p>
                 <div className="grid grid-cols-6 gap-4">
                     {otpInputs.map((index) => (
                         <input
@@ -98,7 +98,7 @@ function OTPModal({email,onClose}:OTPModalProps){
                             onChange={(e) => handleChange(index, e.target.value)}
                             onKeyDown={(e) => handleKeyDown(e, index)}
                             maxLength={1}
-                            className="w-full h-12 border border-gray-300 rounded-md px-4 text-center"
+                            className="w-full h-12 border  border-gray-300 rounded-md px-4 text-center"
                         />
                     ))}
                     {timer > 0 && (
@@ -161,7 +161,7 @@ function ForgetPassword() {
             <img className="h-[100vh] w-[50vw]" src="/images/Img.jpg" alt="" />
         </div>
         <div className='bg-[#F7FCF6] -ml-8 md:col-start-2 pl-[9vw] mt-5 md:mt-[-210px] md:ml-8'>
-            <p className=' text-4xl font-bold'>Forget Password?</p>
+            <p className=' text-4xl font-bold text-black'>Forget Password?</p>
             <p className='mt-7 text-[#837D7D]'>Enter your email</p>
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
                 <Form className="mt-2 w-full md:w-[18.5rem]">

@@ -33,11 +33,11 @@ function SearchUserModal({isOpen,onClose,searchUser}:any) {
     onRequestClose={onClose}
     className=" border-2 border-black absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 bg-white rounded-lg shadow-lg p-6"
     >
-        <div className="bg-[#EAEAEA] ml-8 h-8 w-72 rounded-full flex items-center md:w-44 md:ml-2 lg:-ml-0 lg:w-full">
+        <div className="bg-[#EAEAEA]  ml-8 h-8 w-72 rounded-full flex items-center md:w-44 md:ml-2 lg:-ml-0 lg:w-full">
           <FontAwesomeIcon className="ml-2 text-[#837D7D]" icon={faMagnifyingGlass} />
           <input
           type="text"
-          className="ml-2 bg-transparent border-none focus:outline-none flex-grow"
+          className="ml-2 text-black bg-transparent border-none focus:outline-none flex-grow"
           placeholder="Search"
           onChange={(e)=>setSearchUsers(e.target.value)}
           />
@@ -57,11 +57,11 @@ function SearchUserModal({isOpen,onClose,searchUser}:any) {
             (<div className='flex items-center gap-36 mt-5 hover:bg-slate-200 rounded-lg pt-1 pb-1 cursor-pointer' 
             onClick={()=>{User._id===user._id?navigate('/my-profile'):navigate(`/profile/${user._id}`)}}>
             <img className='rounded-full w-11 h-11 ml-2' src={user.profileImage} alt="" />
-            <p>{user.userName} {user.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</p>
+            <p className='text-black'>{user.userName} {user.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</p>
         </div>)
         ))
     :
-    <p>No users</p>
+    <p className='text-black'>No users</p>
     }
           
         

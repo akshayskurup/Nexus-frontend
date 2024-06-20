@@ -53,7 +53,7 @@ function GroupInfo({ show, onHide, group }:any) {
                     onRequestClose={handleOnHide}
                     className="border-2 border-black absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-lg p-6"
                 >
-                    <div >
+                    <div className='text-black'>
                         <h2 className="text-2xl font-bold mb-4 text-center">Group Info</h2>
                         <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
                         <div className='flex justify-between'>

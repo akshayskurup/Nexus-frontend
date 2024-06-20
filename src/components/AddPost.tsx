@@ -172,12 +172,12 @@ function AddPostModal({ isOpen, onClose,handlePost }:any) {
       onRequestClose={onClose}
       className=" border-2 border-black absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 bg-white rounded-lg shadow-lg p-6"
     >
-      <h2 className="text-2xl font-bold mb-4 text-center">Add Post</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center text-black">Add Post</h2>
       <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
 
       <form onSubmit={formik.handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Description:</label>
+        <div className="mb-4 ">
+          <label className="block text-sm font-medium mb-2 text-black">Description:</label>
           <input
             type="text"
             name="description"
@@ -213,7 +213,7 @@ function AddPostModal({ isOpen, onClose,handlePost }:any) {
           </div>
         )}
         <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
-        <div className="mb-4 flex space-x-56">
+        <div className="mb-4 flex space-x-56 text-black">
           {addImageBtn && (
             <button
               onClick={handleAddPhotoClick}
@@ -331,7 +331,7 @@ function AddPost({handlePost}:any) {
           src={user.profileImage}
           alt=""
         />
-        <div className="ml-5">
+        <div className="ml-5 text-black">
           <div className="bg-[#EAEAEA] w-[18rem] mt-3 h-8 md:w-[32rem] rounded-full flex items-center">
             <FontAwesomeIcon
               className="ml-2 text-[#837D7D]"
@@ -346,7 +346,7 @@ function AddPost({handlePost}:any) {
               onChange={handleInputChange}
             />
             {isInputValid && (
-              <button type="submit" onClick={()=>formik.handleSubmit}>
+              <button type="submit" onClick={(e) => { e.preventDefault(); formik.handleSubmit(); }}>
                 <FontAwesomeIcon
                   className="ml-7 text-[#2892FF]"
                   size="xl"
@@ -357,7 +357,7 @@ function AddPost({handlePost}:any) {
           </div>
         </div>
       </div>
-      <p className="text-center font-semibold">OR</p>
+      <p className="text-center font-semibold text-black">OR</p>
       <div className="flex justify-center ">
         <button
           className="mt-1 h-8 w-1/2  bg-[#2892FF] text-white rounded-xl mb-4 hover:shadow-md"

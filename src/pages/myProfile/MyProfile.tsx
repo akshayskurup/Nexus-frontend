@@ -170,7 +170,7 @@ const fetchUserConnections = (userId: any) => {
       <div className=' fixed bottom-0 w-full md:hidden'>
         <BottomNavBar />
       </div>
-     <div className='flex'>
+     <div className='flex text-black'>
       <div className='mt-5 xl:ml-6 xl:w-3/4  bg-white'>
         <div className='bg-slate-400 w-full xl:h-64'>
           <img className=' w-full h-44 xl:h-64 xl:w-full' src={user.bgImage?user.bgImage:""} alt="noImg" />
