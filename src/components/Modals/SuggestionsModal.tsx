@@ -25,7 +25,7 @@ function SuggestionsModal({isOpen,onClose,getSuggestedUser}:any) {
       suggestedUser(user._id).then((response: any) => {
         if (response.status === 200) {
           const filteredData = response.data.filter((item: any) => item._id !== user._id);
-          setSuggestedUsers(filteredData.slice);
+          setSuggestedUsers(filteredData);
         }
       });
     }, [user._id, refresh]); // Depend on refresh state to trigger re-fetch
