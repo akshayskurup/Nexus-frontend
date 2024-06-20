@@ -218,13 +218,19 @@ const fetchUserConnections = (userId: any) => {
       </button>
       </div>
           <div className='flex flex-col items-center'>
+          {userPost && activeTab=='posts' && (userPost.length!=0?userPost.map((post:any)=>(
+              <Posts key={post._id} post={post} handleSavedPost={handleSavedPost} />
+          )):
+          <p className='mt-5 text-lg font-semibold'>No Post Available</p>
+          )}
             
-          {userSavedPost && (userSavedPost.length!=0?userSavedPost.map((post:any)=>(
+          {userSavedPost && activeTab!='posts' && (userSavedPost.length!=0?userSavedPost.map((post:any)=>(
               <Posts key={post._id} post={post} handleSavedPost={handleSavedPost} />
           )):
           <p className='mt-5 text-lg font-semibold h-[50vh]'>No Post Available</p>
           )}
           </div>
+          
       </div>
           <div className='-mr-14 hidden xl:block w-1/4 sticky top-10 h-screen ml-1 z-0'>
       <Suggestion handleSuggestedFollow = {handleSuggestedFollow} />
