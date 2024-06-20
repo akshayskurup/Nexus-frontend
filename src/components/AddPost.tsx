@@ -278,7 +278,7 @@ function AddPost({handlePost}:any) {
     validationSchema: Yup.object({
       description: Yup.string().trim().min(7, "Enter something.."),
     }),
-    onSubmit: (values) => {
+    onSubmit: (values,{resetForm}) => {
       console.log("Form submitted with values:", values);
       const data = {
         userId: user._id,
@@ -295,6 +295,7 @@ function AddPost({handlePost}:any) {
                 const data = response.data;
                 if (response.status === 200) {
                   toast.success(data.message);
+                  resetForm()
                   handlePost()
                   console.log("data", data);
                 } else {
@@ -324,7 +325,7 @@ function AddPost({handlePost}:any) {
   };
 
   return (
-    <div className=" w-[25rem] bg-white md:w-[40rem] md:ml-3 rounded-md">
+    <div className=" w-[25rem] bg-white md:w-[40rem]  md:ml-3 rounded-md">
       <div className=" flex ml-5 mt-5">
         <img
           className="w-9 h-9 mt-3 rounded-full"

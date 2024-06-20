@@ -29,7 +29,8 @@ function Suggestion({handleSuggestedFollow,followUnfollowState}:any) {
     suggestedUser(user._id).then((response: any) => {
       if (response.status === 200) {
         console.log("Data received from suggestion", response.data);
-        setSuggestedUsers(response.data.slice(0, 4));
+        const filteredData = response.data.filter((item: any) => item._id !== user._id);
+        setSuggestedUsers(filteredData.slice(0, 4));
       }
     });
   }

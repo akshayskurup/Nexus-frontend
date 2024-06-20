@@ -24,8 +24,8 @@ function SuggestionsModal({isOpen,onClose,getSuggestedUser}:any) {
     useEffect(() => {
       suggestedUser(user._id).then((response: any) => {
         if (response.status === 200) {
-          console.log("Data received from suggestion", response.data);
-          setSuggestedUsers(response.data.slice(0, 4));
+          const filteredData = response.data.filter((item: any) => item._id !== user._id);
+          setSuggestedUsers(filteredData.slice);
         }
       });
     }, [user._id, refresh]); // Depend on refresh state to trigger re-fetch
