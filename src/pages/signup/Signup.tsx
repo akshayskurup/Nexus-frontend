@@ -204,7 +204,7 @@ function Signup() {
     <p className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-6xl tracking-wide font-bold">Join With Us !</p>
 </div>
         <div className='bg-[#F7FCF6] md:col-start-2 pl-[9vw] mt-6 md:mt-[-90px]'>
-            <p className='text-5xl mb-4 font-bold'>Signup</p>
+            <p className='text-5xl mb-4 font-bold text-black'>Signup</p>
             
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
             <Form className="-ml-5 w-full md:w-[18.5rem]">

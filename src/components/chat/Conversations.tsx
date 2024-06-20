@@ -53,8 +53,8 @@ function Conversations({chatUser,currentUser,handleActiveChat,handleCurrentChat}
           <div className='flex items-center mt-5 ml-9 pt-3' onClick={()=>handleChat(user)}>
             <img src={user?.profileImage} alt="" className='w-12 h-12 rounded-full' />
             <div className='ml-24 '>
-              <p className='font-semibold'>{user?.userName}</p>
-              <p className='text-sm'>{chatUser.latestMessage?chatUser.latestMessage.text:"Start a new conversation"}</p>
+              <p className='font-semibold text-black'>{user?.userName}</p>
+              <p className='text-sm text-black'>{chatUser.latestMessage?chatUser.latestMessage.text:"Start a new conversation"}</p>
             </div>
             {/* <div className='w-3 h-3 bg-blue-800 rounded-full ml-auto mr-10'></div> */}
           </div>

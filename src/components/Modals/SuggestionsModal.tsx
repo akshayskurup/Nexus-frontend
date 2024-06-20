@@ -36,11 +36,11 @@ function SuggestionsModal({isOpen,onClose,getSuggestedUser}:any) {
     onRequestClose={onClose}
     className=" border-2 border-black absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 bg-white rounded-lg shadow-lg p-6"
     >
-      <h2 className="text-2xl font-bold mb-4 text-center tracking-wider ">Suggested For You</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center tracking-wider text-black">Suggested For You</h2>
             <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
     <div className='bg-white w-90 max-h-80 overflow-y-auto  mt-5 rounded-md'>
     {suggestedUsers.length === 0 ? (
-  <p className='text-center font-semibold'>No Suggestions</p>
+  <p className='text-center font-semibold text-black'>No Suggestions</p>
 ) : (
   suggestedUsers.map((user: any) => (
     <div 
@@ -50,7 +50,7 @@ function SuggestionsModal({isOpen,onClose,getSuggestedUser}:any) {
     >
       <img className='w-11 h-11 rounded-full' src={user.profileImage} alt="" />
       <div className='flex flex-col'>
-        <p className='font-semibold'>{user.userName}</p>
+        <p className='font-semibold text-black'>{user.userName}</p>
         <p className='text-sm text-[#837D7D]'>Suggested For You</p>
       </div>
       <p 

@@ -136,12 +136,12 @@ function EditPostModal({ isOpen, onClose, post, handlePost }:any) {
       onRequestClose={onClose}
       className=" border-2 border-black absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 bg-white rounded-lg shadow-lg p-6"
     >
-      <h2 className="text-2xl font-bold mb-4 text-center">Edit Post</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center text-black">Edit Post</h2>
       <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
 
       <form onSubmit={formik.handleSubmit}>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Description:</label>
+          <label className="block text-sm font-medium mb-2 text-black">Description:</label>
           <input
             type="text"
             name="description"
@@ -244,14 +244,14 @@ function OptionsModal({ isModalOpen, onModalClose, post, handlePost}:any) {
       >
         {post.userId._id == user._id && (
           <>
-        <p className="cursor-pointer mb-4 text-center" onClick={handleDeletion}>Delete</p>
+        <p className="cursor-pointer mb-4 text-center text-black" onClick={handleDeletion}>Delete</p>
         <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
         </>
         )}
         {post.userId._id == user._id && (
           <>
             <p
-              className=" cursor-pointer mb-4 text-center"
+              className=" cursor-pointer mb-4 text-center text-black"
               onClick={handleEditPostModal}
             >
               Edit
@@ -261,7 +261,7 @@ function OptionsModal({ isModalOpen, onModalClose, post, handlePost}:any) {
         )}
         {post.userId._id !== user._id && (
           <p
-            className="cursor-pointer mb-4 text-center"
+            className="cursor-pointer mb-4 text-center text-black"
             onClick={handleReportModal}
           >
             Report
@@ -430,7 +430,7 @@ function Posts({ post, handlePost , handleSavedPost,explore}:any) {
         alt="img"
       />
       <div className="ml-8">
-        <p className="font-semibold text-lg">
+        <p className="font-semibold text-lg text-black">
           {user._id===post.userId._id ? (<Link to={`/my-profile`}>{post.userId.userName} {post.userId.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</Link>):
           (<Link to={`/profile/${post.userId._id}`}>{post.userId.userName} {post.userId.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</Link>)
           }
@@ -439,12 +439,12 @@ function Posts({ post, handlePost , handleSavedPost,explore}:any) {
         {/* <p className="text-xs text-[#8B8585]">10 minutes ago</p> */}
       </div>
       <FontAwesomeIcon
-        className="ml-auto mr-11 cursor-pointer"
+        className="ml-auto mr-11 cursor-pointer text-black"
         icon={faEllipsisV}
         onClick={handleModal}
       />
     </div>
-    <p className={`ml-6 ${explore ? "mt-2 my-2":"mt-5 my-5"} font-semibold text-sm`}>
+    <p className={`ml-6 ${explore ? "mt-2 my-2":"mt-5 my-5"} font-semibold text-sm text-black`}>
       {post.description}
     </p>
 
@@ -462,14 +462,14 @@ function Posts({ post, handlePost , handleSavedPost,explore}:any) {
             style={{ color: likeColor }}
             icon={faHeart}
           />
-          <p className="ml-2">{likeCount}</p>
+          <p className="ml-2 text-black">{likeCount}</p>
         </div>
         <div className="flex" onClick={count !== 0 ? handleCommentModal : ()=>{}}>
           <FontAwesomeIcon
             className="w-6 h-6 text-[#837D7D] cursor-pointer"
             icon={faCommentDots}
           />
-          <p className="ml-2">{count}</p>
+          <p className="ml-2 text-black">{count}</p>
         </div>
         <FontAwesomeIcon
           className="w-6 h-6 cursor-pointer"
@@ -480,12 +480,12 @@ function Posts({ post, handlePost , handleSavedPost,explore}:any) {
       </div>
       {myComment && 
       <div className="flex items-center">
-        <p className="max-w-[32rem] font-semibold">{user.userName}</p>
-        <p>:{myComment}</p>
+        <p className="max-w-[32rem] font-semibold text-black">{user.userName}</p>
+        <p className="text-black">:{myComment}</p>
       </div>
       }
       {count>1 && 
-      <p className="text-sm mt-2 mb-1 cursor-pointer" onClick={handleCommentModal}>View {count} comments</p>}
+      <p className="text-sm mt-2 mb-1 cursor-pointer text-black" onClick={handleCommentModal}>View {count} comments</p>}
       <hr className="bg-slate-500 mr-10"/>
       <div className="flex items-center">
         <img
@@ -494,7 +494,7 @@ function Posts({ post, handlePost , handleSavedPost,explore}:any) {
           alt="img"
         />
         <div className="ml-5 mb-3">
-          <div className="bg-[#EAEAEA] mt-3 h-8 w-[17rem] md:w-[32rem] rounded-full flex items-center">
+          <div className="bg-[#EAEAEA] text-black mt-3 h-8 w-[17rem] md:w-[32rem] rounded-full flex items-center">
             <input
               type="text"
               name="description"

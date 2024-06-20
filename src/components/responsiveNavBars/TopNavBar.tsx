@@ -16,7 +16,7 @@ function TopNavBar() {
         </button>
 
        
-        <p className="font-bold text-2xl tracking-wide text-center">Nexus</p>
+        <p className="font-bold text-2xl tracking-wide text-center text-black">Nexus</p>
 
         
         

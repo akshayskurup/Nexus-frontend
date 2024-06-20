@@ -104,9 +104,13 @@ function EditProfile({ isOpen, onClose }:any) {
     setBGCroppedAreaPixels(croppedAreaPixels);
   };
 
-  const onCropComplete = useCallback((croppedAreaPixels: Area) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
+  const onCropComplete = useCallback(
+    (croppedArea: Area,croppedAreaPixels: Area) => {
+      console.log(croppedArea)
+      setCroppedAreaPixels(croppedAreaPixels);
+    },
+    []
+  );
 
   const onBGCropComplete = useCallback(( bgCroppedAreaPixels: Area) => {
     setBGCroppedAreaPixels(bgCroppedAreaPixels);
@@ -211,7 +215,7 @@ const handleBGImageChange = (e:any) => {
             onRequestClose={onClose}
             className=" border-2 border-black absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 bg-white rounded-lg shadow-lg p-6"
           >
-            <h2 className="text-2xl font-bold mb-4 text-center">Edit Profile</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center text-black">Edit Profile</h2>
             <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
       
             <form onSubmit={formik.handleSubmit}>
@@ -238,7 +242,7 @@ const handleBGImageChange = (e:any) => {
                 </div>
               )}
               <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Bio:</label>
+                <label className="block text-sm font-medium mb-2 text-black">Bio:</label>
                 <input
                   type="text"
                   name="bio"
@@ -255,7 +259,7 @@ const handleBGImageChange = (e:any) => {
                     {formik.errors.bio as React.ReactNode}
                   </div>
                 )}
-                <label className="block text-sm font-medium mb-2">UserName:</label>
+                <label className="block text-sm font-medium mb-2 text-black">UserName:</label>
                 <input
                   type="text"
                   name="userName"
@@ -277,7 +281,7 @@ const handleBGImageChange = (e:any) => {
               <div className="mb-4 flex">
               <button
   onClick={handleAddBGClick}
-  className="rounded-md border border-2 pl-1 pr-1 border-slate-400"
+  className="rounded-md border border-2 text-black pl-1 pr-1 border-slate-400"
 >
   <input
     type="file"
@@ -290,7 +294,7 @@ const handleBGImageChange = (e:any) => {
 
 <button
   onClick={handleAddPhotoClick}
-  className="rounded-md border border-2 pl-1 pr-1 ml-auto border-slate-400"
+  className="rounded-md border border-2 text-black pl-1 pr-1 ml-auto border-slate-400"
 >
   <input
     type="file"

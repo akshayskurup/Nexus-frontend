@@ -514,29 +514,29 @@ function Chat() {
       </div>
       <div className="flex w-screen">
       <div className={`w-full md:w-1/2   bg-white border border-r-3 min-h-[90vh] ${currentChat ? 'hidden' : ''} md:block`}>
-          <p className="font-semibold text-xl text-center mt-5">Messages</p>
-          <button className="float-right font-semibold text-sm mt-1 mr-3" onClick={()=>setCreateGroupModal(true)}><FontAwesomeIcon size="1x" icon={faPlus} /> Add groups</button>
+          <p className="font-semibold text-xl text-center mt-5 text-black">Messages</p>
+          <button className="float-right font-semibold text-sm mt-1 mr-3 text-black" onClick={()=>setCreateGroupModal(true)}><FontAwesomeIcon size="1x" icon={faPlus} /> Add groups</button>
           <div className="flex gap-20 justify-center mt-10 font-semibold">
           <button
         onClick={getConversation}
-        className={`ml-5 ${activeTab === 'messages' ? 'bg-[#2892FF] rounded-lg pl-2 pr-2 text-white' : ''}`}
+        className={`ml-5 ${activeTab === 'messages' ? 'bg-[#2892FF] rounded-lg pl-2 pr-2 text-white' : 'text-black'}`}
       >
         Messages
       </button>
       <button
         onClick={handleAllFriendsMessage}
-        className={`ml-5 ${activeTab === 'friends' ? 'bg-[#2892FF] rounded-lg pl-2 pr-2 text-white' : ''}`}
+        className={`ml-5 ${activeTab === 'friends' ? 'bg-[#2892FF] rounded-lg pl-2 pr-2 text-white' : 'text-black'}`}
       >
         Friends
       </button>
       <button
         onClick={handleGroups}
-        className={`ml-5 ${activeTab === 'groups' ? 'bg-[#2892FF] rounded-lg pl-2 pr-2 text-white' : ''}`}
+        className={`ml-5 ${activeTab === 'groups' ? 'bg-[#2892FF] rounded-lg pl-2 pr-2 text-white' : 'text-black'}`}
       >
         Groups
       </button>
           </div>
-          {conversations &&
+          {conversations && conversations.length > 0 ? 
             conversations.map((c:any) => (
               <div onClick={() => handleActiveChat(c)} className={`hover:bg-slate-100 cursor-pointer ${currentChat?c._id === currentChat._id ? "bg-slate-100" : "":""}`}>
                 <Conversations
@@ -547,9 +547,12 @@ function Chat() {
                   currentChatProfile={null}
                 />
               </div>
-            ))}
+            ))
+          :
+          activeTab === 'messages' && <p className="text-black text-center mt-44 font-semibold text-xl">No Messsages</p>
+          }
 
-          {mutualConnections &&
+          {mutualConnections && mutualConnections.length > 0 ? 
             mutualConnections.map((mutualUser) => (
               <Conversations
                 chatUser={mutualUser}
@@ -558,18 +561,30 @@ function Chat() {
                 handleCurrentChat={handleCurrentChat}
                 currentChatProfile={null}
               />
-            ))}
+            ))
+          :
+          activeTab === 'friends' && <p className="text-black text-center mt-44 font-semibold text-xl">No Friends</p>
+          }
 
-{groups && groups.map((userGroup:any) => (
-  <div key={userGroup.id} onClick={() => handleActiveChat(userGroup)} className={`hover:bg-slate-100 pt-2 cursor-pointer ${currentChat?userGroup._id === currentChat._id ? "bg-slate-100" : "":""}`}>
-    <UserGroup
-      group={userGroup}
-      currentUser={user}
-      handleActiveChat={handleActiveChat}
-      handleCurrentChat={handleCurrentChat}
-    />
-  </div>
-))}
+{groups && groups.length > 0 ? (
+  groups.map((userGroup: any) => (
+    <div
+      key={userGroup.id}
+      onClick={() => handleActiveChat(userGroup)}
+      className={`hover:bg-slate-100 pt-2 cursor-pointer ${currentChat && userGroup._id === currentChat._id ? "bg-slate-100" : ""}`}
+    >
+      <UserGroup
+        group={userGroup}
+        currentUser={user}
+        handleActiveChat={handleActiveChat}
+        handleCurrentChat={handleCurrentChat}
+      />
+    </div>
+  ))
+) : (
+  activeTab === 'groups' && <p className="text-black text-center mt-44 font-semibold text-xl">No groups</p>
+)}
+
 
 
         </div>
@@ -577,7 +592,7 @@ function Chat() {
       {currentChat !== null && (
         <>
           <div>
-            <div className="flex items-center mt-5 ml-10">
+            <div className="flex items-center mt-5 ml-10 text-black">
               <FontAwesomeIcon className="-ml-8 mr-10 md:hidden" onClick={() => setCurrentChat(null)} icon={faArrowLeft} />
               <img
                 src={profile.profileImage ? profile.profileImage : profile.profile}
@@ -599,7 +614,7 @@ function Chat() {
               ref={scrollRef}
             >
               {messages.length===0 ? (
-                <div className="ml-auto mr-auto mt-20 flex flex-col">
+                <div className="ml-auto mr-auto mt-20 flex flex-col text-black">
                 <FontAwesomeIcon size="10x" icon={faCommentMedical} />
                 <p className="font-semibold text-2xl">Start new conversation</p>
                 </div>
@@ -617,7 +632,7 @@ function Chat() {
               }
             </div>
             <div className="fixed bottom-0 left-0 right-0 md:left-auto md:right-auto md:w-[64%] p-2 bg-[#EAEAEA] border-t border-slate-400">
-              <div className="flex items-center w-full rounded-full px-2 bg-white shadow-md">
+              <div className="flex items-center w-full rounded-full px-2 bg-white shadow-md text-black">
                 <input
                   type="text"
                   name="description"

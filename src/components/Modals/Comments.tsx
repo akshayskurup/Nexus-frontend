@@ -78,16 +78,16 @@ function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }:any) {
       >
           <div className="max-h-[54vh] overflow-y-auto">
 
-        <h2 className="text-2xl font-bold mb-4 text-center">Comments</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center text-black">Comments</h2>
       <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
       {allComments && allComments.map((comment:any)=>(
         <>
         <div className='flex my-2 items-center'>
         <img className='w-9 h-9 rounded-full' src={comment.userId.profileImage} alt="" />
-        <p className='ml-3 font-semibold'>
+        <p className='ml-3 font-semibold text-black'>
         {user._id===comment.userId._id?"You":(<Link to={`/profile/${comment.userId._id}`}>{comment.userId.userName} {comment.userId.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</Link>)}        </p>
-        <p className='ml-5 max-w-80'>{comment.comment}</p>
-        <p className='text-xs ml-auto'>{comment.elapsed}</p>
+        <p className='ml-5 max-w-80 text-black'>{comment.comment}</p>
+        <p className='text-xs ml-auto text-black'>{comment.elapsed}</p>
         
         {comment.userId._id===user._id && <FontAwesomeIcon className="ml-8 cursor-pointer" onClick={()=>handleDelete(comment._id)} icon={faTrash} />
 }
@@ -95,9 +95,9 @@ function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }:any) {
         <div className='flex ml-12 -mt-4 gap-6'>
 
        
-        <p className='text-xs  font-semibold cursor-pointer' onClick={()=>handleReplyButton(comment._id,comment.userId.userName,comment.comment)}>reply</p>
+        <p className='text-xs  font-semibold cursor-pointer text-black' onClick={()=>handleReplyButton(comment._id,comment.userId.userName,comment.comment)}>reply</p>
         {comment.replies.length>0 && 
-        <p className='text-xs font-semibold cursor-pointer' onClick={()=>toggleReplies(comment._id)}>{visibleReplies[comment._id] ? 'Hide Replies' : 'View Replies'}</p>
+        <p className='text-xs font-semibold cursor-pointer text-black' onClick={()=>toggleReplies(comment._id)}>{visibleReplies[comment._id] ? 'Hide Replies' : 'View Replies'}</p>
         }
         
         </div>
@@ -105,8 +105,8 @@ function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }:any) {
         {visibleReplies[comment._id] && comment.replies.map((cmt:any)=>(
           <div className='flex gap-5 ml-12 mt-2 mb-2 items-center'>
             <img className='w-7 h-7 rounded-full' src={cmt.userId.profileImage} alt="" />
-          <p className='text-sm font-semibold'>{user._id===cmt.userId._id?"You":(<Link to={`/profile/${cmt.userId._id}`}>{cmt.userId.userName} {cmt.userId.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</Link>)}</p>
-          <p className='text-sm'>{cmt.reply}</p>
+          <p className='text-sm font-semibold text-black'>{user._id===cmt.userId._id?"You":(<Link to={`/profile/${cmt.userId._id}`}>{cmt.userId.userName} {cmt.userId.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</Link>)}</p>
+          <p className='text-sm text-black'>{cmt.reply}</p>
           </div>
         ))
         
@@ -114,15 +114,15 @@ function Comments({ isModalOpen, onModalClose, post, onDeleteComment  }:any) {
         
         }
         
-        <p>{comment.replies.userId}</p>
+        <p className='text-black'>{comment.replies.userId}</p>
         </>
       ))}
       </div>
       {reply && 
       <>
       <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
-      <p className='text-sm'>Replying to {replyCommentDetails.userName}: {replyCommentDetails.comment}</p>
-      <div className="bg-[#EAEAEA] mt-3 h-8 md:w-[40rem] rounded-full flex items-center">
+      <p className='text-sm text-black'>Replying to {replyCommentDetails.userName}: {replyCommentDetails.comment}</p>
+      <div className="bg-[#EAEAEA] mt-3 h-8 md:w-[40rem] rounded-full flex items-center text-black">
 
       <input
               type="text"

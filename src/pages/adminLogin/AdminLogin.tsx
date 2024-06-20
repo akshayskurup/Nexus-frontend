@@ -48,7 +48,7 @@ function AdminLogin() {
             <img className="h-[100vh] w-[50vw]" src="/images/Img.jpg" alt="" />
         </div>
         <div className='bg-[#F7FCF6] md:col-start-2 pl-[9vw] mt-5 md:mt-[-90px]'> 
-            <p className='text-5xl font-bold'>Admin Login</p>
+            <p className='text-5xl font-bold text-black'>Admin Login</p>
             <p className='mt-7 text-[#837D7D]'>Welcome back!</p>
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
                 <Form className="mt-5 w-full md:w-[18.5rem]">

@@ -85,9 +85,13 @@ function CreateGroupModal({ show, onHide }:any) {
         setPreview(true);
       };
 
-      const onCropComplete = useCallback(( croppedAreaPixels: Area) => {
-        setCroppedAreaPixels(croppedAreaPixels);
-      }, []);
+      const onCropComplete = useCallback(
+        (croppedArea: Area,croppedAreaPixels: Area) => {
+          console.log(croppedArea)
+          setCroppedAreaPixels(croppedAreaPixels);
+        },
+        []
+      );
 
       const onCropChange = (crop: Area, croppedAreaPixels: Area) => {
         setCrop(crop);
@@ -125,7 +129,7 @@ function CreateGroupModal({ show, onHide }:any) {
       }
   return (
   <Modal isOpen={show} onRequestClose={onHide}
-  className=" border-2 border-black absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-3/4 md:w-2/3 lg:w-3/4 xl:w-1/3 bg-white rounded-lg shadow-lg p-6"
+  className="text-black border-2 border-black absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 sm:w-3/4 md:w-2/3 lg:w-3/4 xl:w-1/3 bg-white rounded-lg shadow-lg p-6"
   >
         <h2 className="text-2xl font-bold mb-4 text-center">Create Group</h2>
         <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />

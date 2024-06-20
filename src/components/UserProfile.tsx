@@ -70,22 +70,22 @@ function UserProfile({userProfileRefresh}:any) {
     <img className=" w-[90px] h-[90px] rounded-full" src={user.profileImage} alt="" />
   </div>
   <div>
-    <p className="text-center font-semibold">{user.name} {user.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</p>
+    <p className="text-center font-semibold text-black">{user.name} {user.premium?<FontAwesomeIcon icon={faCheckCircle} color='#2892FF' />:""}</p>
     <p className='text-center mt-1 text-[#837D7D] font-semibold text-sm'>@{user.userName}</p>
   </div>
   
 </div>
 <div className='flex gap-10 justify-center mt-5'>
     <div>
-        <p className='text-center font-medium'>{userPost.length}</p>
+        <p className='text-center font-medium text-black'>{userPost.length}</p>
         <p className="text-[#8B8585] text-sm font-medium">Post</p>
     </div>
     <div>
-    <p className='text-center font-medium'>{followers.length}</p>
+    <p className='text-center font-medium text-black'>{followers.length}</p>
         <p className="text-[#8B8585] text-sm font-medium cursor-pointer" onClick={handleFollowersModal}>Followers</p>
     </div>
     <div>
-    <p className='text-center font-medium'>{following.length}</p>
+    <p className='text-center font-medium text-black'>{following.length}</p>
         <p className="text-[#8B8585] text-sm font-medium cursor-pointer" onClick={handleFollowingModal}>Following</p>
     </div>
   </div>
