@@ -62,7 +62,7 @@ This is the frontend of the Nexus project, built with React and Tailwind for sty
 
 ![Contact](https://media1.tenor.com/m/1Dbkt5sPphAAAAAd/customer-service-call-queue-from-hell.gif)
 
-Your Name - [akshayskurup@gmail.com](mailto:akshayskurup@gmail.com)
+Akshay S Kurup - [akshayskurup@gmail.com](mailto:akshayskurup@gmail.com)
 
 Project Link: [https://github.com/akshayskurup/Nexus-frontend](https://github.com/akshayskurup/Nexus-frontend)
 
