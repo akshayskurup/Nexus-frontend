@@ -15,29 +15,26 @@ export interface OTPModalProps {
 }
 function OTPModal({ email, onClose }: OTPModalProps): JSX.Element {
     const [OTP, setOtp] = useState(['', '', '', '', '', '']);
-    const [timer,setTimer] = useState(60)
-    const [resendVisible,setResendVisible] = useState(false)
-    const [loading ,setLoading] = useState(false)
+    const [timer, setTimer] = useState(60);
+    const [resendVisible, setResendVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
     const otpInputs = Array.from({ length: 6 }, (_, i) => i); 
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const navigate = useNavigate();
 
-    
-
-    useEffect(()=>{
-        const interval = setInterval(()=>{
-            setTimer((prevTimer)=>{
-                if(prevTimer===0){
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTimer((prevTimer) => {
+                if (prevTimer === 0) {
                     setResendVisible(true);
                     clearInterval(interval);
                     return 0;
                 }
-                return prevTimer-1
-            })
-        },1000)
-        return()=>clearInterval(interval);
-    },[timer,resendVisible]);
-
+                return prevTimer - 1;
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [timer, resendVisible]);
 
     const handleChange = (index: number, value: string) => {
         if (/^\d*$/.test(value) && value.length <= 1) {
@@ -59,51 +56,54 @@ function OTPModal({ email, onClose }: OTPModalProps): JSX.Element {
         }
     };
 
-    const handleResend =()=>{
+    const handleTouchStart = (index: number) => {
+        inputRefs.current[index]?.focus();
+    };
+
+    const handleResend = () => {
         setTimer(60);
         setResendVisible(false);
         setOtp(['', '', '', '', '', '']);
         postResendOtp()
-        .then((response:any)=>{
+        .then((response: any) => {
             const data = response.data;
-            if(response.status===200){
+            if (response.status === 200) {
                 toast.success(data.message);
-            }else{
+            } else {
                 toast.error(data.message);
             }
-        })
-    }
+        });
+    };
 
-    const handleSubmit = async()=>{
-        setLoading(true)
-        const otp:string = OTP.join('');
+    const handleSubmit = async () => {
+        setLoading(true);
+        const otp: string = OTP.join('');
         try {
-            await postOTP({otp})
-            .then((response:any)=>{
+            await postOTP({ otp })
+            .then((response: any) => {
                 const data = response.data;
-                if(response.status===200){
+                if (response.status === 200) {
                     toast.success(data.message);
-                    localStorage.setItem('userId',data.newUser._id);
-                    navigate('/login')
-                }else{
+                    localStorage.setItem('userId', data.newUser._id);
+                    navigate('/login');
+                } else {
                     toast.error(data.error);
                 }
-            }) 
-        } catch (error:any) {
-            toast.error(error)
+            });
+        } catch (error: any) {
+            toast.error(error);
         } finally {
-          setLoading(false)
+            setLoading(false);
         }
-        
-    }
+    };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-blue-500 bg-opacity-50">
-            <div className="bg-white p-8 w-[500px] rounded-lg shadow-md">
+            <div className="bg-white p-8 w-[500px] rounded-lg shadow-md text-black">
                 <span className="absolute top-0 right-0 m-4 text-gray-700 cursor-pointer" onClick={onClose}>
                     &times;
                 </span>
-                <h2 className="text-xl font-bold mb-4">Enter OTP</h2>
+                <h2 className="text-xl font-bold mb-4 text-black">Enter OTP</h2>
                 <p>An OTP has been sent to {email}.</p>
                 <p className="mb-4">Please enter the OTP below:</p>
                 <div className="grid grid-cols-6 gap-4">
@@ -112,15 +112,17 @@ function OTPModal({ email, onClose }: OTPModalProps): JSX.Element {
                             key={index}
                             ref={(ref) => inputRefs.current[index] = ref}
                             type="text"
+                            inputMode="numeric"
                             value={OTP[index]}
                             onChange={(e) => handleChange(index, e.target.value)}
                             onKeyDown={(e) => handleKeyDown(e, index)}
+                            onTouchStart={() => handleTouchStart(index)}
                             maxLength={1}
-                            className="w-full h-12 border border-gray-300 rounded-md px-4 text-center"
+                            className="w-12 h-12 border border-gray-300 rounded-md px-4 text-center dark:text-white"
                         />
                     ))}
                     {timer > 0 && (
-                        <p className= "w-[190px] text-gray-600 mt-2">Resend OTP in {timer} seconds</p>
+                        <p className="w-[190px] text-gray-600 mt-2 text-sm md text-md">Resend OTP in {timer} seconds</p>
                     )}
                     {timer === 0 && (
                         <button
@@ -133,19 +135,16 @@ function OTPModal({ email, onClose }: OTPModalProps): JSX.Element {
                     )}
                 </div>
                 <div className="flex flex-col items-center ">
-                {OTP.every((digit) => !isNaN(parseInt(digit))) && OTP.length === 6 && (
-                <button
-                type="submit"
-                onClick={handleSubmit}
-                className="w-[9rem] mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
-                disabled={loading}
-                >
-              {loading ? <HashLoader size={20} className='ml-auto mr-auto' color="#ffffff" /> : "Submit OTP"}
-
-            
-        </button>
-    )}
-                
+                    {OTP.every((digit) => !isNaN(parseInt(digit))) && OTP.length === 6 && (
+                        <button
+                            type="submit"
+                            onClick={handleSubmit}
+                            className="w-[9rem] mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                            disabled={loading}
+                        >
+                            {loading ? <HashLoader size={20} className='ml-auto mr-auto' color="#ffffff" /> : "Submit OTP"}
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

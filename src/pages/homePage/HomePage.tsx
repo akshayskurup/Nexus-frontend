@@ -30,14 +30,13 @@ function HomePage() {
       if(response.status===200){
         dispatch(setPosts({posts:data.post}))
         setAllPost(data.post);
+        setLoading(false)
       }else{
         toast.error(data.message)
       }
     })
     } catch (error:any) {
       console.log(error)
-    } finally {
-      setLoading(false)
     }
     
   }
