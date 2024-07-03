@@ -3,12 +3,16 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Modal from "react-modal";
 import { follow, suggestedUser } from '../../services/api/user/apiMethods';
+import HashLoader from "react-spinners/HashLoader";
+
 
 function SuggestionsModal({isOpen,onClose,getSuggestedUser}:any) {
   const navigate = useNavigate();
     const user = useSelector((state:any)=>state.auth.user);
     const [suggestedUsers,setSuggestedUsers] = useState([])
     const [refresh, setRefresh] = useState(false);
+    const [loading,setLoading] = useState(false)
+
 
     const handleFollow = (userId: string, e: any) => {
       e.stopPropagation();
@@ -22,10 +26,12 @@ function SuggestionsModal({isOpen,onClose,getSuggestedUser}:any) {
     };
   
     useEffect(() => {
+      setLoading(true)
       suggestedUser(user._id).then((response: any) => {
         if (response.status === 200) {
           const filteredData = response.data.filter((item: any) => item._id !== user._id);
           setSuggestedUsers(filteredData);
+          setLoading(false)
         }
       });
     }, [user._id, refresh]); // Depend on refresh state to trigger re-fetch
@@ -39,7 +45,10 @@ function SuggestionsModal({isOpen,onClose,getSuggestedUser}:any) {
       <h2 className="text-2xl font-bold mb-4 text-center tracking-wider text-black">Suggested For You</h2>
             <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
     <div className='bg-white w-90 max-h-80 overflow-y-auto  mt-5 rounded-md'>
-    {suggestedUsers.length === 0 ? (
+      <div className='flex items-center justify-center'>
+      {loading && <HashLoader />}
+      </div>
+    {suggestedUsers.length === 0 && !loading ? (
   <p className='text-center font-semibold text-black'>No Suggestions</p>
 ) : (
   suggestedUsers.map((user: any) => (
